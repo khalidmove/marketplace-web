@@ -1,0 +1,139 @@
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { Api } from "@/services/service";
+import { FaFacebookF } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+import { RiInstagramFill } from "react-icons/ri";
+import moment from 'moment';
+import { FaTiktok } from "react-icons/fa";
+import { CiLocationOn } from "react-icons/ci";
+import { FiPhone } from "react-icons/fi";
+import { MdOutlineEmail } from "react-icons/md";
+import { LuClock9 } from "react-icons/lu";
+
+function Footer(props) {
+  const router = useRouter();
+  const [userDetail, setUserDetail] = useState({
+    subscriber: "",
+  });
+
+  const addSubscriber = (e) => {
+    e.preventDefault();
+    const data = {
+      email: userDetail?.subscriber,
+    }
+    props.loader(true);
+    Api("post", "add-subscriber", data, router).then(
+      (res) => {
+        console.log("res================>", res);
+        props.loader(false);
+
+        if (res?.status) {
+          setUserDetail({
+            subscriber: "",
+          });
+          props.toaster({ type: "success", message: res?.data?.message });
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.data?.message });
+      }
+    );
+  };
+
+  return (
+    <div>
+      <div className="bg-white relative">
+        <div className="max-w-7xl mx-auto h-full border-b border-b-[#00000050] md:pb-10 pb-5"></div>
+        <div className="max-w-7xl  mx-auto h-full  md:py-10 py-5">
+          <div className="grid md:grid-cols-5 grid-cols-1">
+            <div className="text-white px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-start items-start  md:col-span-2">
+              <div className="py-5">
+                <img
+                  className="md:w-[165px] h-[43px]  object-cover  rounded-[5px] -mt-6"
+                  src="/logo.png"
+                  alt=""
+                />
+              </div>
+
+              <div className="flex justify-start items-center">
+                <CiLocationOn className="w-[18px] h-[18px] text-custom-purple mr-2" />
+                <p className="text-custom-darkGray font-semibold text-base">Address: <span className="font-medium">1762 School House Road</span></p>
+              </div>
+
+              <div className="flex justify-start items-center pt-5">
+                <FiPhone className="w-[18px] h-[18px] text-custom-purple mr-2" />
+                <p className="text-custom-darkGray font-semibold text-base">Call Us: <a href="tel:1233-777" className="font-medium">1233-777</a></p>
+              </div>
+
+              <div className="flex justify-start items-center pt-5">
+                <MdOutlineEmail className="w-[18px] h-[18px] text-custom-purple mr-2" />
+                <p className="text-custom-darkGray font-semibold text-base">Email: <a href="mailto:groceyish@contact.com" className="font-medium">groceyish@contact.com</a></p>
+              </div>
+
+              <div className="flex justify-start items-center pt-5">
+                <LuClock9 className="w-[18px] h-[18px] text-custom-purple mr-2" />
+                <p className="text-custom-darkGray font-semibold text-base">Work hours: <span className="font-medium">8:00 - 20:00, Sunday -  Thursday</span></p>
+              </div>
+            </div>
+
+            <div className="px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-center items-start md:pt-0 pt-5">
+              <div className="flex flex-col md:items-start items-start">
+                <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Account</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/wishlist') }}>Wishlist</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/cart') }}>Cart</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Track Order</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer">Shipping Details</p>
+              </div>
+            </div>
+
+            <div className="px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-center items-start md:pt-0 pt-5">
+              <div className="flex flex-col md:items-start items-start">
+                <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Useful links</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/about-us') }}>About Us</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/contact-us') }}>Conact</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Hot deals</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Promotions</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer">New products</p>
+              </div>
+            </div>
+
+            <div className="px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-center items-start md:pt-0 pt-5">
+              <div className="flex flex-col md:items-start items-start">
+                <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Help Center</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Payments</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Refund</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Checkout</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Shipping</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Q&A</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer">Privacy Policy</p>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto h-full border-t border-t-[#00000050] md:pb-10 pb-5"></div>
+        <div className="max-w-7xl mx-auto w-full md:pb-10 pb-5 md:px-0 px-5">
+          <div className="md:flex justify-between items-center">
+            <p className="text-custom-darkGray text-base font-medium">© {moment().format('YYYY')}, All rights reserved</p>
+            <div className="flex gap-5 md:pt-0 pt-5">
+              <img className="w-[44px] h-[44px]" src="/facebookImg.png" />
+              <img className="w-[44px] h-[44px]" src="/linkedinImg.png" />
+              <img className="w-[44px] h-[44px]" src="/instagramImg.png" />
+              <img className="w-[44px] h-[44px]" src="/twitterImg.png " />
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto h-full md:pb-0 pb-14"></div>
+
+      </div>
+    </div>
+  );
+}
+
+export default Footer;

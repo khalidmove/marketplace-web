@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: "Quicksand", sans-serif !important;
+}
+
+.slide img {
+  margin: 0 auto;
+}
+
+.slide {
+  transform: scale(0.7);
+  transition: transform 300ms;
+}
+
+.activeSlide {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.arrow {
+  position: absolute;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.next {
+  right: 0%;
+  top: 50%;
+}
+
+.prev {
+  left: 0%;
+  top: 50%;
+}
+
+.react-multiple-carousel__arrow--right {
+  right: calc(0%) !important;
+  /* right: calc(4%) !important; */
+  background: #35035C !important;
+}
+
+.react-multiple-carousel__arrow::before {
+  color: white !important;
+}
+
+.react-multiple-carousel__arrow--left {
+  left: calc(0%) !important;
+  /* left: calc(4%) !important; */
+  background: #35035C !important;
+}
+
+.slider {
+  margin: 0 20px;
+  overflow: "hidden";
+}
+
+.slider img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.custom-dot-list-style button {
+  border: none;
+  background: rgb(255, 68, 68);
+}
+
+.react-multi-carousel-dot.react-multi-carousel-dot--active button {
+  background: rgb(255, 68, 68) !important;
+}
+
+.boxShadow {
+  box-shadow: 0px 3px 8px 0px #0000001F !important;
+}
+
+.boxShadows {
+box-shadow: 0px 4px 4px 0px #00000040 !important;
+}
