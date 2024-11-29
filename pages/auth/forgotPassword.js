@@ -8,6 +8,7 @@ import Head from 'next/head';
 function forgotPassword(props) {
     const router = useRouter();
     const [eyeIcon, setEyeIcon] = useState(false);
+    const [eyeIcons, setEyeIcons] = useState(false);
     const [showEmail, setShowEmail] = useState(true);
     const [email, setEmail] = useState("");
     const [showOtp, setShowOtp] = useState(false);
@@ -184,15 +185,15 @@ function forgotPassword(props) {
 
                                     <div className='relative'>
                                         <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-10" placeholder="Confirm Password"
-                                            type={!eyeIcon ? "password" : "text"}
+                                            type={!eyeIcons ? "password" : "text"}
                                             value={confirmPassword}
                                             onChange={(text) => {
                                                 setConfirmPassword(text.target.value);
                                             }}
                                         />
                                         <div className='absolute top-[14px] right-[12px]'>
-                                            {!eyeIcon && <IoEyeOffOutline className='w-[20px] h-[20px] text-custom-gray' onClick={() => { setEyeIcon(true); }} />}
-                                            {eyeIcon && <IoEyeOutline className='w-[20px] h-[20px] text-custom-gray' onClick={() => { setEyeIcon(false); }} />}
+                                            {!eyeIcons && <IoEyeOffOutline className='w-[20px] h-[20px] text-custom-gray' onClick={() => { setEyeIcons(true); }} />}
+                                            {eyeIcons && <IoEyeOutline className='w-[20px] h-[20px] text-custom-gray' onClick={() => { setEyeIcons(false); }} />}
                                         </div>
                                     </div>
                                 </div>)}

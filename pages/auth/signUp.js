@@ -4,44 +4,25 @@ import { Api } from '@/services/service';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 
-
 function signUp(props) {
     const router = useRouter();
-    const [error, setError] = useState('');
-
     const [userDetail, setUserDetail] = useState({
         name: "",
         email: "",
-        company: "",
+        referal: "",
         phoneNumber: "",
         password: "",
-        recaptcha: ""
     });
     const [eyeIcon, setEyeIcon] = useState(false);
 
-    const recaptchaRef = React.createRef();
-
-    const onChange = () => {
-        const recaptchaValue = recaptchaRef.current.getValue();
-        console.log(recaptchaValue)
-        if (recaptchaValue) {
-            setUserDetail({ ...userDetail, recaptcha: recaptchaValue })
-            setError(''); // Clear the error when captcha is solved
-
-        }
-        // this.props.onSubmit(recaptchaValue);
-    }
     const submit = (e) => {
         e.preventDefault();
-        if (!userDetail.recaptcha) {
-            setError('Please complete the reCAPTCHA');
-            return;
-        }
+
         props.loader(true);
         const data = {
             email: userDetail.email.toLowerCase(),
             username: userDetail.name,
-            company: userDetail.company,
+            referal: userDetail.referal,
             password: userDetail.password,
             number: userDetail.phoneNumber,
             type: "USER",
@@ -56,7 +37,7 @@ function signUp(props) {
                     setUserDetail({
                         name: "",
                         email: "",
-                        company: "",
+                        referal: "",
                         phoneNumber: "",
                         password: "",
                     });
@@ -110,15 +91,15 @@ function signUp(props) {
                                         });
                                     }} />
 
-                                {/* <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="text" placeholder="Company"
+                                <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="number" placeholder="Referal"
                                     required
-                                    value={userDetail.company}
+                                    value={userDetail.referal}
                                     onChange={(text) => {
                                         setUserDetail({
                                             ...userDetail,
-                                            company: text.target.value,
+                                            referal: text.target.value,
                                         });
-                                    }} /> */}
+                                    }} />
 
 
                                 <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="number" placeholder="Phone Number"

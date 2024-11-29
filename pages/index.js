@@ -1,11 +1,97 @@
+import { useEffect, useState } from "react";
 import BestSells from "@/components/BestSells";
 import GroceryCategories from "@/components/GroceryCatories";
 import MainHeader from "@/components/MainHeader";
 import ProductCategory from "@/components/ProductCategory";
 import ShopFasterMarketplace from "@/components/ShopFasterMarketplace";
 import { IoArrowBack } from "react-icons/io5";
+import { Api } from "@/services/service";
+import { useRouter } from "next/router";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-export default function Home() {
+export default function Home(props) {
+  const router = useRouter();
+  const [categoryData, setCategoryData] = useState([]);
+  const [productsList, setProductsList] = useState([]);
+
+  useEffect(() => {
+    getCategory();
+    getProduct()
+  }, []);
+
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 7
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 7
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1
+    }
+  };
+
+  const responsived = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 5
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1
+    }
+  };
+
+  const getCategory = async () => {
+    props.loader(true);
+    Api("get", "getCategory", "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setCategoryData(res.data);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
+
+  const getProduct = async () => {
+    props.loader(true);
+    Api("get", "getProduct", "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setProductsList(res.data);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
+
   return (
 
     <div className="bg-white w-full">
@@ -24,7 +110,16 @@ export default function Home() {
             <p className="text-custom-red text-base font-medium">Meat</p>
           </div>
         </div>
-        <ProductCategory />
+        <div className="bg-white w-full">
+          <Carousel className="h-full w-full gap-5"
+            responsive={responsive}
+            autoPlay={true}
+            infinite={true}
+            arrows={false}
+          >
+            {categoryData.map((item, i) => (<ProductCategory item={item} i={i} />))}
+          </Carousel>
+        </div >
       </section>
 
       <section className="max-w-7xl  mx-auto w-full   md:py-10 py-5 md:px-0 px-5">
@@ -40,8 +135,16 @@ export default function Home() {
           </div>
         </div>
 
-        <GroceryCategories url={`/product-details`} />
-        {/* item={item} i={i} url={`/product-detail/${item?.slug}`} */}
+        <div className="bg-white w-full">
+          <Carousel className="h-full w-full gap-5"
+            responsive={responsived}
+            autoPlay={true}
+            infinite={true}
+            arrows={false}
+          >
+            {productsList.map((item, i) => (<GroceryCategories item={item} i={i} url={`/product-details`} />))}
+          </Carousel>
+        </div>
       </section>
 
       <section className="w-full bg-white ">

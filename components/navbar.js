@@ -80,7 +80,7 @@ const Navbar = (props) => {
   const [cartData, setCartData] = useContext(cartContext);
 
   useEffect(() => {
-    getCategory()
+    // getCategory()
   }, [])
 
   const getproductByCategory = async (text) => {
@@ -198,7 +198,7 @@ const Navbar = (props) => {
           <div className="max-w-7xl  mx-auto w-full">
             <div className="">
               {/* overflow-x-hidden */}
-              <div className={` flex items-center justify-between md:py-4 py-0 text-sm md:px-4 px-0 max-w-full`}>
+              <div className={` flex items-center justify-between md:py-4 py-0 text-sm md:px-0 px-0 max-w-full`}>
                 <div className="flex gap-1 items-center text-xl justify-center font-bold">
                   <img
                     onClick={() => { router.push("/") }}
@@ -208,37 +208,50 @@ const Navbar = (props) => {
                   />
                 </div>
 
-                <ul className="hidden md:flex gap-10  font-medium">
-                  <li>
-                    <div className="relative flex justify-end w-full ">
-                      {/* mx-4 */}
-                      <input
-                        type="text"
-                        placeholder="Search items"
-                        className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm"
-                      />
-                      <div className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	">
-                        <FiSearch className="w-[24px] h-[24px] text-white" />
-                      </div>
+                <div className="hidden md:flex gap-10 font-medium">
+                  <div className="relative flex justify-end w-full ">
+                    <input
+                      type="text"
+                      placeholder="Search items"
+                      className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm"
+                    />
+                    <div className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	">
+                      <FiSearch className="w-[24px] h-[24px] text-white" />
                     </div>
-                  </li>
-                  <li
-                    className="cursor-pointer flex gap-2 items-center justify-center"
-                    onClick={() => { router.push("/wishlist") }}
-                  >
-                    <FaRegHeart className="w-[24px] h-[24px]" />
-                    <span className="text-black text-xs	font-medium">Wishlist</span>
-                  </li>
-                  <li
-                    className="cursor-pointer flex gap-2 items-center justify-center"
-                    onClick={() => { setOpenCart(true); setMobileMenu(!mobileMenu) }}
-                  >
-                    <FiShoppingCart className="w-[24px] h-[24px]" />
-                    <span className="text-black text-xs	font-medium">My cart</span>
-                  </li>
-                </ul>
+                  </div>
+                </div>
 
-                {/* <div className="hidden md:flex gap-3">
+                <div className="md:flex hidden gap-10">
+                  <ul className="hidden md:flex gap-10  font-medium">
+                    {/* <li>
+                      <div className="relative flex justify-end w-full ">
+                        <input
+                          type="text"
+                          placeholder="Search items"
+                          className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm"
+                        />
+                        <div className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	">
+                          <FiSearch className="w-[24px] h-[24px] text-white" />
+                        </div>
+                      </div>
+                    </li> */}
+                    <li
+                      className="cursor-pointer flex gap-2 items-center justify-center"
+                      onClick={() => { router.push("/wishlist") }}
+                    >
+                      <FaRegHeart className="w-[24px] h-[24px]" />
+                      <span className="text-black text-xs	font-medium">Wishlist</span>
+                    </li>
+                    <li
+                      className="cursor-pointer flex gap-2 items-center justify-center"
+                      onClick={() => { setOpenCart(true); setMobileMenu(!mobileMenu) }}
+                    >
+                      <FiShoppingCart className="w-[24px] h-[24px]" />
+                      <span className="text-black text-xs	font-medium">My cart</span>
+                    </li>
+                  </ul>
+
+                  {/* <div className="hidden md:flex gap-3">
                   <div className="flex items-center gap-3 cursor-pointer" onClick={() => { router.push('/auth/signIn') }}>
                     <img
                       className="w-8 rounded-full"
@@ -249,42 +262,45 @@ const Navbar = (props) => {
                   </div>
                 </div> */}
 
-                <div className="md:flex hidden justify-start items-center">
+                  <div className="md:flex hidden justify-start items-center">
 
-                  {user?.token === undefined && (
-                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => { router.push('/auth/signIn') }}>
-                      <img
-                        className="w-8 rounded-full"
-                        src="/profilePhoto.jpg"
-                        alt="User Profile"
-                      />
-                      <p className="text-black font-semibold text-[16px]">David Pal</p>
-                    </div>
-                  )}
+                    {user?.token === undefined && (
+                      <div className="bg-custom-purple text-white  h-[40px] w-[40px] rounded-full md:flex justify-center items-center hidden" onClick={() => { router.push("/auth/signIn") }}>
+                        <LuLogIn className="text-white text-xl" />
+                      </div>
+                      // <div className="flex items-center gap-3 cursor-pointer" onClick={() => { router.push('/auth/signIn') }}>
+                      //   <img
+                      //     className="w-8 rounded-full"
+                      //     src="/profilePhoto.jpg"
+                      //     alt="User Profile"
+                      //   />
+                      //   <p className="text-black font-semibold text-[16px]">David Pal</p>
+                      // </div>
+                    )}
 
-                  {user?.token !== undefined && (
+                    {user?.token !== undefined && (
 
-                    <div className="bg-custom-purple text-white  h-[40px] w-[40px] rounded-full  items-center justify-center md:justify-self-end cursor-pointer md:flex hidden relative group"
-                      onClick={() => { setShowHover(true) }}
-                    >
-                      <p className="font-bold text-white text-base	text-center capitalize">
-                        {user?.username
-                          ?.charAt(0)
-                          .toUpperCase()}
-                      </p>
-                      {showHover && (
+                      <div className="bg-custom-purple text-white  h-[40px] w-[40px] rounded-full  items-center justify-center md:justify-self-end cursor-pointer md:flex hidden relative group"
+                        onClick={() => { setShowHover(true) }}
+                      >
+                        <p className="font-bold text-white text-base	text-center capitalize">
+                          {user?.username
+                            ?.charAt(0)
+                            .toUpperCase()}
+                        </p>
+                        {showHover && (
 
-                        <div
-                          className={` lg:absolute top-4 right-0 lg:min-w-[250px] group-hover:text-black   hidden group-hover:lg:block hover:lg:block md:z-40`}
-                        >
-                          <div className="bg-custom-purple  lg:shadow-inner z-10 rounded-md lg:mt-8 shadow-inner">
-                            <TiArrowSortedUp
-                              className={`group-hover:lg:block lg:hidden h-5 w-5 text-custom-purple  absolute top-5 right-0`}
-                            />
+                          <div
+                            className={` lg:absolute top-4 right-0 lg:min-w-[250px] group-hover:text-black   hidden group-hover:lg:block hover:lg:block md:z-40`}
+                          >
+                            <div className="bg-custom-purple  lg:shadow-inner z-10 rounded-md lg:mt-8 shadow-inner">
+                              <TiArrowSortedUp
+                                className={`group-hover:lg:block lg:hidden h-5 w-5 text-custom-purple  absolute top-5 right-0`}
+                              />
 
-                            <ul>
+                              <ul>
 
-                              {/* <li className="px-5 py-2 shadow-inner feature1 border-b-2 border-white">
+                                {/* <li className="px-5 py-2 shadow-inner feature1 border-b-2 border-white">
                               <Link
                                 href={"/favourite"}
                                 // target="_blank"
@@ -298,43 +314,45 @@ const Navbar = (props) => {
                               </Link>
                             </li> */}
 
-                              <li className="px-5 shadow-inner feature1  py-2">
-                                <div
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: "Are you sure?",
-                                      text: "Do you want to signout?",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      cancelButtonColor: "#d33",
-                                      confirmButtonText: "Yes",
-                                      cancelButtonText: "No",
-                                    }).then(function (result) {
-                                      if (result.isConfirmed) {
-                                        setUser({})
-                                        setShowHover(false);
-                                        localStorage.removeItem(
-                                          "userDetail"
-                                        );
-                                        localStorage.removeItem("token");
-                                        router.push('/auth/signIn')
-                                      }
-                                    })
-                                  }}
+                                <li className="px-5 shadow-inner feature1  py-2">
+                                  <div
+                                    onClick={() => {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        text: "Do you want to signout?",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: "Yes",
+                                        cancelButtonText: "No",
+                                      }).then(function (result) {
+                                        if (result.isConfirmed) {
+                                          setUser({})
+                                          setShowHover(false);
+                                          localStorage.removeItem(
+                                            "userDetail"
+                                          );
+                                          localStorage.removeItem("token");
+                                          router.push('/auth/signIn')
+                                        }
+                                      })
+                                    }}
 
-                                  className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
-                                  aria-current="page"
-                                >
-                                  {("Sign out")}
-                                </div>
-                              </li>
-                            </ul>
+                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                    aria-current="page"
+                                  >
+                                    {("Sign out")}
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
+
                 </div>
 
                 {/* <img
