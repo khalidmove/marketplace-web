@@ -6,7 +6,8 @@ function GroceryCategories({ item, i, url }) {
   const router = useRouter();
 
   return (
-    <div key={i} className="w-[228px] flex border border-featuredProducts-borderColor bg-white flex-col md:pb-5 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-5  md:mr-5 md:mt-10 mt-5" onClick={() => { router.push(url) }}>
+    <div key={i} className="flex border border-featuredProducts-borderColor bg-white flex-col md:pb-5 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-5  md:mr-5" onClick={() => { router.push(url) }}>
+      {/* w-[228px]  */}
       <img className='h-[144px] w-full' src={item?.varients[0]?.image[0]} />
       <div className='flex flex-col justify-start items-start pt-5'>
         <p className='text-custom-gray font-normal text-xs'>{item?.category?.name}</p>

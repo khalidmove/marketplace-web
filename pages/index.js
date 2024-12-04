@@ -14,10 +14,12 @@ export default function Home(props) {
   const router = useRouter();
   const [categoryData, setCategoryData] = useState([]);
   const [productsList, setProductsList] = useState([]);
+  const [bestSellsData, setBestSellsData] = useState([]);
 
   useEffect(() => {
     getCategory();
     getProduct()
+    getBestSells()
   }, []);
 
   const responsive = {
@@ -92,23 +94,39 @@ export default function Home(props) {
     );
   };
 
+  const getBestSells = async () => {
+    props.loader(true);
+    Api("get", "getProduct", "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setBestSellsData(res.data);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
+
   return (
 
     <div className="bg-white w-full">
       <section className="w-full">
-        <MainHeader />
+        <MainHeader {...props} />
       </section>
 
       <section className="max-w-7xl  mx-auto w-full  md:py-10 py-5 md:px-0 px-5">
         <div className="md:flex justify-between items-center w-full">
           <p className="text-custom-darkGray md:text-[32px] text-2xl font-semibold w-full">Explore by Categories</p>
-          <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
-            <p className="text-custom-purple text-base font-bold">All</p>
+          {/* <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
+            <p className="text-custom-purple text-base font-bold cursor-pointer" onClick={() => { router.push(`/categories/all?is_top=true`) }}>View All</p>
             <p className="text-custom-red text-base font-medium">Vegetables</p>
             <p className="text-custom-red text-base font-medium">Fruits</p>
             <p className="text-custom-red text-base font-medium">Coffe & teas</p>
             <p className="text-custom-red text-base font-medium">Meat</p>
-          </div>
+          </div> */}
         </div>
         <div className="bg-white w-full">
           <Carousel className="h-full w-full gap-5"
@@ -117,21 +135,21 @@ export default function Home(props) {
             infinite={true}
             arrows={false}
           >
-            {categoryData.map((item, i) => (<ProductCategory item={item} i={i} />))}
+            {categoryData.map((item, i) => (<ProductCategory item={item} i={i} url={`/categories/${item?.slug}`} />))}
           </Carousel>
         </div >
       </section>
 
       <section className="max-w-7xl  mx-auto w-full   md:py-10 py-5 md:px-0 px-5">
 
-        <div className="md:flex justify-between items-center w-full">
+        <div className="md:flex justify-between items-center w-full  md:mb-10 mb-5">
           <p className="text-black md:text-[32px] text-2xl font-semibold w-full">Featured Products</p>
           <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
-            <p className="text-custom-darkGray text-base font-medium">All</p>
-            <p className="text-custom-purple text-base font-semibold">Vegetables</p>
+            <p className="text-custom-purple text-base font-bold cursor-pointer" onClick={() => { router.push(`/categories/all`) }}>View All</p>
+            {/* <p className="text-custom-purple text-base font-semibold">Vegetables</p>
             <p className="text-custom-darkGray text-base font-medium">Fruits</p>
             <p className="text-custom-darkGray text-base font-medium">Coffe & teas</p>
-            <p className="text-custom-darkGray text-base font-medium">Meat</p>
+            <p className="text-custom-darkGray text-base font-medium">Meat</p> */}
           </div>
         </div>
 
@@ -142,7 +160,7 @@ export default function Home(props) {
             infinite={true}
             arrows={false}
           >
-            {productsList.map((item, i) => (<GroceryCategories item={item} i={i} url={`/product-details`} />))}
+            {productsList.map((item, i) => (<GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
           </Carousel>
         </div>
       </section>
@@ -180,7 +198,26 @@ export default function Home(props) {
 
 
       <section className="max-w-7xl  mx-auto w-full">
-        <BestSells />
+        <div className="bg-white w-full md:py-10 py-5 md:px-0 px-5">
+          <div className="md:flex justify-between items-center w-full">
+            <div className='md:flex justify-start items-center gap-5'>
+              <p className="text-black md:text-[32px] text-2xl font-semibold w-full">Daily Best Sells</p>
+              <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
+                <p className='text-custom-purple text-base font-semibold'>Featured</p>
+                <p className='text-custom-darkGray text-base font-medium'>Popular</p>
+                <p className='text-custom-darkGray text-base font-medium'>New</p>
+              </div>
+            </div>
+            <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
+              <img className='w-[46px]  h-[46px] object-contain' src='/backImg.png' />
+              <img className='w-[46px]  h-[46px] object-contain' src='/nextImg.png' />
+            </div>
+          </div>
+
+          <div className='grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5'>
+            {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))}
+          </div>
+        </div>
       </section>
 
       <section className="w-full md:pt-10 pt-5">

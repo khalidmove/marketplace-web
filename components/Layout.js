@@ -14,7 +14,6 @@ import MobileFooter from "./MobileFooter";
 const Layout = ({ children, loader, toaster, constant }) => {
   const [user, setUser] = useContext(userContext);
   const router = useRouter();
-  console.log(router)
   const [open, setOpen] = useState(false);
   const [organizationOpen, setOrganizationOpen] = useState(false);
   const [orgList, setOrgList] = useState([]);
@@ -93,7 +92,7 @@ const Layout = ({ children, loader, toaster, constant }) => {
 
   const onScroll = useCallback(event => {
     const { pageYOffset, scrollY, screen } = window;
-    console.log("yOffset", pageYOffset, "scrollY", scrollY, screen.availHeight);
+    // console.log("yOffset", pageYOffset, "scrollY", scrollY, screen.availHeight);
     let per = (61 * 70)
     if (scrollY > 100) {
       setOpens(false)
@@ -236,7 +235,7 @@ const Layout = ({ children, loader, toaster, constant }) => {
                   toaster={toaster}
                   opens={opens}
                 />
-                <HeaderFirst />
+                <HeaderFirst loader={loader} />
               </>
             }
           </div>

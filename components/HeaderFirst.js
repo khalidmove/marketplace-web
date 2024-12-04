@@ -3,13 +3,35 @@ import { FaPhoneAlt } from "react-icons/fa";
 import Link from "next/link";
 import { FiHome } from "react-icons/fi";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowBack } from "react-icons/io";
+import { Api } from "@/services/service";
 
-function HeaderFirst() {
+function HeaderFirst(props) {
   const router = useRouter();
   const [showHover, setShowHover] = useState(true);
+  const [categoryData, setCategoryData] = useState([]);
+
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+  const getCategory = async () => {
+    props.loader(true);
+    Api("get", "getCategory", "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setCategoryData(res.data);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
 
   return (
     <div className="w-full md:border-b border-b-0 border-b-gray-400">
@@ -31,13 +53,13 @@ function HeaderFirst() {
                   <TiArrowSortedUp
                     className={`group-hover:lg:block lg:hidden h-5 w-5 text-custom-purple  absolute top-5 right-0`}
                   />
-                  <div>
-                    <div className="px-5 py-2 shadow-inner feature1 border-b-2 border-white flex justify-between items-center" onClick={() => { router.push('/categoriesList') }}>
-                      <p className="text-white text-base	font-normal">Grocery & Kitchen</p>
+                  <div className="w-full">
+                    {categoryData.map((item, i) => (<div key={i} className={`px-5 py-2 shadow-inner feature1  flex justify-between items-center cursor-pointer1 ${categoryData?.length !== i + 1 ? 'border-b-2 border-white' : ""}`} onClick={() => { router.push(`/categories/${item?.slug}`) }}>
+                      <p className="text-white text-base	font-normal">{item?.name}</p>
                       <IoIosArrowBack className="w-[22px] h-[22px] text-white rotate-180" />
-                    </div>
+                    </div>))}
 
-                    <div className="px-5 py-2 shadow-inner feature1 border-b-2 border-white flex justify-between items-center">
+                    {/* <div className="px-5 py-2 shadow-inner feature1 border-b-2 border-white flex justify-between items-center">
                       <p className="text-white text-base	font-normal">Snacks & Drinks</p>
                       <IoIosArrowBack className="w-[22px] h-[22px] text-white rotate-180" />
                     </div>
@@ -65,66 +87,8 @@ function HeaderFirst() {
                     <div className="px-5 py-2 shadow-inner feature1 flex justify-between items-center">
                       <p className="text-white text-base	font-normal">Toys & Sports</p>
                       <IoIosArrowBack className="w-[22px] h-[22px] text-white rotate-180" />
-                    </div>
+                    </div> */}
 
-                    {/* <li className="px-5 py-2 shadow-inner feature1 border-b-2 border-white">
-                      <Link
-                        href={"https://main.d3u137s4z5bz92.amplifyapp.com/"}
-                        target="_blank"
-                        onClick={() => {
-                          setShowHover(false);
-                        }}
-                        className="block px-5  py-1  pl-0  text-white text-left font-semibold text-base"
-                        aria-current="page"
-                      >
-                        {("My Store")}
-                      </Link>
-                    </li>
-
-                    <li className="px-5 py-2 shadow-inner feature1 border-b-2 border-white">
-                      <Link
-                        href={"/favourite"}
-                        // target="_blank"
-                        onClick={() => {
-                          setShowHover(false);
-                        }}
-                        className="block px-5  py-1  pl-0  text-white text-left font-semibold text-base"
-                        aria-current="page"
-                      >
-                        {("My Favourite")}
-                      </Link>
-                    </li>
-
-                    <li className="px-5 shadow-inner feature1  py-2">
-                      <div
-                        onClick={() => {
-                          Swal.fire({
-                            title: "Are you sure?",
-                            text: "Do you want to signout?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Yes",
-                            cancelButtonText: "No",
-                          }).then(function (result) {
-                            if (result.isConfirmed) {
-                              setUser({})
-                              setShowHover(false);
-                              localStorage.removeItem(
-                                "userDetail"
-                              );
-                              localStorage.removeItem("token");
-                              router.push('/auth/signIn')
-                            }
-                          })
-                        }}
-
-                        className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
-                        aria-current="page"
-                      >
-                        {("Sign out")}
-                      </div>
-                    </li> */}
                   </div>
                 </div>
               </div>
