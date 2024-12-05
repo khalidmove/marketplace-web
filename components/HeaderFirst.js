@@ -100,7 +100,7 @@ function HeaderFirst(props) {
             <ul className="flex items-center gap-8 my-2">
               <div className="flex items-center">
                 <FiHome className="w-5 h-5 text-custom-purple" />
-                <Link className="text-custom-purple text-base font-medium cursor-pointer ml-2" href={"/"}>
+                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/"}>
                   Home
                 </Link>
               </div>

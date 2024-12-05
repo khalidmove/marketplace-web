@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { Api } from "@/services/service";
 import { FaFacebookF } from "react-icons/fa";
@@ -10,12 +10,14 @@ import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
 import { LuClock9 } from "react-icons/lu";
+import { openCartContext } from "@/pages/_app";
 
 function Footer(props) {
   const router = useRouter();
   const [userDetail, setUserDetail] = useState({
     subscriber: "",
   });
+  const [openCart, setOpenCart] = useContext(openCartContext);
 
   const addSubscriber = (e) => {
     e.preventDefault();
@@ -83,9 +85,9 @@ function Footer(props) {
               <div className="flex flex-col md:items-start items-start">
                 <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Account</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/wishlist') }}>Wishlist</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/cart') }}>Cart</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Track Order</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer">Shipping Details</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { setOpenCart(true) }}>Cart</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer" onClick={() => { router.push('/orders') }}>Order</p>
+                {/* <p className="text-custom-darkGray text-base font-medium cursor-pointer">Shipping Details</p> */}
               </div>
             </div>
 
@@ -93,22 +95,24 @@ function Footer(props) {
               <div className="flex flex-col md:items-start items-start">
                 <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Useful links</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/about-us') }}>About Us</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/contact-us') }}>Conact</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Hot deals</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer" onClick={() => { router.push('/contact-us') }}>Conact</p>
+                {/* <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Hot deals</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Promotions</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer">New products</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer">New products</p> */}
               </div>
             </div>
 
             <div className="px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-center items-start md:pt-0 pt-5">
               <div className="flex flex-col md:items-start items-start">
                 <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Help Center</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Payments</p>
+                {/* <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Payments</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Refund</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Checkout</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Shipping</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Q&A</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer">Privacy Policy</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Shipping</p> */}
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/faq') }}>Q&A</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/privacy-policy') }}>Privacy Policy</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/terms-condition') }}>Term & Conditions</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer" onClick={() => { router.push('/refund-policy') }}>Refund Policy</p>
               </div>
             </div>
 

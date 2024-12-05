@@ -74,12 +74,39 @@ const Navbar = (props) => {
   const [deliveryCharge, setDeliveryCharge] = useState(0)
   const [deliveryPartnerTip, setDeliveryPartnerTip] = useState(0)
   const [mainTotal, setMainTotal] = useState(0)
+  const [productList, SetProductList] = useState([])
 
   useEffect(() => {
+    // const d = cartData.find(
+    //   (f) => f._id === f.category._id
+    // );
+    // console.log(d)
+    if (cartData?.length > 0) {
+      getproductByCategory()
+    }
     // getCategory()
   }, [])
 
-  const getproductByCategory = async (text) => {
+  console.log(productList)
+
+  const getproductByCategory = async () => {
+    props.loader(true);
+    Api("get", `getProductBycategoryId?category=${cartData[0]?.category._id}&product_id=${cartData[0]?._id}`, "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        // const sameItem = res.data.filter(f => f._id !== router?.query?.id)
+        SetProductList(res.data)
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
+
+  const getproductBySearchCategory = async (text) => {
     let parmas = {}
     let url = `productsearch?key=${text}`
 
@@ -96,8 +123,6 @@ const Navbar = (props) => {
       }
     );
   };
-
-
 
   const closeDrawer = async () => {
     setShowCategory(false);
@@ -259,6 +284,8 @@ const Navbar = (props) => {
     );
   }
 
+
+
   return (
     <>
       <nav className={`flex flex-col justify-center   min-h-max h-auto  bg-white w-full z-50 md:p-0 p-3`}>
@@ -266,7 +293,6 @@ const Navbar = (props) => {
         <div className="w-full md:border-b border-b-0 border-b-gray-400 ">
           <div className="max-w-7xl  mx-auto w-full">
             <div className="">
-              {/* overflow-x-hidden */}
               <div className={` flex items-center justify-between md:py-4 py-0 text-sm md:px-0 px-0 max-w-full`}>
                 <div className="flex gap-1 items-center text-xl justify-center font-bold">
                   <img
@@ -292,18 +318,6 @@ const Navbar = (props) => {
 
                 <div className="md:flex hidden gap-10">
                   <ul className="hidden md:flex gap-10  font-medium">
-                    {/* <li>
-                      <div className="relative flex justify-end w-full ">
-                        <input
-                          type="text"
-                          placeholder="Search items"
-                          className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm"
-                        />
-                        <div className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	">
-                          <FiSearch className="w-[24px] h-[24px] text-white" />
-                        </div>
-                      </div>
-                    </li> */}
                     <li
                       className="cursor-pointer flex gap-2 items-center justify-center"
                       onClick={() => { router.push("/wishlist") }}
@@ -320,31 +334,12 @@ const Navbar = (props) => {
                     </li>
                   </ul>
 
-                  {/* <div className="hidden md:flex gap-3">
-                  <div className="flex items-center gap-3 cursor-pointer" onClick={() => { router.push('/auth/signIn') }}>
-                    <img
-                      className="w-8 rounded-full"
-                      src="/profilePhoto.jpg"
-                      alt="User Profile"
-                    />
-                    <p className="text-black font-semibold text-[16px]">David Pal</p>
-                  </div>
-                </div> */}
-
                   <div className="md:flex hidden justify-start items-center">
 
                     {user?.token === undefined && (
                       <div className="bg-custom-purple text-white  h-[40px] w-[40px] rounded-full md:flex justify-center items-center hidden" onClick={() => { router.push("/auth/signIn") }}>
                         <LuLogIn className="text-white text-xl" />
                       </div>
-                      // <div className="flex items-center gap-3 cursor-pointer" onClick={() => { router.push('/auth/signIn') }}>
-                      //   <img
-                      //     className="w-8 rounded-full"
-                      //     src="/profilePhoto.jpg"
-                      //     alt="User Profile"
-                      //   />
-                      //   <p className="text-black font-semibold text-[16px]">David Pal</p>
-                      // </div>
                     )}
 
                     {user?.token !== undefined && (
@@ -368,21 +363,6 @@ const Navbar = (props) => {
                               />
 
                               <ul>
-
-                                {/* <li className="px-5 py-2 shadow-inner feature1 border-b-2 border-white">
-                              <Link
-                                href={"/favourite"}
-                                // target="_blank"
-                                onClick={() => {
-                                  setShowHover(false);
-                                }}
-                                className="block px-5  py-1  pl-0  text-white text-left font-semibold text-base"
-                                aria-current="page"
-                              >
-                                {("My Favourite")}
-                              </Link>
-                            </li> */}
-
                                 <li className="px-5 shadow-inner feature1  py-2">
                                   <div
                                     onClick={() => {
@@ -423,43 +403,6 @@ const Navbar = (props) => {
                   </div>
 
                 </div>
-
-                {/* <img
-                onClick={() => setMobileMenu(true)}
-                className="md:hidden w-6"
-                src="/menu.png"
-                alt="Mobile Menu Icon"
-              /> */}
-
-                {/* <div
-                className={`${mobileMenu ? "fixed w-full" : "hidden"
-                  } md:hidden  top-0 right-0 overflow-y-auto z-20 bg-white transition-all`}
-              >
-                bottom-0
-                <div className="flex items-center justify-between px-2 py-2">
-                  <img className="w-[165px] h-[43px] object-contain cursor-pointer" src="/logo.png" alt="MarketPlace Logo" />
-                  <img
-                    className="w-10 cursor-pointer"
-                    onClick={() => setMobileMenu(false)}
-                    src="/cros.png"
-                    alt="Close Menu"
-                  />
-                </div>
-                <ul className="flex items-start justify-start flex-col gap-2 mt-5 px-5 text-lg font-medium">
-                  <Link onClick={() => setMobileMenu(false)} href={"/"}>
-                    HOME
-                  </Link>
-                  <Link onClick={() => setMobileMenu(false)} href={"/cart"} >
-                    MY CART
-                  </Link>
-                  <Link onClick={() => setMobileMenu(false)} href={"/about-us"} >
-                    ABOUT US
-                  </Link>
-                  <Link onClick={() => setMobileMenu(false)} href={"/contact-us"} >
-                    CONTACT US
-                  </Link>
-                </ul>
-              </div> */}
 
                 <div className="lg:hidden flex">
                   <button
@@ -517,7 +460,6 @@ const Navbar = (props) => {
         <div className='w-[700px] relative bg-custom-purple py-5 px-10'>
 
           <div className="bg-white w-full rounded-[5px] boxShadows p-5 flex justify-between items-center">
-            {/* h-[109px] */}
             <div className="flex justify-start items-center gap-1 cursor-pointer" onClick={() => { router.back(); setOpenCart(false); }}>
               <IoIosArrowBack className="w-[38px] h-[31px] text-black" />
               <p className="text-custom-purple text-2xl	font-bold">Your Cart</p>
@@ -526,7 +468,6 @@ const Navbar = (props) => {
           </div>
 
           <div className="bg-white w-full rounded-[5px] boxShadows p-5 mt-5">
-            {/* h-[192px] */}
             <div className="flex justify-between items-start gap-5 border-b border-b-[#85808080] pb-5">
               <div className="flex justify-start items-center">
                 <img className="w-[71px] h-[71px]" src="/starImg-1.png" />
@@ -547,7 +488,6 @@ const Navbar = (props) => {
           </div>
 
           <div className="bg-white w-full rounded-[5px] boxShadows p-5 mt-5">
-            {/* h-[450px] */}
 
             <div className="flex justify-start items-center gap-5">
               <div className="w-[50px] h-[39px] rounded-[8px] bg-[#FC096599] flex justify-center items-center">
@@ -569,7 +509,6 @@ const Navbar = (props) => {
 
               <div className="flex justify-center items-center  col-span-3">
                 <div className='bg-custom-offWhite w-[153px] h-[39px] rounded-[8px] flex justify-center items-center'>
-                  {/* md:mt-5 mt-3  */}
                   <div className='h-[39px] w-[51px] bg-custom-purple rounded-[8px] rounded-r-none	 flex justify-center items-center'
                     onClick={() => {
                       if (item.qty > 1) {
@@ -630,7 +569,9 @@ const Navbar = (props) => {
             </div>
           </div>
 
-          {/* <GroceryCategories /> */}
+          {productList.map((item, i) => (
+            <GroceryCategories item={item} i={i} />
+          ))}
 
           <button className="bg-custom-red h-[50px] rounded-[12px] w-full font-semibold text-white text-base text-center mt-5"
             onClick={() => {
