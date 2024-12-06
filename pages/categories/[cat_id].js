@@ -135,7 +135,7 @@ function Categories(props) {
                                 </div>
                                 {openData && <FormControl className=''>
                                     <FormGroup className='flex flex-col' >
-                                        {sortByData.map((item, i) => (<FormControlLabel key={i}
+                                        {sortByData.map((item, i) => (<FormControlLabel className='text-black' key={i}
                                             control={
                                                 <Checkbox onChange={() => {
                                                     if (selectedSortBy === item?.value) {
@@ -159,7 +159,7 @@ function Categories(props) {
                                 </div>
 
                                 {openCategory && <FormGroup>
-                                    {categoryList.map((item, i) => (<FormControlLabel key={i} control={<Checkbox
+                                    {categoryList.map((item, i) => (<FormControlLabel className='text-black' key={i} control={<Checkbox
                                         onChange={() => {
                                             router.replace(`/categories/${item.slug}`)
                                             setSelectedCategories(item?.slug)

@@ -112,7 +112,7 @@ function HeaderFirst(props) {
               </div>
               <div className="flex items-center">
                 <img className="w-5 h-5 object-contain" src="/aboutUsImg.png" />
-                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/"}>
+                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/categories/all"}>
                   Categories
                 </Link>
               </div>

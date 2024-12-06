@@ -322,14 +322,14 @@ const Navbar = (props) => {
                       className="cursor-pointer flex gap-2 items-center justify-center"
                       onClick={() => { router.push("/wishlist") }}
                     >
-                      <FaRegHeart className="w-[24px] h-[24px]" />
+                      <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
                       <span className="text-black text-xs	font-medium">Wishlist</span>
                     </li>
                     <li
                       className="cursor-pointer flex gap-2 items-center justify-center"
                       onClick={() => { setOpenCart(true); setMobileMenu(!mobileMenu) }}
                     >
-                      <FiShoppingCart className="w-[24px] h-[24px]" />
+                      <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" />
                       <span className="text-black text-xs	font-medium">My cart</span>
                     </li>
                   </ul>
@@ -460,7 +460,7 @@ const Navbar = (props) => {
         <div className='w-[700px] relative bg-custom-purple py-5 px-10'>
 
           <div className="bg-white w-full rounded-[5px] boxShadows p-5 flex justify-between items-center">
-            <div className="flex justify-start items-center gap-1 cursor-pointer" onClick={() => { router.back(); setOpenCart(false); }}>
+            <div className="flex justify-start items-center gap-1 cursor-pointer" onClick={() => { setOpenCart(false); }}>
               <IoIosArrowBack className="w-[38px] h-[31px] text-black" />
               <p className="text-custom-purple text-2xl	font-bold">Your Cart</p>
             </div>
@@ -500,7 +500,7 @@ const Navbar = (props) => {
 
             {cartData?.map((item, i) => (<div key={i} className="grid grid-cols-9 w-full gap-5 mt-5">
               <div className="flex justify-start items-start col-span-4">
-                <img className="w-[145px] h-[104px]" src={item?.selectedImage} />
+                <img className="w-[145px] h-[104px]" src={item?.selectedImage || item?.image} />
                 <div className="pt-2">
                   <p className="text-custom-purple font-semibold text-base">{item?.name}</p>
                   <p className="text-custom-newGrayColors font-normal text-sm pt-2">500 g</p>
@@ -538,7 +538,7 @@ const Navbar = (props) => {
               </div>
 
               <div className="flex justify-center items-center col-span-2">
-                <p className="text-custom-purple font-semibold text-base">₹{item?.offer}<del className="text-custom-red font-normal text-xs ml-2">₹{item?.price}</del></p>
+                <p className="text-custom-purple font-semibold text-base">₹{item?.price}<del className="text-custom-red font-normal text-xs ml-2">₹{item?.offer}</del></p>
                 <IoMdClose className="w-[22px] h-[22px] text-custom-newGray ml-2 cursor-pointer" onClick={() => { cartClose(item, i) }} />
               </div>
             </div>))}

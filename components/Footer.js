@@ -95,7 +95,7 @@ function Footer(props) {
               <div className="flex flex-col md:items-start items-start">
                 <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Useful links</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/about-us') }}>About Us</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer" onClick={() => { router.push('/contact-us') }}>Conact</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer" onClick={() => { router.push('/contact-us') }}>Contact</p>
                 {/* <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Hot deals</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5">Promotions</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer">New products</p> */}
