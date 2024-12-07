@@ -7,11 +7,15 @@ import { useEffect, useState } from "react";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowBack } from "react-icons/io";
 import { Api } from "@/services/service";
+import { FaQuestion } from "react-icons/fa6";
+import { BiCategory } from "react-icons/bi";
+import { SiLivechat } from "react-icons/si";
 
 function HeaderFirst(props) {
   const router = useRouter();
   const [showHover, setShowHover] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
+  const [selectedTab, setSelectedTab] = useState('home');
 
   useEffect(() => {
     getCategory();
@@ -96,34 +100,42 @@ function HeaderFirst(props) {
 
 
           </div>
-          <div>
+
+          <div className="flex justify-center items-center">
             <ul className="flex items-center gap-8 my-2">
               <div className="flex items-center">
-                <FiHome className="w-5 h-5 text-custom-purple" />
-                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/"}>
+                <FiHome className={`w-5 h-5 ${selectedTab === 'home' ? 'text-custom-purple' : 'text-custom-darkGray'}`} />
+                <p className={`text-base font-medium cursor-pointer ml-2 ${selectedTab === 'home' ? 'text-custom-purple' : 'text-custom-darkGray'}`} onClick={() => { router.push('/'); setSelectedTab('home'); }}>
                   Home
-                </Link>
+                </p>
               </div>
               <div className="flex items-center">
-                <img className="w-5 h-5 object-contain" src="/referalImg.png" />
-                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/referal"}>
+                {/* <img className="w-5 h-5 object-contain" src="/referalImg.png" /> */}
+                <div className={`w-5 h-5 rounded-full flex justify-center items-center ${selectedTab === 'referal' ? 'bg-custom-purple' : 'bg-custom-darkGray'}`}>
+                  <FaQuestion className="text-white w-4 h-4" />
+                </div>
+                <p className={`text-base font-medium cursor-pointer ml-2 ${selectedTab === 'referal' ? 'text-custom-purple' : 'text-custom-darkGray'}`} onClick={() => { router.push('/referal'); setSelectedTab('referal'); }}>
                   Referal
-                </Link>
+                </p>
               </div>
               <div className="flex items-center">
-                <img className="w-5 h-5 object-contain" src="/aboutUsImg.png" />
-                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/categories/all"}>
+                {/* {selectedTab !== 'categories' && <img className="w-5 h-5 object-contain" src="/aboutUsImg.png" />}
+                {selectedTab === 'categories' && <img className="w-5 h-5 object-contain" src="/categoriesImg.png" />} */}
+                <BiCategory className={`w-5 h-5 ${selectedTab === 'categories' ? 'text-custom-purple' : 'text-custom-darkGray'}`} />
+                <p className={`text-base font-medium cursor-pointer ml-2 ${selectedTab === 'categories' ? 'text-custom-purple' : 'text-custom-darkGray'}`} onClick={() => { router.push('/categories/all'); setSelectedTab('categories'); }}>
                   Categories
-                </Link>
+                </p>
               </div>
               <div className="flex items-center">
-                <img className="w-5 h-5 object-contain" src="/liveChatImg.png" />
-                <Link className="text-custom-darkGray text-base font-medium cursor-pointer ml-2" href={"/"}>
+                {/* <img className="w-5 h-5 object-contain" src="/liveChatImg.png" /> */}
+                <SiLivechat className={`w-5 h-5  ${selectedTab === 'live chat' ? 'text-custom-purple' : 'text-custom-darkGray'}`} />
+                <p className={`text-base font-medium cursor-pointer ml-2 ${selectedTab === 'live chat' ? 'text-custom-purple' : 'text-custom-darkGray'}`} onClick={() => { router.push('/'); setSelectedTab('live chat'); }}>
                   Live chat
-                </Link>
+                </p>
               </div>
             </ul>
           </div>
+
           <div className="my-2 flex items-center gap-5 justify-center">
             <p className="my-1 text-red-500">
               <FaPhoneAlt />

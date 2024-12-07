@@ -202,20 +202,21 @@ export default function Home(props) {
           <div className="md:flex justify-between items-center w-full">
             <div className='md:flex justify-start items-center gap-5'>
               <p className="text-black md:text-[32px] text-2xl font-semibold w-full">Daily Best Sells</p>
-              <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
+              {/* <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
                 <p className='text-custom-purple text-base font-semibold'>Featured</p>
                 <p className='text-custom-darkGray text-base font-medium'>Popular</p>
                 <p className='text-custom-darkGray text-base font-medium'>New</p>
-              </div>
+              </div> */}
             </div>
-            <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
+            {/* <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
               <img className='w-[46px]  h-[46px] object-contain' src='/backImg.png' />
               <img className='w-[46px]  h-[46px] object-contain' src='/nextImg.png' />
-            </div>
+            </div> */}
           </div>
 
           <div className='grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5'>
-            {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))}
+            {bestSellsData.map((item, i) => (<GroceryCategories item={item} i={i} />))}
+            {/* {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))} */}
           </div>
         </div>
       </section>

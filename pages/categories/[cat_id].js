@@ -174,7 +174,7 @@ function Categories(props) {
                             <div className="grid md:grid-cols-4 grid-cols-1 md:gap-0 gap-5">
                                 {productList.map((item, i) => (
                                     <div key={i} className='w-full md:mb-5'>
-                                        <GroceryCategories item={item} i={i} url={`/product-detail/${item?.slug}?from=categories`} />
+                                        <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />
                                     </div>))}
                             </div>
                         </div>

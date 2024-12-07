@@ -11,6 +11,8 @@ import { Api } from '@/services/service';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { produce } from 'immer';
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa6";
 
 function ProductDetails(props) {
     const router = useRouter();
@@ -104,6 +106,38 @@ function ProductDetails(props) {
         );
     };
 
+    const addremovefavourite = () => {
+        if (!user?.token) {
+            props.toaster({ type: "success", message: 'Login required' });
+            return
+        }
+        let data = {
+            product: productsId?._id,
+        }
+
+        console.log(data)
+        props.loader(true);
+        Api("post", 'addremovefavourite', data, router).then(
+            (res) => {
+                props.loader(false);
+                console.log("res================>", res);
+                if (res.status) {
+                    props.toaster({ type: "success", message: res.data?.message });
+                    getProductById()
+                }
+                else {
+                    props.toaster({ type: "error", message: res?.data?.message });
+                }
+
+            },
+            (err) => {
+                props.loader(false);
+                console.log(err);
+                props.toaster({ type: "error", message: err?.message });
+            }
+        );
+    }
+
     return (
         <div className='bg-white w-full'>
 
@@ -124,7 +158,14 @@ function ProductDetails(props) {
                         </div>
                         <div className='flex justify-start items-center w-full'>
                             <div className='flex flex-col justify-start items-start w-full'>
-                                <p className='text-black md:text-[32px] text-2xl font-semibold'>{productsId?.name}</p>
+                                <div className='flex justify-between items-center w-full'>
+                                    <p className='text-black md:text-[32px] text-2xl font-semibold'>{productsId?.name}</p>
+                                    <div className='w-[46px] h-[46px] bg-custom-offWhite rounded-full flex justify-center items-center cursor-pointer' onClick={addremovefavourite}>
+                                        {!productsId?.favourite && <FaRegHeart className='text-black w-[23px] h-[23px]' />}
+                                        {productsId?.favourite && <FaHeart className='text-red-700 w-[23px] h-[23px]' />}
+                                    </div>
+                                </div>
+
                                 {/* <div className='flex justify-start items-center pt-2'>
                                     <p className='text-custom-newPurple font-semibold md:text-xl text-base'>See All Tata Products</p>
                                     <IoIosArrowBack className='text-custom-newPurple rotate-180 w-[15px] h-[15px] ml-2' />
@@ -228,10 +269,10 @@ function ProductDetails(props) {
                                 <p className='text-black font-medium md:text-xl text-base pt-2'>Description : <span className='text-custom-newGray font-normal md:text-xl text-base'>{productsId?.short_description}</span></p>
                             </div>
                             <div className='flex flex-col justify-start items-start'>
-                                <p className='text-black font-medium md:text-xl text-base'>Country of Origin : <span className='text-custom-newGray font-normal md:text-xl text-base'>India</span></p>
-                                <p className='text-black font-medium md:text-xl text-base pt-2'>Self Life : <span className='text-custom-newGray font-normal md:text-xl text-base'>24 Months</span></p>
-                                <p className='text-black font-medium md:text-xl text-base pt-2'>Manufacturer Name : <span className='text-custom-newGray font-normal md:text-xl text-base'>TCPL</span></p>
-                                <p className='text-black font-medium md:text-xl text-base pt-2'>Manufacturer Address : <span className='text-custom-newGray font-normal md:text-xl text-base'>Tata Food Zone, Plot No 5/B, IDA,Cherlapally-50005.</span></p>
+                                <p className='text-black font-medium md:text-xl text-base'>Country of Origin : <span className='text-custom-newGray font-normal md:text-xl text-base'>{productsId?.origin}</span></p>
+                                <p className='text-black font-medium md:text-xl text-base pt-2'>Self Life : <span className='text-custom-newGray font-normal md:text-xl text-base'>{productsId?.selflife}</span></p>
+                                <p className='text-black font-medium md:text-xl text-base pt-2'>Manufacturer Name : <span className='text-custom-newGray font-normal md:text-xl text-base'>{productsId?.manufacturername}</span></p>
+                                <p className='text-black font-medium md:text-xl text-base pt-2'>Manufacturer Address : <span className='text-custom-newGray font-normal md:text-xl text-base'>{productsId?.manufactureradd}</span></p>
                             </div>
                         </div>
                     </div>

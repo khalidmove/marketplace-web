@@ -14,7 +14,7 @@ function GroceryCategories({ item, i, url }) {
       {/* w-[228px]  */}
       <img className='h-[144px] w-full' src={item?.varients[0]?.image[0]} onClick={() => { router.push(url) }} />
       <div className='flex flex-col justify-start items-start pt-5'>
-        <p className='text-custom-gray font-normal text-xs'>{item?.category?.name}</p>
+        <p className='text-custom-gray font-normal text-xs'>{item?.categoryName}</p>
         <p className='text-custom-darkGray text-base font-semibold pt-2'>{item?.name}</p>
       </div>
       <div className='flex justify-between items-center pt-5'>

@@ -294,22 +294,29 @@ const Navbar = (props) => {
           <div className="max-w-7xl  mx-auto w-full">
             <div className="">
               <div className={` flex items-center justify-between md:py-4 py-0 text-sm md:px-0 px-0 max-w-full`}>
-                <div className="flex gap-1 items-center text-xl justify-center font-bold">
+                <div className="md:flex gap-1 items-center text-xl justify-center font-bold hidden" >
                   <img
                     onClick={() => { router.push("/") }}
-                    className="w-[165px] h-[43px] object-contain cursor-pointer"
+                    className="md:w-[165px] w-[130px] h-[43px] object-contain cursor-pointer"
                     src="/logo.png"
                     alt="MarketPlace Logo"
                   />
                 </div>
 
                 <div className="hidden md:flex gap-10 font-medium">
-                  <div className="relative flex justify-end w-full ">
-                    <input
+                  <div className="relative flex justify-end w-full "
+                    onClick={() => {
+                      setShowCategory1(true)
+                      setTimeout(() => {
+                        inputRef2.current.focus();
+                      }, 200);
+                    }}
+                  >
+                    <p
                       type="text"
-                      placeholder="Search items"
-                      className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm"
-                    />
+                      placeholder="Search for items..."
+                      className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
+                    >{serchData || 'Search for products...'}</p>
                     <div className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	">
                       <FiSearch className="w-[24px] h-[24px] text-white" />
                     </div>
@@ -320,7 +327,7 @@ const Navbar = (props) => {
                   <ul className="hidden md:flex gap-10  font-medium">
                     <li
                       className="cursor-pointer flex gap-2 items-center justify-center"
-                      onClick={() => { router.push("/wishlist") }}
+                      onClick={() => { router.push("/favourite") }}
                     >
                       <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
                       <span className="text-black text-xs	font-medium">Wishlist</span>
@@ -404,7 +411,7 @@ const Navbar = (props) => {
 
                 </div>
 
-                <div className="lg:hidden flex">
+                {/* <div className="lg:hidden flex">
                   <button
                     onClick={() => { setMobileMenu(!mobileMenu); }}
                     data-collapse-toggle="navbar-sticky"
@@ -429,18 +436,18 @@ const Navbar = (props) => {
                     </svg>
                   </button>
 
-                </div>
+                </div> */}
 
               </div>
 
-              {mobileMenu && <div className="">
+              {/* {mobileMenu && <div className="">
                 <ul className="flex items-start justify-start flex-col gap-2 mt-5 px-5 text-lg font-medium lg:hidden">
                   <Link onClick={() => setMobileMenu(false)} href={"/"}>
                     Home
                   </Link>
-                  <Link onClick={() => setMobileMenu(false)} href={"/cart"} >
+                  <p onClick={() => { setOpenCart(true); setMobileMenu(false) }}  >
                     My Cart
-                  </Link>
+                  </p>
                   <Link onClick={() => setMobileMenu(false)} href={"/about-us"} >
                     About Us
                   </Link>
@@ -448,7 +455,37 @@ const Navbar = (props) => {
                     Contact Us
                   </Link>
                 </ul>
-              </div>}
+              </div>} */}
+
+              <div className="md:hidden flex">
+
+                <div className="flex gap-1 items-center text-xl justify-center font-bold" >
+                  <img
+                    onClick={() => { router.push("/") }}
+                    className="md:w-[165px] w-[130px] h-[43px] object-contain cursor-pointer"
+                    src="/logo.png"
+                    alt="MarketPlace Logo"
+                  />
+                </div>
+
+                <div className="border border-custom-purple rounded-[20px] h-[38px] w-full mx-5 flex justify-start items-center overflow-hidden">
+                  {/* <IoIosSearch className="w-5 h-5 text-[#00000060] ml-2" /> */}
+                  <p type="text" ref={inputRef1} placeholder="Search for items..."
+                    onClick={() => {
+                      setShowCategory1(true)
+                      setTimeout(() => {
+                        inputRef2.current.focus();
+                      }, 200);
+                    }}
+
+                    className="bg-white min-w-32 justify-start items-center px-3 h-10 w-full rounded-[62px] outline-none flex  text-black text-xs font-normal"
+                  > {serchData || 'Search for items...'}</p>
+                </div>
+
+                <p className="cursor-pointer flex items-center justify-center" onClick={() => { router.push("/wishlist") }}>
+                  <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
+                </p>
+              </div>
 
             </div>
           </div>
@@ -457,37 +494,37 @@ const Navbar = (props) => {
       </nav >
 
       <Drawer className='' open={openCart} onClose={closeDrawers} anchor={'right'}>
-        <div className='w-[700px] relative bg-custom-purple py-5 px-10'>
+        <div className='md:w-[700px] w-[330px] relative bg-custom-purple py-5 md:px-10 px-5'>
 
-          <div className="bg-white w-full rounded-[5px] boxShadows p-5 flex justify-between items-center">
+          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 flex justify-between items-center">
             <div className="flex justify-start items-center gap-1 cursor-pointer" onClick={() => { setOpenCart(false); }}>
-              <IoIosArrowBack className="w-[38px] h-[31px] text-black" />
-              <p className="text-custom-purple text-2xl	font-bold">Your Cart</p>
+              <IoIosArrowBack className="md:w-[38px] w-[28px] md:h-[31px] h-[21px] text-black" />
+              <p className="text-custom-purple md:text-2xl text-base font-bold">Your Cart</p>
             </div>
-            <button className="text-white font-medium text-base bg-custom-red rounded-[12px] h-[50px] w-[112px]" onClick={() => { emptyCart() }}>Empty Cart</button>
+            <button className="text-white font-medium text-base bg-custom-red rounded-[12px] md:h-[50px] h-[40px] md:w-[112px] w-[105px]" onClick={() => { emptyCart() }}>Empty Cart</button>
           </div>
 
-          <div className="bg-white w-full rounded-[5px] boxShadows p-5 mt-5">
-            <div className="flex justify-between items-start gap-5 border-b border-b-[#85808080] pb-5">
-              <div className="flex justify-start items-center">
+          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
+            <div className="md:flex justify-between items-start gap-5 border-b border-b-[#85808080] pb-5">
+              <div className="flex md:flex-row flex-col justify-start md:items-center items-start">
                 <img className="w-[71px] h-[71px]" src="/starImg-1.png" />
-                <div className="pl-2">
-                  <p className="text-custom-purple font-semibold text-xl">Upto $10 cashback with CRED</p>
-                  <p className="text-xl font-normal text-custom-newGrayColor pt-2">Code: MARK123</p>
+                <div className="md:pl-2">
+                  <p className="text-custom-purple font-semibold md:text-xl text-base">Upto $10 cashback with CRED</p>
+                  <p className="md:text-xl text-base font-normal text-custom-newGrayColor md:pt-2 pt-1">Code: MARK123</p>
                 </div>
               </div>
 
-              <button className="w-[183px] h-[61px] rounded-[8px] border border-custom-red text-custom-red font-semibold text-xl">Apply</button>
+              <button className="md:w-[183px] w-[130px] md:h-[50px] h-[40px] rounded-[8px] border border-custom-red text-custom-red font-semibold md:text-xl text-base md:mt-0 mt-2">Apply</button>
             </div>
 
             <div className="pt-5 flex justify-center items-center gap-1">
-              <p className="text-custom-purple font-medium text-lg">View all coupons</p>
-              <IoIosArrowBack className="w-[31px] h-[26px] text-black rotate-180" />
+              <p className="text-custom-purple font-medium md:text-lg text-base">View all coupons</p>
+              <IoIosArrowBack className="md:w-[31px] w-[21px] md:h-[26px] h-[16px] text-black rotate-180" />
             </div>
 
           </div>
 
-          <div className="bg-white w-full rounded-[5px] boxShadows p-5 mt-5">
+          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
 
             <div className="flex justify-start items-center gap-5">
               <div className="w-[50px] h-[39px] rounded-[8px] bg-[#FC096599] flex justify-center items-center">
@@ -498,16 +535,20 @@ const Navbar = (props) => {
             </div>
 
 
-            {cartData?.map((item, i) => (<div key={i} className="grid grid-cols-9 w-full gap-5 mt-5">
-              <div className="flex justify-start items-start col-span-4">
-                <img className="w-[145px] h-[104px]" src={item?.selectedImage || item?.image} />
+            {cartData?.map((item, i) => (<div key={i} className="grid md:grid-cols-9 grid-cols-1 w-full md:gap-5 mt-5">
+              <div className="flex justify-start items-start col-span-4 md:gap-0 gap-2">
+                <img className="md:w-[145px] md:h-[104px] w-[50px] h-[50px] object-contain" src={item?.selectedImage || item?.image} />
                 <div className="pt-2">
                   <p className="text-custom-purple font-semibold text-base">{item?.name}</p>
                   <p className="text-custom-newGrayColors font-normal text-sm pt-2">500 g</p>
                 </div>
+                <div className="flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-2 md:hidden">
+                  <p className="text-custom-purple font-semibold text-base">₹{item?.price}<del className="text-custom-red font-normal text-xs ml-2">₹{item?.offer}</del></p>
+                  <IoMdClose className="w-[22px] h-[22px] text-custom-newGray ml-2 cursor-pointer" onClick={() => { cartClose(item, i) }} />
+                </div>
               </div>
 
-              <div className="flex justify-center items-center  col-span-3">
+              <div className="flex md:justify-center justify-start md:items-center items-start col-span-3 md:mt-0 mt-5">
                 <div className='bg-custom-offWhite w-[153px] h-[39px] rounded-[8px] flex justify-center items-center'>
                   <div className='h-[39px] w-[51px] bg-custom-purple rounded-[8px] rounded-r-none	 flex justify-center items-center'
                     onClick={() => {
@@ -537,7 +578,7 @@ const Navbar = (props) => {
                 </div>
               </div>
 
-              <div className="flex justify-center items-center col-span-2">
+              <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                 <p className="text-custom-purple font-semibold text-base">₹{item?.price}<del className="text-custom-red font-normal text-xs ml-2">₹{item?.offer}</del></p>
                 <IoMdClose className="w-[22px] h-[22px] text-custom-newGray ml-2 cursor-pointer" onClick={() => { cartClose(item, i) }} />
               </div>
@@ -545,7 +586,7 @@ const Navbar = (props) => {
 
           </div>
 
-          <div className="bg-white w-full rounded-[5px] boxShadows p-5 mt-5">
+          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
             <div className="flex justify-between items-center w-full">
               <p className="text-custom-purple font-normal text-base">Item Total</p>
               <p className="text-custom-purple font-normal text-base">₹{CartTotal}</p>
@@ -763,6 +804,63 @@ const Navbar = (props) => {
           </form>
         </div>
       </div>}
+
+      <Drawer open={showCategory1} anchor="top" onClose={closeDrawer1} >
+        <div className='max-w-7xl  mx-auto w-full  relative'>
+          <div className="flex items-center justify-between border-b border-custom-newLightGray p-5 gap-5">
+            {/* <p className='text-black text-2xl font-normal AbrilFatface'>Filters</p> */}
+            <input type="text"
+              ref={inputRef2}
+              value={serchData}
+              onChange={(text) => {
+                setSearchData(text.target.value);
+                if (text.target.value) {
+                  getproductBySearchCategory(text.target.value)
+                } else {
+                  setProductsList([])
+                }
+              }}
+              placeholder="Search for products..."
+              className="bg-custom-lightGray px-5 h-10 w-full rounded-[62px] outline-none  text-black" />
+            <IconButton variant="text" color="blue-gray" onClick={() => { setShowCategory1(false); setSearchData('') }}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </IconButton>
+
+          </div>
+          <div>
+            <section className="w-full ">
+              <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:py-5 py-5">
+                <p className="md:text-[48px] text-2xl text-black font-normal text-center">Products</p>
+                <div className="md:py-10 py-5 grid md:grid-cols-4 grid-cols-1 gap-5 w-full">
+                  {productsList.map((item, i) => (
+                    <div key={i} className="w-full" onClick={() => { setShowCategory1(false); setSearchData(''); setProductsList([]) }}>
+                      <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`
+                      } />
+                    </div>
+                  ))}
+                </div>
+                {productsList?.length === 0 && <p className="text-2xl text-black font-normal text-center">No Products</p>}
+              </div>
+            </section>
+          </div>
+
+
+        </div>
+
+      </Drawer>
 
     </>
   );
