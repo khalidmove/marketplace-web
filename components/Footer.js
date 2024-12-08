@@ -84,7 +84,7 @@ function Footer(props) {
             <div className="px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-center items-start md:pt-0 pt-5">
               <div className="flex flex-col md:items-start items-start">
                 <p className="text-custom-darkGray text-2xl font-semibold pb-5 uppercase">Account</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/wishlist') }}>Wishlist</p>
+                <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/favourite') }}>Wishlist</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { setOpenCart(true) }}>Cart</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer" onClick={() => { router.push('/orders') }}>Order</p>
                 {/* <p className="text-custom-darkGray text-base font-medium cursor-pointer">Shipping Details</p> */}
