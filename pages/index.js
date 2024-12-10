@@ -15,11 +15,13 @@ export default function Home(props) {
   const [categoryData, setCategoryData] = useState([]);
   const [productsList, setProductsList] = useState([]);
   const [bestSellsData, setBestSellsData] = useState([]);
+  const [carouselImg, setCarouselImg] = useState([]);
 
   useEffect(() => {
     getCategory();
     getProduct()
     getBestSells()
+    getsetting()
   }, []);
 
   const responsive = {
@@ -110,6 +112,30 @@ export default function Home(props) {
     );
   };
 
+  const getsetting = async () => {
+    props.loader(true);
+    Api("get", 'getsetting', '', router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        if (res?.success) {
+          if (res?.setting.length > 0) {
+            setCarouselImg(res?.setting[0].carousel)
+          }
+        } else {
+          props.loader(false);
+          console.log(res?.data?.message);
+          props.toaster({ type: "error", message: res?.data?.message });
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  }
+
   return (
 
     <div className="bg-white w-full">
@@ -168,8 +194,11 @@ export default function Home(props) {
       <section className="w-full bg-white ">
         <div className="max-w-7xl  mx-auto w-full md:py-10 py-5 md:px-0 px-5">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
+            {carouselImg.map((d, i) => (<div className='flex flex-col justify-center items-center h-full' key={i}>
+              <img className={`w-full object-contain`} src={d} onClick={() => { router.push(`/categories/all`) }} />
+            </div>))}
 
-            <div className="bg-[url('/backgroundImg-2.png')] bg-cover bg-no-repeat w-full md:h-[300px]">
+            {/* <div className="bg-[url('/backgroundImg-2.png')] bg-cover bg-no-repeat w-full md:h-[300px]">
               <div className="grid grid-cols-3 w-full gap-5">
                 <div className="md:py-10 md:pl-10 col-span-2 md:p-0 p-5">
                   <button className="bg-custom-purple w-[86px] h-[26px] rounded-[3px] text-white font-medium text-xs">Free delivery</button>
@@ -189,7 +218,7 @@ export default function Home(props) {
                   <button className="bg-white w-[143px] md:h-[52px] h-[40px] rounded-[2px] rounded-l-none	mt-5 text-black font-semibold text-base flex justify-center items-center">Order Now <IoArrowBack className="w-[18px] h-[18px] text-black ml-2 rotate-180" /></button>
                 </div>
               </div>
-            </div>
+            </div> */}
 
           </div>
         </div>

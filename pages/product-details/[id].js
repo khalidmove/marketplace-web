@@ -13,6 +13,7 @@ import "react-multi-carousel/lib/styles.css";
 import { produce } from 'immer';
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa6";
 
 function ProductDetails(props) {
     const router = useRouter();
@@ -197,7 +198,7 @@ function ProductDetails(props) {
                                     </div>
                                 </div>
 
-                                <p className='text-custom-newPurpleColor font-semibold md:text-2xl text-lg pt-5'>₹{productsId?.offer}<del className='text-custom-newGray font-normal text-base mx-3'>₹{productsId?.price}</del><span className='text-custom-purple font-medium text-base'>{(Math.round((productsId?.price * 100) / productsId?.offer)) - 100}% OFF</span></p>
+                                <p className='text-custom-newPurpleColor font-semibold md:text-2xl text-lg pt-5'>₹{productsId?.price}<del className='text-custom-newGray font-normal text-base mx-3'>₹{productsId?.offer}</del><span className='text-custom-purple font-medium text-base'>{(Math.round((productsId?.price * 100) / productsId?.offer)) - 100}% OFF</span></p>
 
                                 <div className='bg-custom-offWhite w-[100px] h-[32px] rounded-[8px] md:mt-5 mt-3 flex items-center'>
                                     <div className='h-[32px] w-[32px] bg-custom-purple rounded-[8px] rounded-r-none	 flex justify-center items-center'
@@ -221,6 +222,26 @@ function ProductDetails(props) {
                                     </div>
                                 </div>
 
+                                {productsId.attributes?.some(
+                                    (attribute) => attribute.name === "color"
+                                ) && <div className='w-full'>
+                                        <p className='text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3'>Select Colors</p>
+                                        <div className='flex gap-2 flex-wrap'>
+                                            {productsId?.varients?.map((item, i) => (
+                                                <div key={i} className='md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black' style={{ background: item?.color }} onClick={() => {
+                                                    item.selected.forEach(ele => {
+                                                        ele.request = 0
+                                                    })
+                                                    setSelectedColor(item)
+                                                    setSelectedImageList(item?.image)
+                                                    setSelectedImage(item?.image[0])
+                                                }}>
+                                                    {selectedColor?.color === item?.color && <FaCheck className='md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white' />}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>}
+
                                 <button className='bg-custom-purple w-[96px] h-[32px] rounded-[8px] text-white font-semibold text-xl md:mt-5 mt-4'
                                     onClick={() => {
                                         const d = cartData?.length > 0 ? cartData : [];
@@ -240,7 +261,7 @@ function ProductDetails(props) {
                                             const nextState = produce(cartData, draft => {
                                                 draft.push({
                                                     ...productsId,
-                                                    // selectedColor,
+                                                    selectedColor,
                                                     selectedImage,
                                                     // qty: 1,
                                                     total: productsId.price

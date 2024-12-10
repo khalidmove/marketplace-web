@@ -241,7 +241,7 @@ const Navbar = (props) => {
       data.push({
         product: element?._id,
         image: element.selectedColor?.selectedImage || element?.selectedImage,
-        // color: element.selectedColor?.color,
+        color: element.selectedColor?.color || element?.selectedColor,
         total: element.total,
         price: element.price,
         qty: element.qty,

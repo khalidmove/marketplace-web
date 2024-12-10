@@ -126,13 +126,13 @@ function HeaderFirst(props) {
                   Categories
                 </p>
               </div>
-              <div className="flex items-center">
-                {/* <img className="w-5 h-5 object-contain" src="/liveChatImg.png" /> */}
-                <SiLivechat className={`w-5 h-5  ${selectedTab === 'live chat' ? 'text-custom-purple' : 'text-custom-darkGray'}`} />
+              {/* <div className="flex items-center"> */}
+              {/* <img className="w-5 h-5 object-contain" src="/liveChatImg.png" /> */}
+              {/* <SiLivechat className={`w-5 h-5  ${selectedTab === 'live chat' ? 'text-custom-purple' : 'text-custom-darkGray'}`} />
                 <p className={`text-base font-medium cursor-pointer ml-2 ${selectedTab === 'live chat' ? 'text-custom-purple' : 'text-custom-darkGray'}`} onClick={() => { router.push('/'); setSelectedTab('live chat'); }}>
                   Live chat
                 </p>
-              </div>
+              </div> */}
             </ul>
           </div>
 
