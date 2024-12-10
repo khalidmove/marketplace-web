@@ -1,5 +1,5 @@
 import ShopFasterMarketplace from '@/components/ShopFasterMarketplace'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
     FacebookShareButton,
     TwitterShareButton,
@@ -12,12 +12,16 @@ import {
 } from "react-share";
 import { RxCrossCircled } from 'react-icons/rx';
 import { IoIosSend } from "react-icons/io";
+import { userContext } from './_app';
 
 function Referal() {
     const [viewPopup, setviewPopup] = useState(false)
+    const [user, setUser] = useContext(userContext);
 
-    const shareUrl = "https://yourwebsite.com";
-    const title = "Check out this amazing content!";
+    // const shareUrl = "https://yourwebsite.com";
+    const shareUrl = "https://main.d29wph1akkhrww.amplifyapp.com/";
+    // const title = "Check out this amazing content!";
+    const title = `${user?.referal}`;
     const hashtags = ["ReactShare", "SocialSharing"];
 
     return (
@@ -28,13 +32,13 @@ function Referal() {
                     <div className='bg-[#5C108380] md:w-[680px] w-[320px] border border-custom-newPurple rounded-[15px] md:p-10 p-5 flex flex-col justify-center items-center'>
                         <img className='md:w-[300px] w-[100px] md:h-[300px] h-[100px]' src='/image-2.png' />
                         <p className='text-black md:text-[32px] text-xl font-semibold pt-5 text-center'>Refer a friend to earn points.</p>
-                        <button className='w-[230px] md:h-[50px] h-[40px] border-[2px] border-custom-red rounded-[12px] md:text-2xl text-base font-medium text-custom-red mt-2'>GHAVRU3463463</button>
+                        <button className='w-[230px] md:h-[50px] h-[40px] border-[2px] border-custom-red rounded-[12px] md:text-2xl text-base font-medium text-custom-red mt-2'>{user?.referalpoints} Points</button>
                         <p className='text-black md:text-xl text-base font-medium w-[237px] text-center py-5'>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum</p>
-                        <button className='bg-custom-red md:h-[50px] h-[40px] md:w-[426px] w-[230px] rounded-[12px] text-white md:text-xl text-base font-semibold'
+                        <button className='md:w-[426px] w-[230px] md:h-[50px] h-[40px] border border-custom-red rounded-[12px] md:text-xl text-base font-medium text-custom-red'>{user?.referal}</button>
+                        <button className='bg-custom-red md:h-[50px] h-[40px] md:w-[426px] w-[230px] rounded-[12px] text-white md:text-xl text-base font-semibold mt-5'
                             onClick={() => {
                                 setviewPopup(true)
                             }}>Send invite</button>
-                        <button className='md:w-[426px] w-[230px] md:h-[50px] h-[40px] border border-custom-red rounded-[12px] md:text-xl text-base font-medium text-custom-red mt-5'>GHAVRU3463463</button>
                     </div>
                 </div>
             </section>
@@ -42,10 +46,8 @@ function Referal() {
             {viewPopup && (
                 <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
                     <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">
-                        <div
-                            className="absolute top-2 right-2 p-1 rounded-full  text-black w-8 h-8 cursor-pointer"
-                            onClick={() => setviewPopup(!viewPopup)}
-                        >
+                        <div className="absolute top-2 right-2 p-1 rounded-full  text-black w-8 h-8 cursor-pointer"
+                            onClick={() => setviewPopup(!viewPopup)}>
                             <RxCrossCircled className="h-full w-full font-semibold " />
                         </div>
 
