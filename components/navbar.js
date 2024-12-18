@@ -227,6 +227,8 @@ const Navbar = (props) => {
   }
 
   const createProductRquest = (e) => {
+    console.log(shippingAddressData)
+
     e.preventDefault();
     // if (cartData?.length === 0) {
     //   toaster({ type: "warning", message: 'Your cart is empty' });
@@ -234,14 +236,14 @@ const Navbar = (props) => {
     // }
     let data = []
     let cart = localStorage.getItem("addCartDetail");
-    let address = localStorage.getItem("shippingAddressData");
+    // let address = localStorage.getItem("shippingAddressData");
     let d = JSON.parse(cart)
     d.forEach(element => {
       console.log(element)
       data.push({
         product: element?._id,
-        image: element.selectedColor?.selectedImage || element?.selectedImage,
-        color: element.selectedColor?.color || element?.selectedColor,
+        image: [element.selectedColor?.selectedImage || element?.selectedImage],
+        color: element.selectedColor?.color || '',
         total: element.total,
         price: element.price,
         qty: element.qty,
@@ -251,7 +253,8 @@ const Navbar = (props) => {
     let newData = {
       productDetail: data,
       total: CartTotal.toFixed(2),
-      shipping_address: JSON.parse(address),
+      shipping_address: shippingAddressData,
+      // shipping_address: JSON.parse(address),
     }
 
     console.log(data)
@@ -266,7 +269,7 @@ const Navbar = (props) => {
           setCartData([]);
           setCartTotal(0);
           setShowcart(false)
-          localStorage.setItem("shippingAddressData", JSON.stringify(shippingAddressData));
+          // localStorage.setItem("shippingAddressData", JSON.stringify(shippingAddressData));
           localStorage.removeItem("addCartDetail");
           props.toaster({ type: "success", message: res.data?.message });
           router.push('/orders')
