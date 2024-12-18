@@ -60,7 +60,7 @@ function Footer(props) {
                 />
               </div>
 
-              <div className="flex justify-start items-center">
+              {/* <div className="flex justify-start items-center">
                 <CiLocationOn className="w-[18px] h-[18px] text-custom-purple mr-2" />
                 <p className="text-custom-darkGray font-semibold text-base">Address: <span className="font-medium">1762 School House Road</span></p>
               </div>
@@ -68,16 +68,16 @@ function Footer(props) {
               <div className="flex justify-start items-center pt-5">
                 <FiPhone className="w-[18px] h-[18px] text-custom-purple mr-2" />
                 <p className="text-custom-darkGray font-semibold text-base">Call Us: <a href="tel:1233-777" className="font-medium">1233-777</a></p>
-              </div>
+              </div> */}
 
-              <div className="flex justify-start items-center pt-5">
+              <div className="flex justify-start items-center">
                 <MdOutlineEmail className="w-[18px] h-[18px] text-custom-purple mr-2" />
-                <p className="text-custom-darkGray font-semibold text-base">Email: <a href="mailto:groceyish@contact.com" className="font-medium">groceyish@contact.com</a></p>
+                <p className="text-custom-darkGray font-semibold text-base">Email: <a href="mailto:contact@resazonline.com" className="font-medium">contact@resazonline.com</a></p>
               </div>
 
               <div className="flex justify-start items-center pt-5">
                 <LuClock9 className="w-[18px] h-[18px] text-custom-purple mr-2" />
-                <p className="text-custom-darkGray font-semibold text-base">Work hours: <span className="font-medium">8:00 - 20:00, Sunday -  Thursday</span></p>
+                <p className="text-custom-darkGray font-semibold text-base">Work hours: <span className="font-medium">24/7</span></p>
               </div>
             </div>
 
