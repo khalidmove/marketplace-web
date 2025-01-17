@@ -69,7 +69,7 @@ export default function Home(props) {
     Api("get", "getCategory", "", router).then(
       (res) => {
         props.loader(false);
-        console.log("res================>", res);
+        console.log("res================> category", res);
         setCategoryData(res.data);
       },
       (err) => {
@@ -85,7 +85,7 @@ export default function Home(props) {
     Api("get", "getProduct", "", router).then(
       (res) => {
         props.loader(false);
-        console.log("res================>", res);
+        console.log("res================> product", res);
         setProductsList(res.data);
       },
       (err) => {
@@ -101,7 +101,7 @@ export default function Home(props) {
     Api("get", "getProduct", "", router).then(
       (res) => {
         props.loader(false);
-        console.log("res================>", res);
+        console.log("res================> best sells", res);
         setBestSellsData(res.data);
       },
       (err) => {
@@ -244,7 +244,7 @@ export default function Home(props) {
           </div>
 
           <div className='grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5'>
-            {bestSellsData.map((item, i) => (<GroceryCategories item={item} i={i} />))}
+            {bestSellsData.map((item, i) => (<GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
             {/* {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))} */}
           </div>
         </div>
