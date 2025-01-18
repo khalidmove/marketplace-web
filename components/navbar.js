@@ -80,12 +80,21 @@ const Navbar = (props) => {
   const [deliveryPartnerTip, setDeliveryPartnerTip] = useState(0);
   const [mainTotal, setMainTotal] = useState(0);
   const [productList, SetProductList] = useState([]);
+  const [noProductsFound, setNoProductsFound] = useState(false);
 
   const timeoutRef = useRef(null);
 
   const handleSearch = () => {
-    if (serchData) {
-      router.push(`/product-details/${productsList[0]?.slug}`);
+    if (serchData && productsList.length > 0 && productsList[0]?.slug) {
+      router.push(`/product-details/${productsList[0].slug}`);
+    } else {
+       
+      Swal.fire({
+        title: "No product found",
+        text: "Please refine your search.",
+        icon: "info",
+        confirmButtonText: "Okay"
+      });
     }
   };
 
@@ -154,6 +163,11 @@ const Navbar = (props) => {
         props.loader(false);
         console.log("res================>", res);
         setProductsList(res.data);
+        if (res.data.length === 0) {
+          setNoProductsFound(true);  
+        } else {
+          setNoProductsFound(false);  
+        }
       },
       (err) => {
         props.loader(false);
@@ -295,12 +309,12 @@ const Navbar = (props) => {
     let newData = {
       productDetail: data,
       total: CartTotal.toFixed(2),
-      shipping_address: shippingAddressData,
+      shiping_address: shippingAddressData,
       // shipping_address: JSON.parse(address),
     };
 
     console.log(data);
-    console.log(newData);
+    console.log("newData ::", newData);
     // return
     props.loader(true);
     Api("post", "createProductRquest", newData, router).then(
@@ -649,12 +663,12 @@ const Navbar = (props) => {
                     src={item?.selectedImage || item?.image}
                   />
                   <div className="pt-2">
-                    <p className="text-custom-purple font-semibold text-base">
+                    <p className="text-custom-purple font-semibold text-base pl-3">
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span>{item?.value}</span>{" "}
-                      <span>{item?.unit}</span>
+                      <span className="pl-3">{item?.price_slot[0]?.value}</span>{" "}
+                      <span>{item?.price_slot[0]?.unit}</span>
                     </p>
                   </div>
                   <div className="flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-2 md:hidden">
@@ -680,9 +694,10 @@ const Navbar = (props) => {
                       onClick={() => {
                         if (item.qty > 1) {
                           const nextState = produce(cartData, (draft) => {
-                            draft[i].qty = draft[i].qty - 1;
+                            draft[i].qty -= 1; 
                             draft[i].total = (
-                              draft[i]?.price * draft[i].qty
+                              parseFloat(draft[i].price_slot[0]?.our_price) * 
+                              draft[i].qty
                             ).toFixed(2);
                           });
                           setCartData(nextState);
@@ -702,9 +717,10 @@ const Navbar = (props) => {
                       className="h-[39px] w-[51px] bg-custom-purple rounded-[8px] rounded-l-none flex justify-center items-center"
                       onClick={() => {
                         const nextState = produce(cartData, (draft) => {
-                          draft[i].qty = draft[i].qty + 1;
+                          draft[i].qty += 1; 
                           draft[i].total = (
-                            draft[i]?.price * draft[i].qty
+                            parseFloat(draft[i].price_slot[0]?.our_price) * 
+                            draft[i].qty
                           ).toFixed(2);
                         });
                         setCartData(nextState);
@@ -721,13 +737,13 @@ const Navbar = (props) => {
 
                 <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                   <p className="text-custom-purple font-semibold text-base">
-                    ₹{item?.our_price}
+                    ₹{item?.total}
                     <del className="text-custom-red font-normal text-xs ml-2">
                       ₹{item?.other_price}
                     </del>
                   </p>
                   <IoMdClose
-                    className="w-[22px] h-[22px] text-custom-newGray ml-2 cursor-pointer"
+                    className="w-[22px] h-[22px] text-custom-newGray ml-1 cursor-pointer"
                     onClick={() => {
                       cartClose(item, i);
                     }}

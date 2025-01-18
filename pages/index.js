@@ -194,9 +194,11 @@ export default function Home(props) {
       <section className="w-full bg-white ">
         <div className="max-w-7xl  mx-auto w-full md:py-10 py-5 md:px-0 px-5">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
-            {carouselImg.map((d, i) => (<div className='flex flex-col justify-center items-center h-full' key={i}>
+            {carouselImg.map((d, i) => (
+              <div className='flex flex-col justify-center items-center h-full' key={i}>
               <img className={`w-full object-contain`} src={d} onClick={() => { router.push(`/categories/all`) }} />
-            </div>))}
+              </div>
+            ))}
 
             {/* <div className="bg-[url('/backgroundImg-2.png')] bg-cover bg-no-repeat w-full md:h-[300px]">
               <div className="grid grid-cols-3 w-full gap-5">
@@ -244,7 +246,8 @@ export default function Home(props) {
           </div>
 
           <div className='grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5'>
-            {bestSellsData.map((item, i) => (<GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
+            {bestSellsData.map((item, i) => (
+              <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
             {/* {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))} */}
           </div>
         </div>

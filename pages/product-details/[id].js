@@ -71,7 +71,7 @@ function ProductDetails(props) {
         props.loader(false);
         console.log("res================>", res);
         res.data.qty = 1;
-        res.data.total = (res.data?.price * res.data.qty).toFixed(2);
+        res.data.total = (res.data?.our_price * res.data.qty).toFixed(2);
         setProductsId(res.data);
         console.log(res?.data?.minQuantity);
 
@@ -273,12 +273,12 @@ function ProductDetails(props) {
 
                 <div className="bg-custom-offWhite w-[100px] h-[32px] rounded-[8px] md:mt-5 mt-3 flex items-center">
                   <div
-                    className="h-[32px] w-[32px] bg-custom-purple rounded-[8px] rounded-r-none	 flex justify-center items-center"
+                    className="h-[32px] w-[32px] bg-custom-purple cursor-pointer rounded-[8px] rounded-r-none	 flex justify-center items-center"
                     onClick={() => {
                       if (productsId.qty > 1) {
                         productsId.qty = productsId.qty - 1;
                         productsId.total = (
-                          productsId?.price * productsId.qty
+                          priceSlot[priceIndex]?.our_price * productsId.qty
                         ).toFixed(2);
                         setProductsId({ ...productsId });
                       }
@@ -290,12 +290,13 @@ function ProductDetails(props) {
                     {productsId?.qty || 0}
                   </p>
                   <div
-                    className="h-[32px] w-[32px] bg-custom-purple rounded-[8px] rounded-l-none flex justify-center items-center"
+                    className="h-[32px] w-[32px] bg-custom-purple cursor-pointer rounded-[8px] rounded-l-none flex justify-center items-center"
                     onClick={() => {
                       productsId.qty = productsId.qty + 1;
                       productsId.total = (
-                        productsId?.price * productsId.qty
+                        parseFloat(priceSlot[priceIndex]?.our_price) * productsId.qty
                       ).toFixed(2);
+                    
                       setProductsId({ ...productsId });
                     }}
                   >
@@ -342,11 +343,11 @@ function ProductDetails(props) {
                     console.log(c);
 
                     const price = parseFloat(priceSlot[priceIndex]?.price);
-                    const ourPrice = parseFloat(priceSlot[priceIndex]?.our_price );
+                    const ourPrice = parseFloat(priceSlot[priceIndex]?.our_price);
                     const value = parseFloat(priceSlot[priceIndex]?.value);
                     const unit = parseFloat(priceSlot[priceIndex]?.unit);
                     const percentageDifference = price && ourPrice ? ((price - ourPrice) / price) * 100
-                        : 0;
+                      : 0;
 
                     if (!c) {
                       // console.log(d)
@@ -365,27 +366,31 @@ function ProductDetails(props) {
                           selectedColor,
                           selectedImage,
 
-                          // qty: 1,
-                          total: productsId.price,
-                          our_price: priceSlot[priceIndex]?.our_price,
+                          qty: productsId.qty,
+                          total: (ourPrice * productsId.qty).toFixed(2),
+                          our_price: ourPrice,
                           other_price: priceSlot[priceIndex]?.other_price,
                           value: priceSlot[priceIndex]?.value,
-                         unit: priceSlot[priceIndex]?.unit,
+                          unit: priceSlot[priceIndex]?.unit,
                           percentageDifference: percentageDifference.toFixed(2),
                         });
                         
-                    });
-                    console.log("next state ::", nextState);
+                      });
+                      console.log("next state ::", nextState);
                       setCartData(nextState);
-                      localStorage.setItem( "addCartDetail", JSON.stringify(nextState));
+                      localStorage.setItem("addCartDetail", JSON.stringify(nextState));
                     }
-                    // else {
-                    //     c.qty = c.qty + productsId.qty
-                    //     setCartData(d)
-                    //     localStorage.setItem("addCartDetail", JSON.stringify(d));
-                    // }
+                    else {
+                      const nextState = produce(cartData, (draft) => {
+                        const existingItem = draft.find((item) => item._id === c._id);
+                        existingItem.qty += productsId.qty;  
+                        existingItem.total = (existingItem.our_price * existingItem.qty).toFixed(2);  
+                      });
+                      setCartData(nextState);
+                      localStorage.setItem("addCartDetail", JSON.stringify(nextState));
+                      // router.push('/cart')
+                    }
                     setOpenCart(true);
-                    // router.push('/cart')
                   }}
                 >
                   ADD

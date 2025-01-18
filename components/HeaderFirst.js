@@ -57,9 +57,9 @@ function HeaderFirst(props) {
                   <TiArrowSortedUp
                     className={`group-hover:lg:block lg:hidden h-5 w-5 text-custom-purple  absolute top-5 right-0`}
                   />
-                  <div className="w-full">
+                  <div className="w-full cursor-pointer">
                     {categoryData.map((item, i) => (<div key={i} className={`px-5 py-2 shadow-inner feature1  flex justify-between items-center cursor-pointer1 ${categoryData?.length !== i + 1 ? 'border-b-2 border-white' : ""}`} onClick={() => { router.push(`/categories/${item?.slug}`) }}>
-                      <p className="text-white text-base	font-normal">{item?.name}</p>
+                      <p className="text-white text-base cursor-pointer	font-normal">{item?.name}</p>
                       <IoIosArrowBack className="w-[22px] h-[22px] text-white rotate-180" />
                     </div>))}
 
