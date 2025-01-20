@@ -142,7 +142,7 @@ function HeaderFirst(props) {
             </p>
             <a href="tel:6393274099" className="text-red-500 font-medium cursor-pointer">6393274099</a>
             <p className="font-medium text-gray-500 cursor-pointer">
-              Support Center
+               Become a seller
             </p>
           </div>
         </div>

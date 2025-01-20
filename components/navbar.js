@@ -84,19 +84,19 @@ const Navbar = (props) => {
 
   const timeoutRef = useRef(null);
 
-  const handleSearch = () => {
-    if (serchData && productsList.length > 0 && productsList[0]?.slug) {
-      router.push(`/product-details/${productsList[0].slug}`);
-    } else {
+  // const handleSearch = () => {
+  //   if (serchData && productsList.length > 0 && productsList[0]?.slug) {
+  //     router.push(`/product-details/${productsList[0].slug}`);
+  //   } else {
        
-      Swal.fire({
-        title: "No product found",
-        text: "Please refine your search.",
-        icon: "info",
-        confirmButtonText: "Okay"
-      });
-    }
-  };
+  //     Swal.fire({
+  //       title: "No product found",
+  //       text: "Please refine your search.",
+  //       icon: "info",
+  //       confirmButtonText: "Okay"
+  //     });
+  //   }
+  // };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -386,7 +386,12 @@ const Navbar = (props) => {
                       onChange={handleInputChange}
                     />
                     <div
-                      onClick={handleSearch}
+                      onClick={() => {
+                        if (serchData) {
+                          getproductBySearchCategory(serchData)
+                          router.push(`/search-result?query=${serchData}`)
+                        }
+                      }}
                       className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	"
                     >
                       <FiSearch className="w-[24px] h-[24px] text-white" />
