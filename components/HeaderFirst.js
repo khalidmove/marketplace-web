@@ -3,19 +3,24 @@ import { FaPhoneAlt } from "react-icons/fa";
 import Link from "next/link";
 import { FiHome } from "react-icons/fi";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowBack } from "react-icons/io";
 import { Api } from "@/services/service";
 import { FaQuestion } from "react-icons/fa6";
 import { BiCategory } from "react-icons/bi";
 import { SiLivechat } from "react-icons/si";
+import { userContext } from "@/pages/_app";
 
 function HeaderFirst(props) {
   const router = useRouter();
   const [showHover, setShowHover] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
   const [selectedTab, setSelectedTab] = useState('home');
+  const [user, setUser] = useContext(userContext);
+
+  console.log("user ::", user);
+  
 
   useEffect(() => {
     getCategory();
@@ -141,8 +146,10 @@ function HeaderFirst(props) {
               <FaPhoneAlt />
             </p>
             <a href="tel:6393274099" className="text-red-500 font-medium cursor-pointer">6393274099</a>
-            <p className="font-medium text-gray-500 cursor-pointer">
-               Become a seller
+            <p className="font-medium text-gray-500 cursor-pointer"
+              onClick={()=>{router.push("/create-store")}}
+            >
+                {user.type=='SELLER' ?<span>My Store</span>:<span>Become a seller</span>}
             </p>
           </div>
         </div>

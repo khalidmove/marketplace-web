@@ -5,7 +5,7 @@ import { cartContext, openCartContext } from "@/pages/_app";
 import { produce } from "immer"; // Add this line
 
 function GroceryCategories({ item, i, url }) {
-  console.log(item);
+  // console.log(item);
   const router = useRouter();
   const [cartData, setCartData] = useContext(cartContext);
   const [openCart, setOpenCart] = useContext(openCartContext);
