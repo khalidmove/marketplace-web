@@ -367,7 +367,7 @@ function ProductDetails(props) {
                           selectedImage,
 
                           qty: productsId.qty,
-                          total: (ourPrice * productsId.qty).toFixed(2),
+                          total: (parseFloat(ourPrice) * productsId.qty).toFixed(2),
                           our_price: ourPrice,
                           other_price: priceSlot[priceIndex]?.other_price,
                           value: priceSlot[priceIndex]?.value,
@@ -384,7 +384,7 @@ function ProductDetails(props) {
                       const nextState = produce(cartData, (draft) => {
                         const existingItem = draft.find((item) => item._id === c._id);
                         existingItem.qty += productsId.qty;  
-                        existingItem.total = (existingItem.our_price * existingItem.qty).toFixed(2);  
+                        existingItem.total = (parseFloat(existingItem.our_price) * existingItem.qty).toFixed(2);  s  
                       });
                       setCartData(nextState);
                       localStorage.setItem("addCartDetail", JSON.stringify(nextState));

@@ -46,8 +46,8 @@ function SearchResult(props) {
             </div>
           ))
         ) : (
-          <div className="col-span-full flex items-center justify-center min-h-[200px] md:min-h-[300px]">
-            <p className="text-lg md:text-3xl text-black font-semibold text-center mt-20">
+          <div className="col-span-full flex items-center justify-center min-h-[180px] md:min-h-[300px]">
+            <p className="text-lg md:text-3xl text-black font-semibold text-center ">
               No product available
             </p>
           </div>

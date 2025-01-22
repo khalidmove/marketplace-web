@@ -15,12 +15,15 @@ function GroceryCategories({ item, i, url }) {
     let updatedCart = [...cartData];
     const existingItemIndex = updatedCart.findIndex((f) => f._id === item?._id);
 
+    const price = parseFloat(item?.price_slot[0]?.our_price);
+
     if (existingItemIndex === -1) {
       const newItem = {
         ...item,
         selectedColor: item?.varients[0],
         image: item?.varients[0]?.image[0],
-        total: parseFloat(item.price_slot[0]?.our_price),
+        total:price,
+          // parseFloat(item.price_slot[0]?.our_price),
         qty: 1,
       };
       updatedCart.push(newItem);
@@ -28,10 +31,7 @@ function GroceryCategories({ item, i, url }) {
       
       const nextState = produce(updatedCart, (draft) => {
         draft[existingItemIndex].qty += 1;  
-        draft[existingItemIndex].total = (
-          parseFloat(draft[existingItemIndex].price_slot[0]?.our_price) *
-          draft[existingItemIndex].qty
-        ).toFixed(2);  
+        draft[existingItemIndex].total = (price * draft[existingItemIndex].qty).toFixed(2)
       });
       updatedCart = nextState;  
     }
