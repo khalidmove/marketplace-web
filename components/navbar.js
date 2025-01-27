@@ -773,12 +773,14 @@ const Navbar = (props) => {
                   </div>
                 </div>
 
+                
+
                 <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                   <p className="text-custom-purple font-semibold text-base">
                     ₹{item?.total}
-                    {/* <del className="text-custom-red font-normal text-xs ml-2">
+                    <del className="text-custom-red font-normal text-xs ml-2">
                       ₹{item?.other_price}
-                    </del> */}
+                    </del>
                   </p>
                   <IoMdClose
                     className="w-[22px] h-[22px] text-custom-newGray ml-1 cursor-pointer"

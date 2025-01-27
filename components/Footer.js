@@ -128,10 +128,10 @@ function Footer(props) {
           <div className="md:flex justify-between items-center">
             <p className="text-custom-darkGray text-base font-medium">© {moment().format('YYYY')}, All rights reserved</p>
             <div className="flex gap-5 md:pt-0 pt-5">
-              <img className="w-[44px] h-[44px]" src="/facebookImg.png" />
-              <img className="w-[44px] h-[44px]" src="/linkedinImg.png" />
-              <img className="w-[44px] h-[44px]" src="/instagramImg.png" />
-              <img className="w-[44px] h-[44px]" src="/twitterImg.png " />
+              <img className="w-[44px] h-[44px] cursor-pointer" src="/facebookImg.png" />
+              <img className="w-[44px] h-[44px] cursor-pointer" src="/linkedinImg.png" />
+              <img className="w-[44px] h-[44px] cursor-pointer" src="/instagramImg.png" />
+              <img className="w-[44px] h-[44px] cursor-pointer" src="/twitterImg.png " />
             </div>
           </div>
         </div>
