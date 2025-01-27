@@ -130,8 +130,10 @@ function Categories(props) {
                             <div className='border-b border-custom-gray'>
                                 <div className='flex justify-between items-center w-full  pb-5'>
                                     <p className='text-custom-black font-semibold text-lg'>Sort By</p>
-                                    {!openData && <FaCircleChevronDown className='text-lg text-custom-purple' onClick={() => { setOpenData(true); }} />}
-                                    {openData && < FaCircleChevronUp className='text-lg text-custom-purple' onClick={() => setOpenData(false)} />}
+                                    {!openData && <FaCircleChevronDown className='text-lg text-custom-purple'
+                                        onClick={() => { setOpenData(true); }} />}
+                                    {openData && < FaCircleChevronUp className='text-lg text-custom-purple'
+                                        onClick={() => setOpenData(false)} />}
                                 </div>
                                 {openData && <FormControl className=''>
                                     <FormGroup className='flex flex-col' >
@@ -154,30 +156,42 @@ function Categories(props) {
                             <div className='pt-5'>
                                 <div className='flex justify-between items-center w-full  pb-5'>
                                     <p className='text-custom-black font-semibold text-lg'>Categories</p>
-                                    {!openCategory && <FaCircleChevronDown className='text-lg text-custom-purple' onClick={() => { setOpenCategory(true); }} />}
-                                    {openCategory && < FaCircleChevronUp className='text-lg text-custom-purple' onClick={() => setOpenCategory(false)} />}
+                                    {!openCategory && <FaCircleChevronDown className='text-lg text-custom-purple cursor-pointer' onClick={() => { setOpenCategory(true); }} />}
+                                    {openCategory && < FaCircleChevronUp className='text-lg text-custom-purple cursor-pointer' onClick={() => setOpenCategory(false)} />}
                                 </div>
 
                                 {openCategory && <FormGroup>
-                                    {categoryList.map((item, i) => (<FormControlLabel className='text-black' key={i} control={<Checkbox
-                                        onChange={() => {
+                                    {
+                                        categoryList.map((item, i) => (
+                                            <FormControlLabel className='text-black'
+                                            key={i} control={<Checkbox
+                                            onChange={() => {
                                             router.replace(`/categories/${item.slug}`)
                                             setSelectedCategories(item?.slug)
                                         }}
                                         checked={item.slug === selectedCategories}
-                                    />} label={item?.name} />))}
+                                                />} label={item?.name} />
+                                        ))}
                                 </FormGroup>}
                             </div>
                         </div>
 
                         <div className='col-span-3 md:mt-0 mt-5'>
                             <div className="grid md:grid-cols-4 grid-cols-1 md:gap-0 gap-5">
-                                {productList.map((item, i) => (
-                                    <div key={i} className='w-full md:mb-5'>
-                                        <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />
-                                    </div>))}
+                                {productList.length > 0 ? (
+                                    productList.map((item, i) => (
+                                        <div key={i} className='w-full md:mb-5'>
+                                            <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />
+                                        </div>
+                                    ))
+                                ) : (
+                                     <div className='flex justify-center items-center h-[200px] md:h-[400px] col-span-4 '>
+                                        <p className='text-black text-center font-semibold text-2xl'>No products available in this category.</p>
+                                     </div>
+                                )}
                             </div>
                         </div>
+                    </div>
                     </div>
 
                     {/* <div className='pt-5 flex justify-end items-end'>
@@ -185,7 +199,7 @@ function Categories(props) {
                             <Pagination count={10} shape="rounded" size="small" />
                         </Stack>
                     </div> */}
-                </div>
+                
             </section>
 
         </div>

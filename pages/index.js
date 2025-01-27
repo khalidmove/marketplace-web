@@ -161,7 +161,8 @@ export default function Home(props) {
             infinite={true}
             arrows={false}
           >
-            {categoryData.map((item, i) => (<ProductCategory item={item} i={i} url={`/categories/${item?.slug}`} />))}
+            {categoryData.map((item, i) => (
+              <ProductCategory item={item} i={i} url={`/categories/${item?.slug}`} />))}
           </Carousel>
         </div >
       </section>
@@ -186,7 +187,8 @@ export default function Home(props) {
             infinite={true}
             arrows={false}
           >
-            {productsList.map((item, i) => (<GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
+            {productsList.map((item, i) => (
+              <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
           </Carousel>
         </div>
       </section>
@@ -196,7 +198,9 @@ export default function Home(props) {
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             {carouselImg.map((d, i) => (
               <div className='flex flex-col justify-center items-center h-full' key={i}>
-              <img className={`w-full object-contain`} src={d} onClick={() => { router.push(`/categories/all`) }} />
+                <img className={`w-full object-contain`}
+                  src={d}
+                  onClick={() => { router.push(`/categories/all`) }} />
               </div>
             ))}
 

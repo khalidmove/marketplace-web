@@ -384,7 +384,7 @@ function ProductDetails(props) {
                       const nextState = produce(cartData, (draft) => {
                         const existingItem = draft.find((item) => item._id === c._id);
                         existingItem.qty += productsId.qty;  
-                        existingItem.total = (parseFloat(existingItem.our_price) * existingItem.qty).toFixed(2);  s  
+                        existingItem.total = (parseFloat(existingItem.our_price) * existingItem.qty).toFixed(2);  
                       });
                       setCartData(nextState);
                       localStorage.setItem("addCartDetail", JSON.stringify(nextState));

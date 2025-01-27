@@ -1,183 +1,255 @@
-import { Api } from '@/services/service';
-import React, { useState, useEffect } from 'react'
+import { Api } from "@/services/service";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { RxCrossCircled } from 'react-icons/rx'
-import Box from '@mui/material/Box';
-import Rating from '@mui/material/Rating';
-import StarIcon from '@mui/icons-material/Star';
+import { RxCrossCircled } from "react-icons/rx";
+import Box from "@mui/material/Box";
+import Rating from "@mui/material/Rating";
+import StarIcon from "@mui/icons-material/Star";
 
 function orders(props) {
-    const router = useRouter();
-    const [ordersData, setOrdersData] = useState([]);
-    const [showReviews, setShowReviews] = useState(false);
-    const [reviewsData, setReviewsData] = useState({
-        description: '',
-        reviews: 0,
-    })
-    const [productId, setProductId] = useState('');
-    const [reviews, setReviews] = useState('product');
-    const [sellerId, setSellerId] = useState('')
+  const router = useRouter();
+  const [ordersData, setOrdersData] = useState([]);
+  const [showReviews, setShowReviews] = useState(false);
+  const [reviewsData, setReviewsData] = useState({
+    description: "",
+    reviews: 0,
+  });
+  const [productId, setProductId] = useState("");
+  const [reviews, setReviews] = useState("product");
+  const [sellerId, setSellerId] = useState("");
 
-    useEffect(() => {
-        getProductRequestbyUser()
-    }, [])
+  useEffect(() => {
+    getProductRequestbyUser();
+  }, []);
 
-    const getProductRequestbyUser = async () => {
-        props.loader(true);
-        Api("get", "getProductRequestbyUser", "", router).then(
-            (res) => {
-                props.loader(false);
-                console.log("res================>", res);
-                setOrdersData(res.data);
-            },
-            (err) => {
-                props.loader(false);
-                console.log(err);
-                props.toaster({ type: "error", message: err?.message });
-            }
-        );
-    };
+  const getProductRequestbyUser = async () => {
+    props.loader(true);
+    Api("get", "getProductRequestbyUser", "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setOrdersData(res.data);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
 
-    const createProductRquest = (e) => {
-        e.preventDefault();
-        if (reviewsData?.reviews === 0) {
-            props.toaster({ type: "success", message: 'Rating is required' });
-            return
-        }
-
-        let data = {
-            description: reviewsData?.description,
-            // product: productId,
-            rating: reviewsData?.reviews,
-        }
-
-        if (reviews === 'product') {
-            data.product = productId
-        } else {
-            data.seller = sellerId
-        }
-
-        console.log(data)
-        props.loader(true);
-        Api("post", 'giverate', data, router).then(
-            (res) => {
-                props.loader(false);
-                console.log("res================>", res);
-                if (res.status) {
-                    setShowReviews(false)
-                    setReviewsData({
-                        description: '',
-                        reviews: "",
-                    });
-                    setProductId('')
-                    setSellerId('')
-                    props.toaster({ type: "success", message: res.data?.message });
-
-                }
-                else {
-                    props.toaster({ type: "error", message: res?.data?.message });
-                }
-
-            },
-            (err) => {
-                props.loader(false);
-                console.log(err);
-                props.toaster({ type: "error", message: err?.message });
-            }
-        );
+  const createProductRquest = (e) => {
+    e.preventDefault();
+    if (reviewsData?.reviews === 0) {
+      props.toaster({ type: "success", message: "Rating is required" });
+      return;
     }
 
-    return (
-        <div className="bg-white w-full">
-            <section className="bg-white w-full  relative flex flex-col justify-center items-center">
-                <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
-                    <div className='grid md:grid-cols-2 grid-cols-1 w-full gap-5'>
+    let data = {
+      description: reviewsData?.description,
+      // product: productId,
+      rating: reviewsData?.reviews,
+    };
 
-                        {ordersData.map((item, i) => (<div key={i} className='grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]'>
-                            <div className='col-span-2 flex gap-5'>
-                                <img className='w-20 h-20 rounded-[10px] object-contain' src={item?.productDetail?.image[0]} />
-                                <div>
-                                    <p className='text-black text-base font-bold'>{item?.productDetail?.product?.name}</p>
-                                    {item?.productDetail?.color && <div className='flex justify-start items-center pt-[6px]'>
-                                        <p className='text-custom-purple text-xs font-bold'>Color:</p>
-                                        <p className="h-[10px] w-[10px] rounded-full border border-black ml-2" style={{ backgroundColor: item?.productDetail?.color }}></p>
-                                    </div>}
-                                    <p className='text-custom-purple text-xs font-bold pt-[6px]'>Quantity: {item?.productDetail?.qty || 1}</p>
-                                    <p className='text-custom-purple text-xs font-bold pt-[6px]'>Order ID: {item?._id}</p>
-                                </div>
-                            </div>
-                            <div className='flex flex-col'>
-                                <p className='text-custom-red text-base font-bold text-right'>$ {item?.productDetail?.total}</p>
-                                {/* <div className='flex justify-end items-end mt-2'>
-                                    <button className='bg-custom-purple h-[30px] w-24 rounded-[5px] text-white font-semibold text-sm' onClick={() => { setShowReviews(true); setProductId(item?.productDetail?.product?._id); setSellerId(item?.productDetail?.seller_id) }}>Reviews</button>
-                                </div> */}
-                            </div>
-                        </div>))}
+    if (reviews === "product") {
+      data.product = productId;
+    } else {
+      data.seller = sellerId;
+    }
 
+    console.log(data);
+    props.loader(true);
+    Api("post", "giverate", data, router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        if (res.status) {
+          setShowReviews(false);
+          setReviewsData({
+            description: "",
+            reviews: "",
+          });
+          setProductId("");
+          setSellerId("");
+          props.toaster({ type: "success", message: res.data?.message });
+        } else {
+          props.toaster({ type: "error", message: res?.data?.message });
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  };
 
-
-
-                    </div>
-
-                    {showReviews && <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
-                        <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">
-                            <div className="absolute top-2 right-2 p-1 rounded-full  text-black w-8 h-8 cursor-pointer"
-                                onClick={() => { setShowReviews(false) }}
-                            >
-                                <RxCrossCircled className="h-full w-full font-semibold " />
-                            </div>
-
-                            <form className='px-5 py-5' onSubmit={createProductRquest}>
-
-                                <p className='text-black font-bold text-2xl mb-5'>Reviews</p>
-
-                                <div className='flex justify-center items-center mb-5 gap-5'>
-                                    <button className={`h-[30px] w-32 rounded-[5px] text-black font-semibold text-sm ${reviews === 'product' ? 'underline underline-offset-8' : ''} `} onClick={() => { setReviews('product') }}>Product</button>
-                                    <button className={`h-[30px] w-32 rounded-[5px] text-black font-semibold text-sm ${reviews === 'product' ? '' : 'underline underline-offset-8'}`} onClick={() => { setReviews('seller') }}>Seller</button>
-                                </div>
-
-                                <div className='flex flex-col justify-center items-center  border border-custom-newGray rounded-[10px] py-3 mb-5'>
-                                    <Box sx={{ width: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Rating
-                                            name="text-feedback"
-                                            value={reviewsData?.reviews}
-                                            onChange={(e, value) => {
-                                                console.log(e, value)
-                                                setReviewsData({ ...reviewsData, reviews: value });
-                                            }}
-                                            precision={0.5}
-                                            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                                        />
-                                        {/* <Box sx={{ ml: 2 }}>rating</Box> */}
-                                    </Box>
-                                    <p className='text-custom-newGrayColors font-bold text-center text-base mt-2'>Rated {Number(reviewsData?.reviews || 0)?.toFixed(1)}/5.0 by users</p>
-                                </div>
-
-
-                                <div className='w-full'>
-                                    <textarea className="bg-white md:w-full w-full px-5 py-2 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3" rows={4} placeholder="Description"
-                                        value={reviewsData.description}
-                                        onChange={(e) => {
-                                            setReviewsData({ ...reviewsData, description: e.target.value });
-                                        }}
-                                        required
-                                    />
-                                </div>
-
-
-
-                                <div className='flex md:justify-start justify-center'>
-                                    <button className='bg-custom-purple w-full md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base' type="submit">Submit</button>
-                                </div>
-
-                            </form>
+  return (
+    <div className="bg-white w-full">
+      <section className="bg-white w-full  relative flex flex-col justify-center items-center">
+        <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
+          <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
+            {ordersData && ordersData.length > 0 ? (
+              ordersData.map((item, i) => (
+                <div
+                  key={i}
+                  className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]"
+                >
+                  <div className="col-span-2 flex gap-5">
+                    <img
+                      className="w-20 h-20 rounded-[10px] object-contain"
+                      src={item?.productDetail?.image[0]}
+                    />
+                    <div>
+                      <p className="text-black text-base font-bold">
+                        {item?.productDetail?.product?.name}
+                      </p>
+                      {item?.productDetail?.color && (
+                        <div className="flex justify-start items-center pt-[6px]">
+                          <p className="text-custom-purple text-xs font-bold">
+                            Color:
+                          </p>
+                          <p
+                            className="h-[10px] w-[10px] rounded-full border border-black ml-2"
+                            style={{
+                              backgroundColor: item?.productDetail?.color,
+                            }}
+                          ></p>
                         </div>
-                    </div>}
-
+                      )}
+                      <p className="text-custom-purple text-xs font-bold pt-[6px]">
+                        Quantity: {item?.productDetail?.qty || 1}
+                      </p>
+                      <p className="text-custom-purple text-xs font-bold pt-[6px]">
+                        Order ID: {item?._id}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-custom-red text-base font-bold text-right">
+                      $ {item?.productDetail?.total}
+                    </p>
+                    {/* <div className='flex justify-end items-end mt-2'>
+                                            <button className='bg-custom-purple h-[30px] w-24 rounded-[5px] text-white font-semibold text-sm' onClick={() => { setShowReviews(true); setProductId(item?.productDetail?.product?._id); setSellerId(item?.productDetail?.seller_id) }}>Reviews</button>
+                                        </div> */}
+                  </div>
                 </div>
-            </section>
+              ))
+            ) : (
+              <div className="flex justify-center items-center md:mt-5 w-full md:h-[300px] h-[200px] col-span-4">
+                <p className="text-center text-black text-2xl">
+                  No orders available.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {showReviews && (
+            <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
+              <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">
+                <div
+                  className="absolute top-2 right-2 p-1 rounded-full  text-black w-8 h-8 cursor-pointer"
+                  onClick={() => {
+                    setShowReviews(false);
+                  }}
+                >
+                  <RxCrossCircled className="h-full w-full font-semibold " />
+                </div>
+
+                <form className="px-5 py-5" onSubmit={createProductRquest}>
+                  <p className="text-black font-bold text-2xl mb-5">Reviews</p>
+
+                  <div className="flex justify-center items-center mb-5 gap-5">
+                    <button
+                      className={`h-[30px] w-32 rounded-[5px] text-black font-semibold text-sm ${
+                        reviews === "product"
+                          ? "underline underline-offset-8"
+                          : ""
+                      } `}
+                      onClick={() => {
+                        setReviews("product");
+                      }}
+                    >
+                      Product
+                    </button>
+                    <button
+                      className={`h-[30px] w-32 rounded-[5px] text-black font-semibold text-sm ${
+                        reviews === "product"
+                          ? ""
+                          : "underline underline-offset-8"
+                      }`}
+                      onClick={() => {
+                        setReviews("seller");
+                      }}
+                    >
+                      Seller
+                    </button>
+                  </div>
+
+                  <div className="flex flex-col justify-center items-center  border border-custom-newGray rounded-[10px] py-3 mb-5">
+                    <Box
+                      sx={{
+                        width: 200,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Rating
+                        name="text-feedback"
+                        value={reviewsData?.reviews}
+                        onChange={(e, value) => {
+                          console.log(e, value);
+                          setReviewsData({ ...reviewsData, reviews: value });
+                        }}
+                        precision={0.5}
+                        emptyIcon={
+                          <StarIcon
+                            style={{ opacity: 0.55 }}
+                            fontSize="inherit"
+                          />
+                        }
+                      />
+                      {/* <Box sx={{ ml: 2 }}>rating</Box> */}
+                    </Box>
+                    <p className="text-custom-newGrayColors font-bold text-center text-base mt-2">
+                      Rated {Number(reviewsData?.reviews || 0)?.toFixed(1)}/5.0
+                      by users
+                    </p>
+                  </div>
+
+                  <div className="w-full">
+                    <textarea
+                      className="bg-white md:w-full w-full px-5 py-2 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
+                      rows={4}
+                      placeholder="Description"
+                      value={reviewsData.description}
+                      onChange={(e) => {
+                        setReviewsData({
+                          ...reviewsData,
+                          description: e.target.value,
+                        });
+                      }}
+                      required
+                    />
+                  </div>
+
+                  <div className="flex md:justify-start justify-center">
+                    <button
+                      className="bg-custom-purple w-full md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base"
+                      type="submit"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
-    )
+      </section>
+    </div>
+  );
 }
 
-export default orders
+export default orders;

@@ -28,6 +28,8 @@ import { IoMdClose } from "react-icons/io";
 import GroceryCategories from "./GroceryCatories";
 import { produce } from "immer";
 import { RxCrossCircled } from "react-icons/rx";
+import { GoCart } from "react-icons/go";
+import { MdOutlineShoppingCart } from "react-icons/md";
 
 const Navbar = (props) => {
   // console.log(props)
@@ -88,7 +90,7 @@ const Navbar = (props) => {
   //   if (serchData && productsList.length > 0 && productsList[0]?.slug) {
   //     router.push(`/product-details/${productsList[0].slug}`);
   //   } else {
-       
+
   //     Swal.fire({
   //       title: "No product found",
   //       text: "Please refine your search.",
@@ -106,9 +108,9 @@ const Navbar = (props) => {
       if (value) {
         getproductBySearchCategory(value);
       } else {
-        setProductsList([]);  
+        setProductsList([]);
       }
-    }, 500); 
+    }, 500);
   };
 
   useEffect(() => {
@@ -164,9 +166,9 @@ const Navbar = (props) => {
         console.log("res================>", res);
         setProductsList(res.data);
         if (res.data.length === 0) {
-          setNoProductsFound(true);  
+          setNoProductsFound(true);
         } else {
-          setNoProductsFound(false);  
+          setNoProductsFound(false);
         }
       },
       (err) => {
@@ -342,7 +344,10 @@ const Navbar = (props) => {
   };
 
   console.log("cart data::", cartData);
-  
+
+  // const toaster = () => {
+  //   props.toaster
+  // }
 
   return (
     <>
@@ -388,8 +393,8 @@ const Navbar = (props) => {
                     <div
                       onClick={() => {
                         if (serchData) {
-                          getproductBySearchCategory(serchData)
-                          router.push(`/search-result?query=${serchData}`)
+                          getproductBySearchCategory(serchData);
+                          router.push(`/search-result?query=${serchData}`);
                         }
                       }}
                       className="absolute right-0 w-[42px] h-[42px] bg-custom-purple cursor-pointer flex justify-center items-center  rounded-[2px] rounded-l-none	"
@@ -598,10 +603,14 @@ const Navbar = (props) => {
         onClose={closeDrawers}
         anchor={"right"}
       >
-        <div className="md:w-[700px] w-[330px] relative bg-custom-purple py-5 md:px-10 px-5">
-          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 flex justify-between items-center">
+        <div
+          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${
+            !cartData.length ? "h-full" : ""
+          }`}
+        >
+          <div className="bg-white w-full rounded-[5px]  boxShadows md:p-5 p-2 flex justify-between items-center">
             <div
-              className="flex justify-start items-center gap-1 cursor-pointer"
+              className="flex justify-start items-center  gap-1 cursor-pointer"
               onClick={() => {
                 setOpenCart(false);
               }}
@@ -611,17 +620,19 @@ const Navbar = (props) => {
                 Your Cart
               </p>
             </div>
-            <button
-              className="text-white font-medium text-base bg-custom-red rounded-[12px] md:h-[50px] h-[40px] md:w-[112px] w-[105px]"
-              onClick={() => {
-                emptyCart();
-              }}
-            >
-              Empty Cart
-            </button>
+            {cartData.length > 0 && (
+              <button
+                className="text-white font-medium text-base bg-custom-red rounded-[12px] md:h-[50px] h-[40px] md:w-[112px] w-[105px]"
+                onClick={() => {
+                  emptyCart();
+                }}
+              >
+                Empty Cart
+              </button>
+            )}
           </div>
 
-          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
+          {/* <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
             <div className="md:flex justify-between items-start gap-5 border-b border-b-[#85808080] pb-5">
               <div className="flex md:flex-row flex-col justify-start md:items-center items-start">
                 <img className="w-[71px] h-[71px]" src="/starImg-1.png" />
@@ -646,17 +657,39 @@ const Navbar = (props) => {
               </p>
               <IoIosArrowBack className="md:w-[31px] w-[21px] md:h-[26px] h-[16px] text-black rotate-180" />
             </div>
-          </div>
+          </div> */}
 
           <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
-            <div className="flex justify-start items-center gap-5">
-              <div className="w-[50px] h-[39px] rounded-[8px] bg-[#FC096599] flex justify-center items-center">
-                <GoClock className="text-white w-[38px] h-[29px]" />
+            {cartData && cartData.length > 0 ? (
+              <div className="flex justify-start items-center gap-5">
+                <div className="w-[50px] h-[39px] rounded-[8px] bg-custom-purple flex justify-center items-center">
+                  <GoClock className="text-white w-[38px] h-[29px]" />
+                </div>
+                <p className="text-custom-purple font-semibold text-xl">
+                  Items
+                </p>
+                {/* Delivery in 8 mins */}
               </div>
-              <p className="text-custom-purple font-semibold text-xl">Items</p>
-              {/* Delivery in 8 mins */}
-            </div>
-
+            ) : (
+              <div className="bg-white w-full rounded-[5px]  md:p-5 p-2 mt-5 text-center">
+                <MdOutlineShoppingCart className="text-custom-purple text-5xl mx-auto mb-4" />
+                <p className="text-custom-purple font-semibold text-xl">
+                  Your cart is empty
+                </p>
+                {/* <p className="text-custom-newGrayColors text-sm mt-2">
+              Looks like you haven't added any items to your cart yet. Start shopping now!
+            </p> */}
+                <button
+                  className="bg-custom-red text-white text-base font-medium rounded-[12px] md:w-[200px] w-full mt-5 py-3"
+                  onClick={() => {
+                    setOpenCart(false);
+                    router.push("/");
+                  }}
+                >
+                  Start Shopping
+                </button>
+              </div>
+            )}
             {cartData?.map((item, i) => (
               <div
                 key={i}
@@ -695,13 +728,13 @@ const Navbar = (props) => {
                 <div className="flex md:justify-center justify-start md:items-center items-start col-span-3 md:mt-0 mt-5">
                   <div className="bg-custom-offWhite w-[153px] h-[39px] rounded-[8px] flex justify-center items-center">
                     <div
-                      className="h-[39px] w-[51px] bg-custom-purple rounded-[8px] rounded-r-none	 flex justify-center items-center"
+                      className="h-[39px] w-[51px] bg-custom-purple cursor-pointer rounded-[8px] rounded-r-none	 flex justify-center items-center"
                       onClick={() => {
                         if (item.qty > 1) {
                           const nextState = produce(cartData, (draft) => {
-                            draft[i].qty -= 1; 
+                            draft[i].qty -= 1;
                             draft[i].total = (
-                              parseFloat(draft[i].price_slot[0]?.our_price) * 
+                              parseFloat(draft[i].price_slot[0]?.our_price) *
                               draft[i].qty
                             ).toFixed(2);
                           });
@@ -719,12 +752,12 @@ const Navbar = (props) => {
                       {item?.qty}
                     </p>
                     <div
-                      className="h-[39px] w-[51px] bg-custom-purple rounded-[8px] rounded-l-none flex justify-center items-center"
+                      className="h-[39px] w-[51px] bg-custom-purple cursor-pointer rounded-[8px] rounded-l-none flex justify-center items-center"
                       onClick={() => {
                         const nextState = produce(cartData, (draft) => {
-                          draft[i].qty += 1; 
+                          draft[i].qty += 1;
                           draft[i].total = (
-                            parseFloat(draft[i].price_slot[0]?.our_price) * 
+                            parseFloat(draft[i].price_slot[0]?.our_price) *
                             draft[i].qty
                           ).toFixed(2);
                         });
@@ -743,9 +776,9 @@ const Navbar = (props) => {
                 <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                   <p className="text-custom-purple font-semibold text-base">
                     ₹{item?.total}
-                    <del className="text-custom-red font-normal text-xs ml-2">
+                    {/* <del className="text-custom-red font-normal text-xs ml-2">
                       ₹{item?.other_price}
-                    </del>
+                    </del> */}
                   </p>
                   <IoMdClose
                     className="w-[22px] h-[22px] text-custom-newGray ml-1 cursor-pointer"
@@ -758,66 +791,75 @@ const Navbar = (props) => {
             ))}
           </div>
 
-          <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
-            <div className="flex justify-between items-center w-full">
-              <p className="text-custom-purple font-normal text-base">
-                Item Total
-              </p>
-              <p className="text-custom-purple font-normal text-base">
-                ₹{CartTotal}
-              </p>
-              {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
-            </div>
+          {cartData.length > 0 && (
+            <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
+              <div className="flex justify-between items-center w-full">
+                <p className="text-custom-purple font-normal text-base">
+                  Item Total
+                </p>
+                <p className="text-custom-purple font-normal text-base">
+                  ₹{CartTotal}
+                </p>
+                {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
+              </div>
 
-            <div className="flex justify-between items-center w-full pt-3">
-              <p className="text-custom-red font-normal text-base">
-                Delivery Fee (₹35 Saved)
-              </p>
-              <p className="text-custom-purple font-normal text-base">
-                ₹{deliveryCharge}
-              </p>
-              {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹35</del> */}
-            </div>
+              <div className="flex justify-between items-center w-full pt-3">
+                <p className="text-custom-red font-normal text-base">
+                  Delivery Fee (₹35 Saved)
+                </p>
+                <p className="text-custom-purple font-normal text-base">
+                  ₹{deliveryCharge}
+                </p>
+                {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹35</del> */}
+              </div>
 
-            <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
-              <p className="text-custom-grayColors font-normal text-base">
-                Delivery Partner Tip
-              </p>
-              <p className="font-normal text-base text-custom-purple">
-                ₹{deliveryPartnerTip}
-              </p>
-            </div>
+              <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
+                <p className="text-custom-grayColors font-normal text-base">
+                  Delivery Partner Tip
+                </p>
+                <p className="font-normal text-base text-custom-purple">
+                  ₹{deliveryPartnerTip}
+                </p>
+              </div>
 
-            <div className="flex justify-between items-center w-full pt-5">
-              <p className="text-custom-purple font-normal text-base">
-                Total Payable
-              </p>
-              <p className="text-custom-purple font-medium text-base">
-                ₹{mainTotal}
-              </p>
+              <div className="flex justify-between items-center w-full pt-5">
+                <p className="text-custom-purple font-normal text-base">
+                  Total Payable
+                </p>
+                <p className="text-custom-purple font-medium text-base">
+                  ₹{mainTotal}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           {productList.map((item, i) => (
             <GroceryCategories item={item} i={i} />
           ))}
 
-          <button
-            className="bg-custom-red h-[50px] rounded-[12px] w-full font-semibold text-white text-base text-center mt-5"
-            onClick={() => {
-              if (cartData?.length === 0) {
-                toaster({ type: "warning", message: "Your cart is empty" });
-                return;
-              } else {
-                setShowcart(true);
-                setOpenCart(false);
-              }
-            }}
-          >
-            CONTINUE TO PAY ₹{CartTotal}
-          </button>
+          {cartData.length > 0 && (
+            <button
+              className="bg-custom-red h-[50px] rounded-[12px] w-full font-semibold text-white text-base text-center mt-5"
+              onClick={() => {
+                if (cartData?.length === 0) {
+                  props.toaster({
+                    type: "warning",
+                    message: "Your cart is empty",
+                  });
+                  return;
+                } else {
+                  setShowcart(true);
+                  setOpenCart(false);
+                }
+              }}
+            >
+              CONTINUE TO PAY ₹{CartTotal}
+            </button>
+          )}
+        </div>
+      </Drawer>
 
-          {/* <div className='w-full p-5'>
+      {/* <div className='w-full p-5'>
             <div className='!z-50 top-0 w-full border-b border-[#00000050]'>
               <div className='flex justify-between items-center pb-5 w-full'>
                 <p className='text-black text-base font-normal'>Cart • {CartItem}</p>
@@ -892,8 +934,6 @@ const Navbar = (props) => {
             </div>
 
           </div> */}
-        </div>
-      </Drawer>
 
       {showcart && (
         <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
@@ -1081,7 +1121,10 @@ const Navbar = (props) => {
                         setProductsList([]);
                       }}
                     >
-                      <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`}
+                      <GroceryCategories
+                        item={item}
+                        i={i}
+                        url={`/product-details/${item?.slug}`}
                       />
                     </div>
                   ))}
