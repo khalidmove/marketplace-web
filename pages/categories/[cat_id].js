@@ -56,7 +56,7 @@ function Categories(props) {
     const [selectedCategories, setSelectedCategories] = useState('')
     const [selectedSortBy, setSelectedSortBy] = useState('')
     const [openData, setOpenData] = useState(false);
-    const [openCategory, setOpenCategory] = useState(false)
+    const [openCategory, setOpenCategory] = useState(true)
 
     useEffect(() => {
         // if (category?._id) {

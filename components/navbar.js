@@ -285,7 +285,7 @@ const Navbar = (props) => {
   };
 
   const createProductRquest = (e) => {
-    console.log(shippingAddressData);
+    console.log("im address ",shippingAddressData);
 
     e.preventDefault();
     // if (cartData?.length === 0) {
@@ -298,9 +298,10 @@ const Navbar = (props) => {
     let d = JSON.parse(cart);
     d.forEach((element) => {
       console.log(element);
+      console.log("hey i'm image ",element?.selectedImage); 
       data.push({
         product: element?._id,
-        image: [element.selectedColor?.selectedImage || element?.selectedImage],
+        image: element.selectedColor?.image ,
         color: element.selectedColor?.color || "",
         total: element.total,
         price: element.price,
@@ -311,7 +312,7 @@ const Navbar = (props) => {
     let newData = {
       productDetail: data,
       total: CartTotal.toFixed(2),
-      shiping_address: shippingAddressData,
+      shipping_address: shippingAddressData,
       // shipping_address: JSON.parse(address),
     };
 
@@ -498,6 +499,25 @@ const Navbar = (props) => {
                                     {"Sign out"}
                                   </div>
                                 </li>
+                                <li className="px-5 shadow-inner feature1  py-2">
+                                  <div
+                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                    aria-current="page"
+                                    onClick={() => { router.push("/MyProfile") }}
+                                  >
+                                    {"My Profile"}
+                                  </div>
+                                </li>
+                                <li className="px-5 shadow-inner feature1  py-2">
+                                  <div
+                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                    aria-current="page"
+                                    onClick={() => { router.push("/orders") }}
+                                  >
+                                    {"My order"}
+                                  </div>
+                                </li>
+
                               </ul>
                             </div>
                           </div>
