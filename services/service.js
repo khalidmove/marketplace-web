@@ -1,6 +1,6 @@
 import axios from "axios";
-const ConstantsUrl = "http://localhost:3002/v1/api/";
-// export const ConstantsUrl = "https://marketapi.moveex.co/v1/api/";
+// const ConstantsUrl = "http://localhost:3002/v1/api/";
+export const ConstantsUrl = "https://marketapi.moveex.co/v1/api/";
 
 // "https://sp-app-api.herokuapp.com"
 
