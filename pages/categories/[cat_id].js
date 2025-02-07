@@ -98,7 +98,7 @@ function Categories(props) {
 
     const getproductByCategory = async (cat) => {
         props.loader(true);
-        let parmas = {}
+        let parmas = { status: 'verified' }
         let url = `getProductBycategoryId`
         if (cat) {
             parmas.category = cat
@@ -109,8 +109,25 @@ function Categories(props) {
         Api("get", url, "", router, parmas).then(
             (res) => {
                 props.loader(false);
-                console.log("res================>", res);
-                SetProductList(res.data)
+                console.log("res================>12", res);
+                
+                if (res.data && Array.isArray(res.data)) {
+                    console.log("original data", res.data[0].status);
+
+                    const activeProducts = res.data.filter(product => product.status !== 'suspended');
+
+                    console.log("Filtered Data:", activeProducts);
+                  
+                    if (activeProducts.length > 0) {
+                      SetProductList(activeProducts);
+                    } else {
+                      props.toaster({ type: "info", message: "No active products found" });
+                    }
+                  } else {
+                    console.error("Unexpected response format:", res);
+                    props.toaster({ type: "error", message: "Unexpected response format" });
+                  }
+                  
             },
             (err) => {
                 props.loader(false);

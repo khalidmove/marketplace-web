@@ -85,8 +85,21 @@ export default function Home(props) {
     Api("get", "getProduct", "", router).then(
       (res) => {
         props.loader(false);
-        console.log("res================> product", res);
-        setProductsList(res.data);
+        if (res.data && Array.isArray(res.data)) {
+          const activeProducts = res.data.filter(product => product.status !== 'suspended');
+
+          console.log("Filtered Data: featured products", activeProducts);
+        
+          if (activeProducts.length > 0) {
+            setProductsList(activeProducts);
+          } else {
+            props.toaster({ type: "info", message: "No active products found" });
+          }
+        } else {
+          console.error("Unexpected response format:", res);
+          props.toaster({ type: "error", message: "Unexpected response format" });
+        }
+      
       },
       (err) => {
         props.loader(false);
@@ -101,8 +114,24 @@ export default function Home(props) {
     Api("get", "getProduct", "", router).then(
       (res) => {
         props.loader(false);
-        console.log("res================> best sells", res);
-        setBestSellsData(res.data);
+       
+        if (res.data && Array.isArray(res.data)) {
+          const activeProducts = res.data.filter(product => product.status !== 'suspended');
+
+          console.log("Filtered Data: best sells", activeProducts);
+        
+          if (activeProducts.length > 0) {
+            setBestSellsData(activeProducts);
+          } else {
+            props.toaster({ type: "info", message: "No active products found" });
+          }
+        } else {
+          console.error("Unexpected response format:", res);
+          props.toaster({ type: "error", message: "Unexpected response format" });
+        }
+        
+
+        
       },
       (err) => {
         props.loader(false);

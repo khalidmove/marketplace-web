@@ -72,7 +72,12 @@ function ProductDetails(props) {
         console.log("res================>", res);
         res.data.qty = 1;
         res.data.total = (res.data?.our_price * res.data.qty).toFixed(2);
+
+
         setProductsId(res.data);
+
+
+
         console.log(res?.data?.minQuantity);
 
         // res.data?.varients[0].selected.map((ele) => {
@@ -112,7 +117,21 @@ function ProductDetails(props) {
         props.loader(false);
         console.log("res================>", res);
         const sameItem = res.data.filter((f) => f._id !== router?.query?.id);
-        SetProductList(sameItem);
+       
+        if (sameItem && sameItem.isArray(res.data)) {
+          const activeProducts = sameItem.filter(product => product.status !== 'suspended');
+          console.log("Filtered Data:", activeProducts);
+          if (activeProducts.length > 0) {
+            SetProductList(activeProducts);
+          } else {
+            props.toaster({ type: "info", message: "No active products found" });
+          }
+        } else {
+          console.error("Unexpected response format:", res);
+          props.toaster({ type: "error", message: "Unexpected response format" });
+        }
+       
+
       },
       (err) => {
         props.loader(false);
