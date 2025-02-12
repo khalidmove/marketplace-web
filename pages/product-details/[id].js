@@ -72,12 +72,18 @@ function ProductDetails(props) {
         console.log("res================>", res);
         res.data.qty = 1;
         res.data.total = (res.data?.our_price * res.data.qty).toFixed(2);
+
+
         setProductsId(res.data);
+
+
+
         console.log(res?.data?.minQuantity);
 
-        res.data?.varients[0].selected.forEach((ele) => {
-          ele.request = 0;
-        });
+        // res.data?.varients[0].selected.map((ele) => {
+        //   ele.request = 0;
+        // });
+
         setSelectedColor(res.data?.varients[0]);
         setSelectedImageList(res.data?.varients[0].image);
         setSelectedImage(res.data?.varients[0].image[0]);
@@ -111,7 +117,21 @@ function ProductDetails(props) {
         props.loader(false);
         console.log("res================>", res);
         const sameItem = res.data.filter((f) => f._id !== router?.query?.id);
-        SetProductList(sameItem);
+       
+        if (sameItem && sameItem.isArray(res.data)) {
+          const activeProducts = sameItem.filter(product => product.status !== 'suspended');
+          console.log("Filtered Data:", activeProducts);
+          if (activeProducts.length > 0) {
+            SetProductList(activeProducts);
+          } else {
+            props.toaster({ type: "info", message: "No active products found" });
+          }
+        } else {
+          console.error("Unexpected response format:", res);
+          props.toaster({ type: "error", message: "Unexpected response format" });
+        }
+       
+
       },
       (err) => {
         props.loader(false);
@@ -198,11 +218,11 @@ function ProductDetails(props) {
                 <div className="pt-5 grid md:grid-cols-3 grid-cols-1 w-full gap-5">
                   {priceSlot &&
                     priceSlot.map((data, i) => {
-                      const price = parseFloat(data?.price);
+                      const otherprice = parseFloat(data?.other_price);
                       const ourPrice = parseFloat(data?.our_price);
                       const percentageDifference =
-                        price && ourPrice
-                          ? ((price - ourPrice) / price) * 100
+                      otherprice && ourPrice
+                          ? ((otherprice - ourPrice) / otherprice) * 100
                           : 0;
                       return (
                         <div key={i}>
@@ -224,14 +244,11 @@ function ProductDetails(props) {
                               {percentageDifference?.toFixed(2)}%<br />
                               off
                             </p>
-                            <p className="text-black font-normal text-sm">
-                              {data?.value} {data?.unit}
-                            </p>
                             <p className="text-black font-normal text-base pt-1">
                               ₹{data.price}
                             </p>
                             <p className="text-custom-newPurpleColor font-semibold text-sm pt-2">
-                              ₹{data?.our_price}{" "}
+                           
                               <span className="text-custom-newGray font-normal line-through">
                                 {data?.other_price}
                               </span>
@@ -408,7 +425,7 @@ function ProductDetails(props) {
                 <p className="text-black font-medium md:text-xl text-base pt-2">
                   Description :{" "}
                   <span className="text-custom-newGray font-normal md:text-xl text-base">
-                    {productsId?.short_description}
+                    {productsId?.long_description}
                   </span>
                 </p>
               </div>
