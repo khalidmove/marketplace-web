@@ -29,6 +29,8 @@ function ProductDetails(props) {
   const [openCart, setOpenCart] = useContext(openCartContext);
   const [priceSlot, setPriceSlote] = useState([]);
   const [priceIndex, setPriceIndex] = useState(0);
+  const [selectedPrice, setSelectedPrice] = useState({});
+  console.log(selectedPrice)
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -94,6 +96,7 @@ function ProductDetails(props) {
           createProductRquest();
         }
         setPriceSlote(res?.data?.price_slot);
+        setSelectedPrice(res?.data?.price_slot[0])
       },
       (err) => {
         props.loader(false);
@@ -116,21 +119,22 @@ function ProductDetails(props) {
       (res) => {
         props.loader(false);
         console.log("res================>", res);
-        const sameItem = res.data.filter((f) => f._id !== router?.query?.id);
-       
-        if (sameItem && sameItem.isArray(res.data)) {
-          const activeProducts = sameItem.filter(product => product.status !== 'suspended');
-          console.log("Filtered Data:", activeProducts);
-          if (activeProducts.length > 0) {
-            SetProductList(activeProducts);
-          } else {
-            props.toaster({ type: "info", message: "No active products found" });
-          }
-        } else {
-          console.error("Unexpected response format:", res);
-          props.toaster({ type: "error", message: "Unexpected response format" });
-        }
-       
+        const sameItem = res?.data?.filter((f) => f._id !== router?.query?.id);
+        SetProductList(sameItem);
+
+        // if (sameItem && sameItem?.isArray(res?.data)) {
+        //   const activeProducts = sameItem.filter(product => product.status !== 'suspended');
+        //   console.log("Filtered Data:", activeProducts);
+        //   if (activeProducts.length > 0) {
+        //     SetProductList(activeProducts);
+        //   } else {
+        //     props.toaster({ type: "info", message: "No active products found" });
+        //   }
+        // } else {
+        //   console.error("Unexpected response format:", res);
+        //   props.toaster({ type: "error", message: "Unexpected response format" });
+        // }
+
 
       },
       (err) => {
@@ -221,19 +225,19 @@ function ProductDetails(props) {
                       const otherprice = parseFloat(data?.other_price);
                       const ourPrice = parseFloat(data?.our_price);
                       const percentageDifference =
-                      otherprice && ourPrice
+                        otherprice && ourPrice
                           ? ((otherprice - ourPrice) / otherprice) * 100
                           : 0;
                       return (
                         <div key={i}>
                           <div
-                            onClick={() => handleIndex(i)}
+                            // onClick={() => handleIndex(i)}
+                            onClick={() => { setSelectedPrice(data); setPriceIndex(i); }}
                             className={`bg-custom-lightPurple cursor-pointer w-full rounded-[8px] border border-custom-darkPurple p-[10px] relative
-                                        ${
-                                          priceIndex == i
-                                            ? "bg-custom-lightPurple"
-                                            : "bg-white"
-                                        }
+                                        ${priceIndex == i
+                                ? "bg-custom-lightPurple"
+                                : "bg-white"
+                              }
                             `}
                           >
                             <img
@@ -245,17 +249,17 @@ function ProductDetails(props) {
                               off
                             </p>
                             <p className="text-black font-normal text-base pt-1">
-                              ₹{data.price}
+                              ₹{data.our_price}
                             </p>
                             <p className="text-custom-newPurpleColor font-semibold text-sm pt-2">
-                           
+
                               <span className="text-custom-newGray font-normal line-through">
                                 {data?.other_price}
                               </span>
                             </p>
                           </div>
 
-                          {priceIndex === i && (
+                          {/* {priceIndex === i && (
                             <div className="pt-3 mt-2 px-4  border-custom-darkPurple">
                               <p className="text-custom-newPurpleColor font-semibold text-lg">
                                 ₹{data?.our_price}{" "}
@@ -267,11 +271,26 @@ function ProductDetails(props) {
                                 </span>
                               </p>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       );
                     })}
                 </div>
+
+                <div className="pt-3 mt-2 px-4  border-custom-darkPurple">
+                  <p className="text-custom-newPurpleColor font-semibold text-lg">
+                    ₹{selectedPrice?.our_price}{" "}
+                    <span className="text-custom-newGray text-sm font-normal line-through">
+                      {selectedPrice?.other_price}
+                    </span>{" "}
+                    <span className="text-sm">
+                      {/* {percentageDifference?.toFixed(2)}% */}
+                      {(((selectedPrice?.other_price - selectedPrice?.our_price) / selectedPrice?.other_price) * 100).toFixed(2)}%
+                    </span>
+                  </p>
+                </div>
+
+
                 {/* <div className='bg-white w-full rounded-[8px] border border-custom-newLightGray p-[10px] relative'>
                                         <img className='w-[60px] h-[60px] object-contain absolute -top-[20px] -right-[18px]' src='/starImg.png' />
                                         <p className='text-white text-[8px] font-medium absolute -top-[2px] right-[5px]'>5%<br />off</p>
@@ -313,7 +332,7 @@ function ProductDetails(props) {
                       productsId.total = (
                         parseFloat(priceSlot[priceIndex]?.our_price) * productsId.qty
                       ).toFixed(2);
-                    
+
                       setProductsId({ ...productsId });
                     }}
                   >
@@ -324,33 +343,33 @@ function ProductDetails(props) {
                 {productsId.attributes?.some(
                   (attribute) => attribute.name === "color"
                 ) && (
-                  <div className="w-full">
-                    <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
-                      Select Colors
-                    </p>
-                    <div className="flex gap-2 flex-wrap">
-                      {productsId?.varients?.map((item, i) => (
-                        <div
-                          key={i}
-                          className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
-                          style={{ background: item?.color }}
-                          onClick={() => {
-                            item.selected.forEach((ele) => {
-                              ele.request = 0;
-                            });
-                            setSelectedColor(item);
-                            setSelectedImageList(item?.image);
-                            setSelectedImage(item?.image[0]);
-                          }}
-                        >
-                          {selectedColor?.color === item?.color && (
-                            <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
-                          )}
-                        </div>
-                      ))}
+                    <div className="w-full">
+                      <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
+                        Select Colors
+                      </p>
+                      <div className="flex gap-2 flex-wrap">
+                        {productsId?.varients?.map((item, i) => (
+                          <div
+                            key={i}
+                            className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
+                            style={{ background: item?.color }}
+                            onClick={() => {
+                              item.selected.forEach((ele) => {
+                                ele.request = 0;
+                              });
+                              setSelectedColor(item);
+                              setSelectedImageList(item?.image);
+                              setSelectedImage(item?.image[0]);
+                            }}
+                          >
+                            {selectedColor?.color === item?.color && (
+                              <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 <button
                   className="bg-custom-purple w-[96px] h-[32px] rounded-[8px] text-white font-semibold text-xl md:mt-5 mt-4"
@@ -391,7 +410,7 @@ function ProductDetails(props) {
                           unit: priceSlot[priceIndex]?.unit,
                           percentageDifference: percentageDifference.toFixed(2),
                         });
-                        
+
                       });
                       console.log("next state ::", nextState);
                       setCartData(nextState);
@@ -400,8 +419,8 @@ function ProductDetails(props) {
                     else {
                       const nextState = produce(cartData, (draft) => {
                         const existingItem = draft.find((item) => item._id === c._id);
-                        existingItem.qty += productsId.qty;  
-                        existingItem.total = (parseFloat(existingItem.our_price) * existingItem.qty).toFixed(2);  
+                        existingItem.qty += productsId.qty;
+                        existingItem.total = (parseFloat(existingItem.our_price) * existingItem.qty).toFixed(2);
                       });
                       setCartData(nextState);
                       localStorage.setItem("addCartDetail", JSON.stringify(nextState));

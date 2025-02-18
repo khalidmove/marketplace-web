@@ -13,7 +13,7 @@ function SearchResult(props) {
     if (query) {
       getProductBySearchCategory(query);
     }
-  }, [query]);  
+  }, [query]);
 
   const getProductBySearchCategory = (searchQuery) => {
     props.loader(true);
@@ -22,7 +22,7 @@ function SearchResult(props) {
       (res) => {
         props.loader(false);
         console.log("Search result ::", res);
-        setSearchData(res?.data);  
+        setSearchData(res?.data);
       },
       (error) => {
         props.loader(false);
@@ -33,25 +33,27 @@ function SearchResult(props) {
   };
 
   return (
-    <div>
-      <div className="mx-10 grid md:grid-cols-5 grid-cols-1 mt-8">
-        {searchData.length > 0 ? (  
-          searchData.map((data, i) => (
-            <div key={i} className="">
-              <GroceryCategories
-                i={i}
-                item={data}
-                url={`product-details/${data?.slug}`}
-              />
+    <div className="bg-white w-full">
+      <div className="max-w-7xl  mx-auto w-full">
+        <div className="grid md:grid-cols-5 grid-cols-1 md:pt-10 pt-5">
+          {searchData.length > 0 ? (
+            searchData.map((data, i) => (
+              <div key={i} className="">
+                <GroceryCategories
+                  i={i}
+                  item={data}
+                  url={`product-details/${data?.slug}`}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full flex items-center justify-center min-h-[180px] md:min-h-[300px]">
+              <p className="text-lg md:text-3xl text-black font-semibold text-center ">
+                No product available
+              </p>
             </div>
-          ))
-        ) : (
-          <div className="col-span-full flex items-center justify-center min-h-[180px] md:min-h-[300px]">
-            <p className="text-lg md:text-3xl text-black font-semibold text-center ">
-              No product available
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

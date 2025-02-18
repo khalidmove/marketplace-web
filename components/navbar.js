@@ -250,7 +250,7 @@ const Navbar = (props) => {
     },
   ];
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
   // console.log(props?.user);
 
   useEffect(() => {
@@ -285,7 +285,7 @@ const Navbar = (props) => {
   };
 
   const createProductRquest = (e) => {
-    console.log("im address ",shippingAddressData);
+    console.log("im address ", shippingAddressData);
 
     e.preventDefault();
     // if (cartData?.length === 0) {
@@ -298,10 +298,10 @@ const Navbar = (props) => {
     let d = JSON.parse(cart);
     d.forEach((element) => {
       console.log(element);
-      console.log("hey i'm image ",element?.selectedImage); 
+      console.log("hey i'm image ", element?.selectedImage);
       data.push({
         product: element?._id,
-        image: element.selectedColor?.image ,
+        image: element.selectedColor?.image,
         color: element.selectedColor?.color || "",
         total: element.total,
         price: element.price,
@@ -376,12 +376,12 @@ const Navbar = (props) => {
                 <div className="hidden md:flex gap-10 font-medium">
                   <div
                     className="relative flex justify-end w-full "
-                    // onClick={() => {
-                    //   setShowCategory1(true)
-                    //   setTimeout(() => {
-                    //     inputRef2.current.focus();
-                    //   }, 200);
-                    // }}
+                  // onClick={() => {
+                  //   setShowCategory1(true)
+                  //   setTimeout(() => {
+                  //     inputRef2.current.focus();
+                  //   }, 200);
+                  // }}
                   >
                     <input
                       type="text"
@@ -624,9 +624,8 @@ const Navbar = (props) => {
         anchor={"right"}
       >
         <div
-          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${
-            !cartData.length ? "h-full" : ""
-          }`}
+          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${!cartData.length ? "h-full" : ""
+            }`}
         >
           <div className="bg-white w-full rounded-[5px]  boxShadows md:p-5 p-2 flex justify-between items-center">
             <div
@@ -793,7 +792,7 @@ const Navbar = (props) => {
                   </div>
                 </div>
 
-                
+
 
                 <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                   <p className="text-custom-purple font-semibold text-base">
