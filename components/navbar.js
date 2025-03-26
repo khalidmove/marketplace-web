@@ -143,10 +143,11 @@ const Navbar = (props) => {
     if (wishList) {
       const wishListData = JSON.parse(wishList);
       setWishlist(wishListData);
+      
     }
-  }, [wishlist]);
+  }, []);
 
-  console.log("wish list data----->", wishlist);
+  // console.log("wish list data----->", wishlist);
 
   console.log(productList);
 
