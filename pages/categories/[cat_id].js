@@ -112,7 +112,7 @@ function Categories(props) {
                 console.log("res================>12", res);
                 
                 if (res.data && Array.isArray(res.data)) {
-                    console.log("original data", res.data[0].status);
+                    console.log("original data", res.data[0]?.status);
 
                     const activeProducts = res.data.filter(product => product.status !== 'suspended');
 

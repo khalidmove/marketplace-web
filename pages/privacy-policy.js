@@ -45,9 +45,9 @@ function PrivacyPolicy(props) {
             <div className="max-w-6xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5 md:min-h-screen">
 
 
-                {loading ? (
+                {/* {loading ? (
                     <p className="text-base text-black font-normal md:pb-5">Loading...</p>
-                ) : (
+                ) : ( */}
                     <div>
                         <p
                             className='text-2xl text-black font-bold md:pb-5 pb-2'>Privacy policy</p>
@@ -55,7 +55,7 @@ function PrivacyPolicy(props) {
                     </div>
 
 
-                )}
+                {/* )} */}
             </div>
         </section>
     );

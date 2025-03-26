@@ -113,9 +113,9 @@ function Footer(props) {
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/privacy-policy') }}>Privacy Policy</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/terms-condition') }}>Term & Conditions</p>
                 <p className="text-custom-darkGray text-base font-medium cursor-pointer pb-5" onClick={() => { router.push('/refund-policy') }}>Refund Policy</p>
-                <p className="text-custom-darkGray text-base font-medium cursor-pointer"
+                {/* <p className="text-custom-darkGray text-base font-medium cursor-pointer"
                   onClick={() => { router.push('/contact-us') }}
-                >Support Center</p>
+                >Support Center</p> */}
               </div>
             </div>
 

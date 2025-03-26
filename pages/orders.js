@@ -103,11 +103,11 @@ function orders(props) {
                   className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]"
                 >
                   <div className="col-span-2 flex gap-5"
-                    onClick={() => { router.push(`/myorder/${item?._id}?product_id=${item?.productDetail?._id}`) }}
+                    onClick={() => { router.push(`/myorder/${item?._id}?product_id=${item?.productDetail[0]?._id}`) }}
                   >
                     <img
                       className="w-20 h-20 rounded-[10px] object-contain"
-                      src={item?.productDetail?.image[0]}
+                      src={item?.productDetail[0]?.image[0]}
                     />
                     <div>
                       <p className="text-black text-base font-bold">

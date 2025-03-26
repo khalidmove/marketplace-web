@@ -39,14 +39,14 @@ function TermsAndConditions(props) {
     return (
         <section className="bg-white w-full flex flex-col justify-center items-center">
             <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5 md:min-h-screen">
-                {loading ? (
+                {/* {loading ? (
                     <p className="text-base text-black font-normal md:pb-5">Loading...</p>
-                ) : (
+                ) : ( */}
                     <div>
                         <p className='text-2xl text-black font-bold md:pb-5 pb-2'>Terms and conditions</p>
                         <div className="text-base text-black font-normal md:pb-5" dangerouslySetInnerHTML={{ __html: termsAndConditions }} />
                     </div>
-                )}
+                {/* )} */}
             </div>
         </section>
     );
