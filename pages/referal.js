@@ -26,7 +26,6 @@ function Referal() {
 
     return (
         <div className='bg-white w-full'>
-
             <section className='bg-white w-full md:py-10 py-5 md:px-0 px-5'>
                 <div className="max-w-7xl  mx-auto w-full flex justify-center items-center">
                     <div className='bg-[#5C108380] md:w-[680px] w-[320px] border border-custom-newPurple rounded-[15px] md:p-10 p-5 flex flex-col justify-center items-center'>
@@ -42,7 +41,6 @@ function Referal() {
                     </div>
                 </div>
             </section>
-
             {viewPopup && (
                 <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
                     <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">
@@ -50,7 +48,6 @@ function Referal() {
                             onClick={() => setviewPopup(!viewPopup)}>
                             <RxCrossCircled className="h-full w-full font-semibold " />
                         </div>
-
                         <div className='text-center p-5'>
                             {/* <h2>Share this page!</h2> */}
                             <div className='flex justify-center items-center py-5'>
@@ -74,7 +71,6 @@ function Referal() {
                                 </WhatsappShareButton>
                             </div>
                         </div>
-
                         {/* <div className='px-5 '>
                             <p className='text-center mt-2 font-semibold text-xl text-custom-black'>Query</p>
                             <p className="text-base mt-3 pb-3 text-center font-bold text-custom-newGray">

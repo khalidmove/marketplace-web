@@ -143,7 +143,6 @@ const Navbar = (props) => {
     if (wishList) {
       const wishListData = JSON.parse(wishList);
       setWishlist(wishListData);
-      
     }
   }, []);
 
@@ -632,14 +631,23 @@ const Navbar = (props) => {
                   </p>
                 </div>
 
-                <p
+                <div
                   className="cursor-pointer flex items-center justify-center"
                   onClick={() => {
-                    router.push("/wishlist");
+                    router.push("/favourite");
                   }}
                 >
-                  <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
-                </p>
+                  <div className="relative">
+                    <div className="cursor-pointer">
+                      <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
+                    </div>
+                    {wishlist?.length > 0 && (
+                      <span className="bg-red-500 text-sm absolute w-5 h-5 rounded-full top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-white text-center">
+                        {wishlist?.length}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
