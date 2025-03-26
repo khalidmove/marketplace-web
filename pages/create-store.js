@@ -130,7 +130,7 @@ function CreateStore(props) {
        
             <div className="bg-white w-full">
             <section className="bg-white w-full flex flex-col justify-center items-center">
-                <div className="mx-auto w-full md:px-10 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
+                <div className=" max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
 
                     <form className='' onSubmit={submit}>
                         <div className='grid md:grid-cols-2 grid-cols-1 w-full gap-x-24'>
