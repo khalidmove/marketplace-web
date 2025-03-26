@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoRemoveSharp } from "react-icons/io5";
 import { IoAddSharp } from "react-icons/io5";
 import { useRouter } from "next/router";
-import { cartContext, openCartContext, userContext } from "../_app";
+import { cartContext, openCartContext, userContext, wishlistContext } from "../_app";
 import { Api } from "@/services/service";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -19,6 +19,7 @@ function ProductDetails(props) {
   const router = useRouter();
   console.log(router);
   const [user, setUser] = useContext(userContext);
+  const [wishlist, setWishlist] = useContext(wishlistContext);
   const [productsId, setProductsId] = useState({});
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedImageList, setSelectedImageList] = useState([]);
@@ -106,7 +107,7 @@ function ProductDetails(props) {
     );
   };
 
-  console.log("price slot ::", priceSlot);
+  // console.log("price slot ::", priceSlot);
 
   const getproductByCategory = async (category_id, product_id) => {
     props.loader(true);
@@ -162,10 +163,20 @@ function ProductDetails(props) {
         console.log("res================>", res);
         if (res.status) {
           props.toaster({ type: "success", message: res.data?.message });
-          getProductById();
+          if (res.data?.message === "Product added to favourite") {
+            const updatedWishlist = [...wishlist, productsId];
+            setWishlist(updatedWishlist);
+            localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+          } else if (res?.data?.message === "Product removed to favourite") {
+            const updatedWishlist = wishlist.filter(item => item._id !== productsId._id);
+            setWishlist(updatedWishlist);
+            localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+          }
         } else {
           props.toaster({ type: "error", message: res?.data?.message });
+           
         }
+        getProductById();
       },
       (err) => {
         props.loader(false);
@@ -174,6 +185,10 @@ function ProductDetails(props) {
       }
     );
   };
+
+  console.log("wishlist----->", wishlist);
+  console.log("product id----->", productsId);
+  
 
   return (
     <div className="bg-white w-full">

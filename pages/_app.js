@@ -9,6 +9,7 @@ import Loader from "@/components/loader";
 export const userContext = createContext();
 export const openCartContext = createContext();
 export const cartContext = createContext();
+export const wishlistContext = createContext();
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function App({ Component, pageProps }) {
   const [data, setData] = useState();
   const [openCart, setOpenCart] = useState(false);
   const [cartData, setCartData] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     setOpen(open);
@@ -45,6 +47,7 @@ export default function App({ Component, pageProps }) {
     <div>
       <ToastContainer />
       <userContext.Provider value={[user, setUser]}>
+        <wishlistContext.Provider value={[wishlist, setWishlist]}> 
         <openCartContext.Provider value={[openCart, setOpenCart]}>
           <cartContext.Provider value={[cartData, setCartData]}>
             <Layout loader={setOpen} constant={data} toaster={(t) => toast(t.message)}>
@@ -58,6 +61,7 @@ export default function App({ Component, pageProps }) {
             </Layout>
           </cartContext.Provider>
         </openCartContext.Provider>
+        </wishlistContext.Provider>
       </userContext.Provider>
     </div>
     // <Component {...pageProps} />;

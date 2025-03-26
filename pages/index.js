@@ -19,49 +19,49 @@ export default function Home(props) {
 
   useEffect(() => {
     getCategory();
-    getProduct()
-    getBestSells()
-    getsetting()
+    getProduct();
+    getBestSells();
+    getsetting();
   }, []);
 
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
       breakpoint: { max: 4000, min: 3000 },
-      items: 7
+      items: 7,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 7
+      items: 7,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2
+      items: 2,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1
-    }
+      items: 1,
+    },
   };
 
   const responsived = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
       breakpoint: { max: 4000, min: 3000 },
-      items: 5
+      items: 5,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 5
+      items: 5,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2
+      items: 2,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1
-    }
+      items: 1,
+    },
   };
 
   const getCategory = async () => {
@@ -86,20 +86,27 @@ export default function Home(props) {
       (res) => {
         props.loader(false);
         if (res.data && Array.isArray(res.data)) {
-          const activeProducts = res.data.filter(product => product.status !== 'suspended');
+          const activeProducts = res.data.filter(
+            (product) => product.status !== "suspended"
+          );
 
           console.log("Filtered Data: featured products", activeProducts);
-        
+
           if (activeProducts.length > 0) {
             setProductsList(activeProducts);
           } else {
-            props.toaster({ type: "info", message: "No active products found" });
+            props.toaster({
+              type: "info",
+              message: "No active products found",
+            });
           }
         } else {
           console.error("Unexpected response format:", res);
-          props.toaster({ type: "error", message: "Unexpected response format" });
+          props.toaster({
+            type: "error",
+            message: "Unexpected response format",
+          });
         }
-      
       },
       (err) => {
         props.loader(false);
@@ -114,24 +121,29 @@ export default function Home(props) {
     Api("get", "getProduct", "", router).then(
       (res) => {
         props.loader(false);
-       
+
         if (res.data && Array.isArray(res.data)) {
-          const activeProducts = res.data.filter(product => product.status !== 'suspended');
+          const activeProducts = res.data.filter(
+            (product) => product.status !== "suspended"
+          );
 
           console.log("Filtered Data: best sells", activeProducts);
-        
+
           if (activeProducts.length > 0) {
             setBestSellsData(activeProducts);
           } else {
-            props.toaster({ type: "info", message: "No active products found" });
+            props.toaster({
+              type: "info",
+              message: "No active products found",
+            });
           }
         } else {
           console.error("Unexpected response format:", res);
-          props.toaster({ type: "error", message: "Unexpected response format" });
+          props.toaster({
+            type: "error",
+            message: "Unexpected response format",
+          });
         }
-        
-
-        
       },
       (err) => {
         props.loader(false);
@@ -143,13 +155,13 @@ export default function Home(props) {
 
   const getsetting = async () => {
     props.loader(true);
-    Api("get", 'getsetting', '', router).then(
+    Api("get", "getsetting", "", router).then(
       (res) => {
         props.loader(false);
         console.log("res================>", res);
         if (res?.success) {
           if (res?.setting.length > 0) {
-            setCarouselImg(res?.setting[0].carousel)
+            setCarouselImg(res?.setting[0].carousel?.slice(2,4));
           }
         } else {
           props.loader(false);
@@ -163,10 +175,9 @@ export default function Home(props) {
         props.toaster({ type: "error", message: err?.message });
       }
     );
-  }
+  };
 
   return (
-
     <div className="bg-white w-full">
       <section className="w-full">
         <MainHeader {...props} />
@@ -174,7 +185,9 @@ export default function Home(props) {
 
       <section className="max-w-7xl  mx-auto w-full  md:py-10 py-5 md:px-0 px-5">
         <div className="md:flex justify-between items-center w-full">
-          <p className="text-custom-darkGray md:text-[32px] text-2xl font-semibold w-full">Explore by Categories</p>
+          <p className="text-custom-darkGray md:text-[32px] text-2xl font-semibold w-full">
+            Explore by Categories
+          </p>
           {/* <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
             <p className="text-custom-purple text-base font-bold cursor-pointer" onClick={() => { router.push(`/categories/all?is_top=true`) }}>View All</p>
             <p className="text-custom-red text-base font-medium">Vegetables</p>
@@ -184,24 +197,38 @@ export default function Home(props) {
           </div> */}
         </div>
         <div className="bg-white w-full">
-          <Carousel className="h-full w-full gap-5"
+          <Carousel
+            className="h-full w-full gap-5"
             responsive={responsive}
             autoPlay={true}
             infinite={true}
             arrows={false}
           >
             {categoryData.map((item, i) => (
-              <ProductCategory item={item} i={i} url={`/categories/${item?.slug}`} />))}
+              <ProductCategory
+                item={item}
+                i={i}
+                url={`/categories/${item?.slug}`}
+              />
+            ))}
           </Carousel>
-        </div >
+        </div>
       </section>
 
       <section className="max-w-7xl  mx-auto w-full   md:py-10 py-5 md:px-0 px-5">
-
         <div className="md:flex justify-between items-center w-full  md:mb-10 mb-5">
-          <p className="text-black md:text-[32px] text-2xl font-semibold w-full">Featured Products</p>
+          <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
+            Featured Products
+          </p>
           <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
-            <p className="text-custom-purple text-base font-bold cursor-pointer" onClick={() => { router.push(`/categories/all`) }}>View All</p>
+            <p
+              className="text-custom-purple text-base font-bold cursor-pointer"
+              onClick={() => {
+                router.push(`/categories/all`);
+              }}
+            >
+              View All
+            </p>
             {/* <p className="text-custom-purple text-base font-semibold">Vegetables</p>
             <p className="text-custom-darkGray text-base font-medium">Fruits</p>
             <p className="text-custom-darkGray text-base font-medium">Coffe & teas</p>
@@ -210,14 +237,20 @@ export default function Home(props) {
         </div>
 
         <div className="bg-white w-full">
-          <Carousel className="h-full w-full gap-5"
+          <Carousel
+            className="h-full w-full gap-5"
             responsive={responsived}
             autoPlay={true}
             infinite={true}
             arrows={false}
           >
             {productsList.map((item, i) => (
-              <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
+              <GroceryCategories
+                item={item}
+                i={i}
+                url={`/product-details/${item?.slug}`}
+              />
+            ))}
           </Carousel>
         </div>
       </section>
@@ -225,13 +258,22 @@ export default function Home(props) {
       <section className="w-full bg-white ">
         <div className="max-w-7xl  mx-auto w-full md:py-10 py-5 md:px-0 px-5">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
-            {carouselImg.map((d, i) => (
-              <div className='flex flex-col justify-center items-center h-full' key={i}>
-                <img className={`w-full object-contain`}
-                  src={d}
-                  onClick={() => { router.push(`/categories/all`) }} />
-              </div>
-            ))}
+            {carouselImg.map((d, i) => {
+              return (
+                <div
+                  className="flex flex-col justify-center items-center h-full"
+                  key={i}
+                >
+                  <img
+                    className={`w-full object-contain`}
+                    src={d?.image}
+                    onClick={() => {
+                      router.push(`/categories/all`);
+                    }}
+                  />
+                </div>
+              );
+            })}
 
             {/* <div className="bg-[url('/backgroundImg-2.png')] bg-cover bg-no-repeat w-full md:h-[300px]">
               <div className="grid grid-cols-3 w-full gap-5">
@@ -254,18 +296,17 @@ export default function Home(props) {
                 </div>
               </div>
             </div> */}
-
           </div>
         </div>
-      </section >
-
-
+      </section>
 
       <section className="max-w-7xl  mx-auto w-full">
         <div className="bg-white w-full md:py-10 py-5 md:px-0 px-5">
           <div className="md:flex justify-between items-center w-full">
-            <div className='md:flex justify-start items-center gap-5'>
-              <p className="text-black md:text-[32px] text-2xl font-semibold w-full">Daily Best Sells</p>
+            <div className="md:flex justify-start items-center gap-5">
+              <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
+                Daily Best Sells
+              </p>
               {/* <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
                 <p className='text-custom-purple text-base font-semibold'>Featured</p>
                 <p className='text-custom-darkGray text-base font-medium'>Popular</p>
@@ -278,9 +319,14 @@ export default function Home(props) {
             </div> */}
           </div>
 
-          <div className='grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5'>
+          <div className="grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5">
             {bestSellsData.map((item, i) => (
-              <GroceryCategories item={item} i={i} url={`/product-details/${item?.slug}`} />))}
+              <GroceryCategories
+                item={item}
+                i={i}
+                url={`/product-details/${item?.slug}`}
+              />
+            ))}
             {/* {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))} */}
           </div>
         </div>
@@ -289,7 +335,6 @@ export default function Home(props) {
       <section className="w-full md:pt-10 pt-5">
         <ShopFasterMarketplace />
       </section>
-
-    </div >
+    </div>
   );
 }

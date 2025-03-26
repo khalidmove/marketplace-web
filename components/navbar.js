@@ -3,7 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { useContext } from "react";
-import { cartContext, openCartContext, userContext } from "@/pages/_app";
+import {
+  cartContext,
+  openCartContext,
+  userContext,
+  wishlistContext,
+} from "@/pages/_app";
 import Swal from "sweetalert2";
 // import * as rdd from "react-device-detect";
 import { LuLogIn } from "react-icons/lu";
@@ -38,6 +43,7 @@ const Navbar = (props) => {
   const [showSub, setShowSub] = useState("");
   const router = useRouter();
   const [user, setUser] = useContext(userContext);
+  const [wishlist, setWishlist] = useContext(wishlistContext);
   const [services, setServices] = useState([]);
   const [list, setList] = useState([
     { href: "/profile", title: "Profile" },
@@ -131,6 +137,16 @@ const Navbar = (props) => {
     }
     // getCategory()
   }, []);
+
+  useEffect(() => {
+    const wishList = localStorage.getItem("wishlist");
+    if (wishList) {
+      const wishListData = JSON.parse(wishList);
+      setWishlist(wishListData);
+    }
+  }, [wishlist]);
+
+  console.log("wish list data----->", wishlist);
 
   console.log(productList);
 
@@ -250,7 +266,7 @@ const Navbar = (props) => {
     },
   ];
 
-  useEffect(() => { }, [user]);
+  useEffect(() => {}, [user]);
   // console.log(props?.user);
 
   useEffect(() => {
@@ -376,12 +392,12 @@ const Navbar = (props) => {
                 <div className="hidden md:flex gap-10 font-medium">
                   <div
                     className="relative flex justify-end w-full "
-                  // onClick={() => {
-                  //   setShowCategory1(true)
-                  //   setTimeout(() => {
-                  //     inputRef2.current.focus();
-                  //   }, 200);
-                  // }}
+                    // onClick={() => {
+                    //   setShowCategory1(true)
+                    //   setTimeout(() => {
+                    //     inputRef2.current.focus();
+                    //   }, 200);
+                    // }}
                   >
                     <input
                       type="text"
@@ -421,7 +437,16 @@ const Navbar = (props) => {
                         router.push("/favourite");
                       }}
                     >
-                      <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
+                      <div className="relative">
+                        <div className="cursor-pointer">
+                          <FaRegHeart className="w-[24px] h-[24px] text-custom-purple" />
+                        </div>
+                        {wishlist?.length > 0 && (
+                          <span className="bg-red-500 absolute w-5 h-5 rounded-full top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-white text-center">
+                            {wishlist?.length}
+                          </span>
+                        )}
+                      </div>
                       <span className="text-black text-xs	font-medium">
                         Wishlist
                       </span>
@@ -503,7 +528,9 @@ const Navbar = (props) => {
                                   <div
                                     className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
                                     aria-current="page"
-                                    onClick={() => { router.push("/MyProfile") }}
+                                    onClick={() => {
+                                      router.push("/MyProfile");
+                                    }}
                                   >
                                     {"My Profile"}
                                   </div>
@@ -512,12 +539,13 @@ const Navbar = (props) => {
                                   <div
                                     className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
                                     aria-current="page"
-                                    onClick={() => { router.push("/orders") }}
+                                    onClick={() => {
+                                      router.push("/orders");
+                                    }}
                                   >
                                     {"My order"}
                                   </div>
                                 </li>
-
                               </ul>
                             </div>
                           </div>
@@ -624,8 +652,9 @@ const Navbar = (props) => {
         anchor={"right"}
       >
         <div
-          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${!cartData.length ? "h-full" : ""
-            }`}
+          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${
+            !cartData.length ? "h-full" : ""
+          }`}
         >
           <div className="bg-white w-full rounded-[5px]  boxShadows md:p-5 p-2 flex justify-between items-center">
             <div
@@ -791,8 +820,6 @@ const Navbar = (props) => {
                     </div>
                   </div>
                 </div>
-
-
 
                 <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                   <p className="text-custom-purple font-semibold text-base">

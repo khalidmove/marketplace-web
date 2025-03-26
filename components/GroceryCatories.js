@@ -22,24 +22,25 @@ function GroceryCategories({ item, i, url }) {
         ...item,
         selectedColor: item?.varients[0],
         image: item?.varients[0]?.image[0],
-        total:price,
-          // parseFloat(item.price_slot[0]?.our_price),
+        total: price,
+        // parseFloat(item.price_slot[0]?.our_price),
         qty: 1,
       };
       updatedCart.push(newItem);
     } else {
-      
       const nextState = produce(updatedCart, (draft) => {
-        draft[existingItemIndex].qty += 1;  
-        draft[existingItemIndex].total = (price * draft[existingItemIndex].qty).toFixed(2)
+        draft[existingItemIndex].qty += 1;
+        draft[existingItemIndex].total = (
+          price * draft[existingItemIndex].qty
+        ).toFixed(2);
       });
-      updatedCart = nextState;  
+      updatedCart = nextState;
     }
 
     setCartData(updatedCart);
     localStorage.setItem("addCartDetail", JSON.stringify(updatedCart));
     setOpenCart(true);
-  }
+  };
 
   return (
     <div
@@ -58,9 +59,14 @@ function GroceryCategories({ item, i, url }) {
         <p className="text-custom-gray font-normal text-xs">
           {item?.categoryName}
         </p>
-        <p className="text-custom-darkGray text-base font-semibold pt-2">
-          {item?.name}
-        </p>
+        <div className="flex gap-2">
+          <span className="text-custom-darkGray text-base font-semibold pt-2">
+            {item?.name}
+          </span>
+          <span className="text-custom-darkGray text-base font-semibold pt-2">
+            {item?.price_slot[0]?.value}{item?.price_slot[0]?.unit}
+          </span>
+        </div>
       </div>
       <div className="flex justify-between items-center pt-5">
         <p className="text-custom-purple text-lg	font-semibold">
