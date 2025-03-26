@@ -163,6 +163,7 @@ function ProductDetails(props) {
         console.log("res================>", res);
         if (res.status) {
           props.toaster({ type: "success", message: res.data?.message });
+          getProductById();
           if (res.data?.message === "Product added to favourite") {
             const updatedWishlist = [...wishlist, productsId];
             setWishlist(updatedWishlist);
@@ -176,7 +177,7 @@ function ProductDetails(props) {
           props.toaster({ type: "error", message: res?.data?.message });
            
         }
-        getProductById();
+        
       },
       (err) => {
         props.loader(false);
@@ -186,8 +187,8 @@ function ProductDetails(props) {
     );
   };
 
-  console.log("wishlist----->", wishlist);
-  console.log("product id----->", productsId);
+  // console.log("wishlist----->", wishlist);
+  // console.log("product id----->", productsId);
   
 
   return (
