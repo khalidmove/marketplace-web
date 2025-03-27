@@ -32,7 +32,7 @@ function Referal() {
                         <img className='md:w-[300px] w-[100px] md:h-[300px] h-[100px]' src='/image-2.png' />
                         <p className='text-black md:text-[32px] text-xl font-semibold pt-5 text-center'>Refer a friend to earn points.</p>
                         <button className='w-[230px] md:h-[50px] h-[40px] border-[2px] border-custom-red rounded-[12px] md:text-2xl text-base font-medium text-custom-red mt-2'>{user?.referalpoints} Points</button>
-                        <p className='text-black md:text-xl text-base font-medium w-[237px] text-center py-5'>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum</p>
+                        <p className='text-black md:text-xl text-base font-medium w-[400px] text-center py-5'>Welcome to our  <span className='font-semibold'>Marketplace Referral Program</span>! We’re excited to reward you for sharing the marketplace with your friends and family</p>
                         <button className='md:w-[426px] w-[230px] md:h-[50px] h-[40px] border border-custom-red rounded-[12px] md:text-xl text-base font-medium text-custom-red'>{user?.referal}</button>
                         <button className='bg-custom-red md:h-[50px] h-[40px] md:w-[426px] w-[230px] rounded-[12px] text-white md:text-xl text-base font-semibold mt-5'
                             onClick={() => {
