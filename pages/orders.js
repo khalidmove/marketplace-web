@@ -136,7 +136,7 @@ function orders(props) {
                   </div>
                   <div className="flex flex-col">
                     <p className="text-custom-red text-base font-bold text-right">
-                      $ {item?.productDetail?.total}
+                      $ {item?.total}
                     </p>
                     {/* <div className='flex justify-end items-end mt-2'>
                                             <button className='bg-custom-purple h-[30px] w-24 rounded-[5px] text-white font-semibold text-sm' onClick={() => { setShowReviews(true); setProductId(item?.productDetail?.product?._id); setSellerId(item?.productDetail?.seller_id) }}>Reviews</button>

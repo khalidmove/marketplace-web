@@ -35,6 +35,7 @@ import { produce } from "immer";
 import { RxCrossCircled } from "react-icons/rx";
 import { GoCart } from "react-icons/go";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlineStar } from "react-icons/md";
 
 const Navbar = (props) => {
   // console.log(props)
@@ -70,7 +71,7 @@ const Navbar = (props) => {
   const [productsList, setProductsList] = useState([]);
 
   const [mobileMenu, setMobileMenu] = useState(false);
-
+  const [redeemPoints, setRedeemPoints] = useState();
   const [CartTotal, setCartTotal] = useState(0);
   const [openCart, setOpenCart] = useContext(openCartContext);
   const [CartItem, setCartItem] = useState(0);
@@ -360,11 +361,34 @@ const Navbar = (props) => {
     );
   };
 
-  console.log("cart data::", cartData);
+  // console.log("cart data::", cartData);
 
-  // const toaster = () => {
-  //   props.toaster
-  // }
+  const pricePerPoint = 0.001; 
+  const minPointsRequired = 25000;
+  let redeemablePoints;
+  if (user?.referalpoints > minPointsRequired) {
+    if (CartTotal >= 400) {
+      redeemablePoints = Math.floor(user?.referalpoints / 1000) * 1000;
+    } else if (CartTotal < 400) {
+      redeemablePoints = Math.floor(user?.referalpoints / 10000) * 1000;
+    } else {
+      redeemablePoints = 0;
+    }
+  } else {
+    redeemablePoints = 0;
+  }
+
+  const redeemableAmount = redeemablePoints * pricePerPoint;
+  const finalAmount = CartTotal - redeemableAmount;
+
+   
+  const handleCheckboxChange = (event) => {
+    if (event.target.checked) {
+      setMainTotal(finalAmount);  
+    } else {
+      setMainTotal(CartTotal + deliveryCharge + deliveryPartnerTip); 
+    }
+  };
 
   return (
     <>
@@ -852,13 +876,46 @@ const Navbar = (props) => {
             <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
               <div className="flex justify-between items-center w-full">
                 <p className="text-custom-purple font-normal text-base">
-                  Item Total
+                  Total Amount
                 </p>
                 <p className="text-custom-purple font-normal text-base">
                   ₹{CartTotal}
                 </p>
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
+              <div className="flex items-center justify-between mt-1">
+                <p className="text-custom-purple text-base">
+                  You have total point
+                </p>
+                <div className="flex gap-1 ">
+                  <span>
+                    <MdOutlineStar className="text-lg mt-[2px] text-custom-red" />
+                  </span>
+                  <span className="text-custom-purple">
+                    {user?.referalpoints}
+                  </span>
+                </div>
+              </div>
+              {user?.referalpoints > 25000 ? (
+                <div className="mt-1">
+                  <input type="checkbox" onChange={handleCheckboxChange} />{" "}
+                  <span>
+                    Use{" "}
+                    <span className="text-custom-purple font-semibold">
+                      {redeemablePoints}
+                    </span>{" "}
+                    points
+                  </span>
+                </div>
+              ) : (
+                <p className="mt-1 text-base text-custom-purple">
+                  Minimum{" "}
+                  <span className="font-semibold text-custom-purple">
+                    25,000{" "}
+                  </span>
+                  points required to redeem
+                </p>
+              )}
 
               <div className="flex justify-between items-center w-full pt-3">
                 <p className="text-custom-red font-normal text-base">
