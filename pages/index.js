@@ -183,9 +183,9 @@ export default function Home(props) {
         <MainHeader {...props} />
       </section>
 
-      <section className="max-w-7xl  mx-auto w-full  md:py-10 py-5 md:px-0 px-5">
+      <section className="max-w-7xl mx-auto w-full md:py-10 py-5 md:px-0 px-5">
         <div className="md:flex justify-between items-center w-full">
-          <p className="text-custom-darkGray md:text-[32px] text-2xl font-semibold w-full">
+          <p className="text-black md:text-[32px] text-2xl font-semibold w-full px-1 md:px-6 2xl:px-0">
             Explore by Categories
           </p>
           {/* <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
@@ -196,7 +196,7 @@ export default function Home(props) {
             <p className="text-custom-red text-base font-medium">Meat</p>
           </div> */}
         </div>
-        <div className="bg-white w-full">
+        <div className="bg-white w-full px-1 md:px-6 2xl:px-0">
           <Carousel
             className="h-full w-full gap-5"
             responsive={responsive}
@@ -216,7 +216,7 @@ export default function Home(props) {
       </section>
 
       <section className="max-w-7xl  mx-auto w-full   md:py-10 py-5 md:px-0 px-5">
-        <div className="md:flex justify-between items-center w-full  md:mb-10 mb-5">
+        <div className="md:flex justify-between items-center w-full  md:mb-10 mb-5 px-1 md:px-6 2xl:px-0">
           <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
             Featured Products
           </p>
@@ -236,7 +236,7 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div className="bg-white w-full">
+        <div className="bg-white w-full px-1 md:px-6 2xl:px-0">
           <Carousel
             className="h-full w-full gap-5"
             responsive={responsived}
@@ -249,13 +249,15 @@ export default function Home(props) {
                 item={item}
                 i={i}
                 url={`/product-details/${item?.slug}`}
+                loader={props?.loader}
+                toaster={props?.toaster}
               />
             ))}
           </Carousel>
         </div>
       </section>
 
-      <section className="w-full bg-white ">
+      <section className="w-full bg-white px-1 md:px-6 2xl:px-0 hidden md:block">
         <div className="max-w-7xl  mx-auto w-full md:py-10 py-5 md:px-0 px-5">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             {carouselImg.map((d, i) => {
@@ -303,7 +305,7 @@ export default function Home(props) {
       <section className="max-w-7xl  mx-auto w-full">
         <div className="bg-white w-full md:py-10 py-5 md:px-0 px-5">
           <div className="md:flex justify-between items-center w-full">
-            <div className="md:flex justify-start items-center gap-5">
+            <div className="md:flex justify-start items-center gap-5 px-1 md:px-6 2xl:px-0">
               <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
                 Daily Best Sells
               </p>
@@ -319,12 +321,14 @@ export default function Home(props) {
             </div> */}
           </div>
 
-          <div className="grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5">
+          <div className="grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5 px-1 md:px-6 2xl:px-0">
             {bestSellsData.map((item, i) => (
               <GroceryCategories
                 item={item}
                 i={i}
                 url={`/product-details/${item?.slug}`}
+                loader={props?.loader}
+                toaster={props?.toaster}
               />
             ))}
             {/* {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))} */}

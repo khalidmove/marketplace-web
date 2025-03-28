@@ -14,6 +14,7 @@ import { produce } from "immer";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
+import currencySign from "@/utils/currencySign";
 
 function ProductDetails(props) {
   const router = useRouter();
@@ -193,7 +194,7 @@ function ProductDetails(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full md:pt-10 pt-5 md:pb-5 pb-5 md:px-0 px-5">
+      <section className="bg-white w-full md:pt-10 pt-5 md:pb-5 pb-5 px-1 md:px-6 2xl:px-0">
         <div className="max-w-7xl  mx-auto w-full">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             <div className="border border-black p-[10px] rounded-[15px]">
@@ -265,12 +266,12 @@ function ProductDetails(props) {
                               off
                             </p>
                             <p className="text-black font-normal text-base pt-1">
-                              ₹{data.our_price}
+                              {currencySign(data.our_price)}
                             </p>
                             <p className="text-custom-newPurpleColor font-semibold text-sm pt-2">
 
                               <span className="text-custom-newGray font-normal line-through">
-                                {data?.other_price}
+                                {currencySign(data?.other_price)}
                               </span>
                             </p>
                           </div>
@@ -295,9 +296,9 @@ function ProductDetails(props) {
 
                 <div className="pt-3 mt-2 px-4  border-custom-darkPurple">
                   <p className="text-custom-newPurpleColor font-semibold text-lg">
-                    ₹{selectedPrice?.our_price}{" "}
+                    {currencySign(selectedPrice?.our_price)}{" "}
                     <span className="text-custom-newGray text-sm font-normal line-through">
-                      {selectedPrice?.other_price}
+                      {currencySign(selectedPrice?.other_price)}
                     </span>{" "}
                     <span className="text-sm">
                       {/* {percentageDifference?.toFixed(2)}% */}
@@ -505,6 +506,8 @@ function ProductDetails(props) {
                     item={item}
                     i={i}
                     url={`/product-details/${item?.slug}`}
+                    loader={props?.loader}
+                toaster={props?.toaster}
                   />
                 </div>
               ))}
@@ -522,6 +525,8 @@ function ProductDetails(props) {
                     item={item}
                     i={i}
                     url={`/product-details/${item?.slug}`}
+                    loader={props?.loader}
+                toaster={props?.toaster}
                   />
                 </div>
               ))}

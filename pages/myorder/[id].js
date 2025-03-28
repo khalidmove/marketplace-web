@@ -5,6 +5,7 @@ import { Api } from "@/services/service";
 import "react-multi-carousel/lib/styles.css";
 import moment from "moment";
 import Carousel from "react-multi-carousel";
+import currencySign from "@/utils/currencySign";
 
 export default function MyOrder(props) {
   const router = useRouter();
@@ -73,8 +74,8 @@ export default function MyOrder(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full  relative flex flex-col justify-center items-center">
-        <div className="max-w-7xl  md:px-0 mx-auto w-full  px-5 md:pt-10 pt-5 md:pb-10 pb-5 mb-6">
+      <section className="bg-white w-full relative flex flex-col justify-center items-center">
+        <div className="max-w-7xl mx-auto w-full px-1 md:px-6 2xl:px-0 md:pt-10 pt-5 md:pb-10 pb-5 mb-6">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full md:gap-0 gap-5">
             <div className="w-full">
               <div className="border border-black p-[10px] rounded-[15px]">
@@ -101,7 +102,7 @@ export default function MyOrder(props) {
                 {productsId?.product?.name}
               </p>
               <p className="text-black text-xl font-normal md:pt-5 pt-3">
-                €{productsId?.price}
+                {currencySign(productsId?.price)}
               </p>
               {productsId?.color && (
                 <div className="flex justify-start items-center pt-[6px] mt-2">

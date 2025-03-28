@@ -18,7 +18,7 @@ import { Drawer, Typography, IconButton, Button } from "@mui/material";
 // import Categoriess from "./Categoriess";
 // import ProductCard from "./ProductCard";
 import Badge from "@mui/material/Badge";
-import { FaRegHeart } from "react-icons/fa";
+import { FaMapMarker, FaMapMarkerAlt, FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FiSearch } from "react-icons/fi";
 import {
@@ -36,6 +36,8 @@ import { RxCrossCircled } from "react-icons/rx";
 import { GoCart } from "react-icons/go";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { MdOutlineStar } from "react-icons/md";
+import currencySign from "@/utils/currencySign";
+import formatShippingAddress from "@/utils/formatShippingAddress";
 
 const Navbar = (props) => {
   // console.log(props)
@@ -390,12 +392,12 @@ const Navbar = (props) => {
   };
 
   return (
-    <>
+    <div>
       <nav
-        className={`flex flex-col justify-center   min-h-max h-auto  bg-white w-full z-50 md:p-0 p-3`}
+        className={`flex flex-col justify-center min-h-max h-auto  bg-white w-full z-50 md:p-0 p-3`}
       >
         {/* drop-shadow-md */}
-        <div className="w-full md:border-b border-b-0 border-b-gray-400 ">
+        <div className="w-full md:border-b border-b-0 border-b-gray-400 px-1 md:px-6 2xl:px-0">
           <div className="max-w-7xl  mx-auto w-full">
             <div className="">
               <div
@@ -795,15 +797,15 @@ const Navbar = (props) => {
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="pl-3">{item?.price_slot[0]?.value}</span>{" "}
-                      <span>{item?.price_slot[0]?.unit}</span>
+                      <span className="pl-3">{currencySign(item?.price_slot[0]?.value)}</span>{" "}
+                      <span>{currencySign(item?.price_slot[0]?.unit)}</span>
                     </p>
                   </div>
                   <div className="flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-2 md:hidden">
                     <p className="text-custom-purple font-semibold text-base">
-                      ₹{item?.our_price}
+                      {currencySign(item?.our_price)}
                       <del className="text-custom-red font-normal text-xs ml-2">
-                        ₹{item?.other_price}
+                        {currencySign(item?.other_price)}
                       </del>
                     </p>
                     <IoMdClose
@@ -865,9 +867,9 @@ const Navbar = (props) => {
 
                 <div className="md:flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-5 hidden">
                   <p className="text-custom-purple font-semibold text-base">
-                    ₹{item?.total}
+                    {currencySign(item?.total)}
                     <del className="text-custom-red font-normal text-xs ml-2">
-                      ₹{item?.other_price}
+                      {currencySign(item?.other_price)}
                     </del>
                   </p>
                   <IoMdClose
@@ -901,7 +903,7 @@ const Navbar = (props) => {
                     <MdOutlineStar className="text-lg mt-[2px] text-custom-red" />
                   </span>
                   <span className="text-custom-purple">
-                    {user?.referalpoints}
+                    {user?.referalpoints || 0}
                   </span>
                 </div>
               </div>
@@ -928,10 +930,10 @@ const Navbar = (props) => {
 
               <div className="flex justify-between items-center w-full pt-3">
                 <p className="text-custom-red font-normal text-base">
-                  Delivery Fee (₹35 Saved)
+                  Delivery Fee ({currencySign(35)} Saved)
                 </p>
                 <p className="text-custom-purple font-normal text-base">
-                  ₹{deliveryCharge}
+                  {currencySign(deliveryCharge)}
                 </p>
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹35</del> */}
               </div>
@@ -941,7 +943,16 @@ const Navbar = (props) => {
                   Delivery Partner Tip
                 </p>
                 <p className="font-normal text-base text-custom-purple">
-                  ₹{deliveryPartnerTip}
+                  {currencySign(deliveryPartnerTip)}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
+                <p className="text-custom-grayColors font-normal text-base">
+                  Delivery Partner Tip
+                </p>
+                <p className="font-normal text-base text-custom-purple">
+                  {currencySign(deliveryPartnerTip)}
                 </p>
               </div>
 
@@ -950,20 +961,47 @@ const Navbar = (props) => {
                   Total Payable
                 </p>
                 <p className="text-custom-purple font-medium text-base">
-                  ₹{mainTotal}
+                  {currencySign(mainTotal)}
                 </p>
               </div>
+
+              {shippingAddressData &&
+                user?.token &&
+                (shippingAddressData.firstName ||
+                  shippingAddressData.address ||
+                  shippingAddressData.city ||
+                  shippingAddressData.country) && (
+              <div onClick={() => {
+                setOpenCart(false);
+                setShowcart(true);
+              }} className="flex justify-between items-center w-full pt-5">
+                <p className="text-custom-purple font-normal text-base">
+                  Delivery Address
+                </p>
+                <p className="text-custom-purple font-medium text-base">
+                <FaMapMarkerAlt/>  {formatShippingAddress(shippingAddressData)}
+                </p>
+              </div>
+            )}
             </div>
           )}
 
           {productList.map((item, i) => (
-            <GroceryCategories item={item} i={i} />
+            <GroceryCategories item={item} i={i} loader={props?.loader}
+            toaster={props?.toaster} />
           ))}
 
           {cartData.length > 0 && (
             <button
               className="bg-custom-red h-[50px] rounded-[12px] w-full font-semibold text-white text-base text-center mt-5"
               onClick={() => {
+                if (mainTotal <= 0) {
+                  props.toaster({
+                    type: "warning",
+                    message: "Product is not valid!",
+                  });
+                  return;
+                }
                 if (cartData?.length === 0) {
                   props.toaster({
                     type: "warning",
@@ -976,7 +1014,7 @@ const Navbar = (props) => {
                 }
               }}
             >
-              CONTINUE TO PAY ₹{CartTotal}
+              CONTINUE TO PAY {currencySign(CartTotal)}
             </button>
           )}
         </div>
@@ -1248,6 +1286,8 @@ const Navbar = (props) => {
                         item={item}
                         i={i}
                         url={`/product-details/${item?.slug}`}
+                        loader={props?.loader}
+                toaster={props?.toaster}
                       />
                     </div>
                   ))}
@@ -1262,7 +1302,7 @@ const Navbar = (props) => {
           </div>
         </div>
       </Drawer>
-    </>
+    </div>
   );
 };
 

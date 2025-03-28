@@ -5,6 +5,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
+import currencySign from "@/utils/currencySign";
 
 function orders(props) {
   const router = useRouter();
@@ -91,10 +92,12 @@ function orders(props) {
     });
 };
 
+console.log(ordersData)
+
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full  relative flex flex-col justify-center items-center">
-        <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
+      <section className="bg-white w-full relative flex flex-col justify-start items-center 2xl:justify-start h-screen">
+        <div className="max-w-7xl mx-auto w-full px-5 md:pt-10 pt-5 md:pb-10 pb-5">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             {ordersData && ordersData.length > 0 ? (
               ordersData.map((item, i) => (
@@ -111,7 +114,7 @@ function orders(props) {
                     />
                     <div>
                       <p className="text-black text-base font-bold">
-                        {item?.productDetail?.product?.name}
+                      {item?.productDetail[0]?.product?.name}
                       </p>
                       {item?.productDetail?.color && (
                         <div className="flex justify-start items-center pt-[6px]">
@@ -136,7 +139,7 @@ function orders(props) {
                   </div>
                   <div className="flex flex-col">
                     <p className="text-custom-red text-base font-bold text-right">
-                      $ {item?.total}
+                      {currencySign(item?.total)}
                     </p>
                     {/* <div className='flex justify-end items-end mt-2'>
                                             <button className='bg-custom-purple h-[30px] w-24 rounded-[5px] text-white font-semibold text-sm' onClick={() => { setShowReviews(true); setProductId(item?.productDetail?.product?._id); setSellerId(item?.productDetail?.seller_id) }}>Reviews</button>

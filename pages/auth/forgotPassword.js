@@ -143,7 +143,7 @@ function forgotPassword(props) {
         <>
             <div className="bg-white w-full">
                 <section className="bg-white w-full  relative flex flex-col justify-center items-center">
-                    <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5">
+                    <div className="max-w-7xl mx-auto w-full px-1 md:px-6 2xl:px-0 md:pt-10 pt-5">
                         <p className='text-custom-black md:text-[64px]  text-2xl font-bold md:leading-[80px]'>Welcome</p>
                         <p className='text-custom-newGrayColor font-normal md:text-xl text-base'>Please enter your forgot password details.</p>
                         {/* <div className="bg-custom-gray w-full rounded-[20px] border border-black md:p-10 p-5"> */}
