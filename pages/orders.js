@@ -20,6 +20,7 @@ function orders(props) {
   const [reviews, setReviews] = useState("product");
   const [sellerId, setSellerId] = useState("");
   const [showProduct, setShowProduct] = useState(false);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
 
   useEffect(() => {
     getProductRequestbyUser();
@@ -43,7 +44,7 @@ function orders(props) {
 
   const groupOrdersByBookingId = () => {
     return ordersData.reduce((groups, order) => {
-      const bookingId = order.bookingId;  
+      const bookingId = order.bookingId;
       if (!groups[bookingId]) {
         groups[bookingId] = [];
       }
@@ -51,10 +52,14 @@ function orders(props) {
       return groups;
     }, {});
   };
-  
+
   const groupedOrders = groupOrdersByBookingId();
-  console.log("data---------->", groupedOrders);
-  
+  // console.log("data---------->", groupedOrders);
+
+  const toggleOrderDetails = (orderId) => {
+    
+    setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
+  };
 
   const createProductRquest = (e) => {
     e.preventDefault();
@@ -102,38 +107,25 @@ function orders(props) {
     );
   };
 
-  
-
-  const handleProductClick = (productId, productDetailId) => {
-    router.push({
-        pathname: "/myorder",
-        query: { id: productId, productDetailId: productDetailId } // 
-    });
-};
-
-console.log(ordersData)
+  //   const handleProductClick = (productId, productDetailId) => {
+  //     router.push({
+  //         pathname: "/myorder",
+  //         query: { id: productId, productDetailId: productDetailId }
+  //     });
+  // };
 
   return (
     <div className="bg-white w-full">
       <section className="bg-white w-full relative flex flex-col justify-start items-center 2xl:justify-start h-screen">
         <div className="max-w-7xl mx-auto w-full px-5 md:pt-10 pt-5 md:pb-10 pb-5">
-          <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
+          {/* <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             {Object.keys(groupedOrders).length > 0 ? (
              Object.keys(groupedOrders).map((item, i) => (
                 <div
                   key={i}
-                  className="grid md:grid-cols-2 border grid-cols-1 w-full gap-5 bg-white  p-5 rounded-[10px]"
-               >
-                 {/* <div className="flex justify-end items-end" onClick={()=>setShowProduct(!showProduct)}>
-                 <FaChevronDown className="text-black text-2xl text-end" />
-                 </div>
-                 {showProduct && (
-                   <div className="bg-custom-purple h-20 w-20">
-                   sdklke
-                   </div>
-                  )} */}
-                 
-                  {/* <div className="col-span-2 flex gap-5"
+                  className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]"
+                >
+                  <div className="col-span-2 flex gap-5"
                     onClick={() => { router.push(`/myorder/${item?._id}?product_id=${item?.productDetail[0]?._id}`) }}
                   >
                     <img
@@ -164,13 +156,13 @@ console.log(ordersData)
                         Order ID: {item?._id}
                       </p>
                     </div>
-                 </div> */}
+                 </div>
                  
-                  {/* <div className="flex flex-col">
+                  <div className="flex flex-col">
                     <p className="text-custom-red text-base font-bold text-right">
-                      {currencySign(item?.total)}
+                      $ {item?.total}
                     </p>
-                  </div> */}
+                  </div>
                 </div>
               ))
             ) : (
@@ -180,9 +172,77 @@ console.log(ordersData)
                 </p>
               </div>
             )}
+          </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-6 md:mx-auto md:gap-12 gap-8 max-w-6xl">
+            {ordersData.length > 0 ? (
+              ordersData.map((order, key) => (
+                <div
+                  key={key}
+                  className="bg-white p-4 rounded-md border-2 border-[#999999] h-auto self-start"
+                >
+                  <div onClick={() => toggleOrderDetails(order._id)} className="flex items-center justify-between  ">
+                    <div className="flex flex-col justify-start w-full">
+                      <div className="flex flex-row justify-end items-center mb-4">
+                        <p   className="text-[18px] text-black md:text-[24px]">
+                        <FaChevronDown className={`text-xl cursor-pointer ${expandedOrderId === order._id ? "transform rotate-180" : ""}`} />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] border border-gray-200">
+                    {expandedOrderId === order._id && (
+                      order.productDetail.map((product, index) => {
+                        console.log("order------>", order);
+                        return (
+                          <div
+                            key={index}
+                            className="col-span-2 flex gap-5 cursor-pointer"
+                            onClick={() => {
+                              router.push(
+                                `/myorder/${product?._id}?product_id=${product?.product?._id}`
+                              );
+                              // router.push(
+                              //   `/myorder/${product?._id}`
+                              // );
+                            }}
+                          >
+                            <img
+                              className="w-20 h-20 text-gray-600 rounded-[10px] object-contain "
+                              src={product.image[0] }
+                              alt="Product"
+                            />
+                            <div>
+                              <p className="text-black text-base font-bold">
+                                {product.product?.name || "Product Name"}
+                              </p>
+                              <p className="text-gray-600 text-xs font-bold pt-[6px]">
+                                Quantity: {product.qty || 1}
+                              </p>
+                              <p className="text-gray-600 text-xs font-bold pt-[6px]">
+                                Order Id: {order._id || 1}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                    
+                    <div className="flex flex-col justify-center items-end">
+                      <p className="text-gray-600 text-base font-bold">
+                        Total: $ {order.total || "0.00"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-center items-center md:mt-5 w-full md:h-[300px] h-[200px] col-span-4">
+              <p className="text-center text-black text-2xl">
+                No orders available.
+              </p>
+            </div>
+            )}
           </div>
-          
-
           {showReviews && (
             <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
               <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">
