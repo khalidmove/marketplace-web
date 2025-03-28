@@ -5,6 +5,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
+import { FaChevronDown } from "react-icons/fa";
 
 function orders(props) {
   const router = useRouter();
@@ -17,6 +18,7 @@ function orders(props) {
   const [productId, setProductId] = useState("");
   const [reviews, setReviews] = useState("product");
   const [sellerId, setSellerId] = useState("");
+  const [showProduct, setShowProduct] = useState(false);
 
   useEffect(() => {
     getProductRequestbyUser();
@@ -37,6 +39,21 @@ function orders(props) {
       }
     );
   };
+
+  const groupOrdersByBookingId = () => {
+    return ordersData.reduce((groups, order) => {
+      const bookingId = order.bookingId;  
+      if (!groups[bookingId]) {
+        groups[bookingId] = [];
+      }
+      groups[bookingId].push(order);
+      return groups;
+    }, {});
+  };
+  
+  const groupedOrders = groupOrdersByBookingId();
+  console.log("data---------->", groupedOrders);
+  
 
   const createProductRquest = (e) => {
     e.preventDefault();
@@ -84,31 +101,37 @@ function orders(props) {
     );
   };
 
+  
+
   const handleProductClick = (productId, productDetailId) => {
     router.push({
-      pathname: "/myorder",
-      query: { id: productId, productDetailId: productDetailId }, //
+        pathname: "/myorder",
+        query: { id: productId, productDetailId: productDetailId } // 
     });
-  };
+};
 
   return (
     <div className="bg-white w-full">
       <section className="bg-white w-full  relative flex flex-col justify-center items-center">
         <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
-            {ordersData && ordersData.length > 0 ? (
-              ordersData.map((item, i) => (
+            {Object.keys(groupedOrders).length > 0 ? (
+             Object.keys(groupedOrders).map((item, i) => (
                 <div
                   key={i}
-                  className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]"
-                >
-                  <div
-                    className="col-span-2 flex gap-5"
-                    onClick={() => {
-                      router.push(
-                        `/myorder/${item?._id}?product_id=${item?.productDetail[0]?._id}`
-                      );
-                    }}
+                  className="grid md:grid-cols-2 border grid-cols-1 w-full gap-5 bg-white  p-5 rounded-[10px]"
+               >
+                 {/* <div className="flex justify-end items-end" onClick={()=>setShowProduct(!showProduct)}>
+                 <FaChevronDown className="text-black text-2xl text-end" />
+                 </div>
+                 {showProduct && (
+                   <div className="bg-custom-purple h-20 w-20">
+                   sdklke
+                   </div>
+                  )} */}
+                 
+                  {/* <div className="col-span-2 flex gap-5"
+                    onClick={() => { router.push(`/myorder/${item?._id}?product_id=${item?.productDetail[0]?._id}`) }}
                   >
                     <img
                       className="w-20 h-20 rounded-[10px] object-contain"
@@ -138,15 +161,13 @@ function orders(props) {
                         Order ID: {item?._id}
                       </p>
                     </div>
-                  </div>
-                  <div className="flex flex-col">
+                 </div> */}
+                 
+                  {/* <div className="flex flex-col">
                     <p className="text-custom-red text-base font-bold text-right">
                       $ {item?.total}
                     </p>
-                    {/* <div className='flex justify-end items-end mt-2'>
-                                            <button className='bg-custom-purple h-[30px] w-24 rounded-[5px] text-white font-semibold text-sm' onClick={() => { setShowReviews(true); setProductId(item?.productDetail?.product?._id); setSellerId(item?.productDetail?.seller_id) }}>Reviews</button>
-                                        </div> */}
-                  </div>
+                  </div> */}
                 </div>
               ))
             ) : (
@@ -157,6 +178,7 @@ function orders(props) {
               </div>
             )}
           </div>
+          
 
           {showReviews && (
             <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
