@@ -39,7 +39,7 @@ function GroceryCategories({ item, i, url }) {
 
     setCartData(updatedCart);
     localStorage.setItem("addCartDetail", JSON.stringify(updatedCart));
-    setOpenCart(true);
+    // setOpenCart(true);
   };
 
   return (

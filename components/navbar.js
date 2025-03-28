@@ -90,7 +90,6 @@ const Navbar = (props) => {
   const [mainTotal, setMainTotal] = useState(0);
   const [productList, SetProductList] = useState([]);
   const [noProductsFound, setNoProductsFound] = useState(false);
-
   const timeoutRef = useRef(null);
 
   // const handleSearch = () => {
@@ -482,7 +481,17 @@ const Navbar = (props) => {
                         setMobileMenu(!mobileMenu);
                       }}
                     >
-                      <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" />
+                       <div className="relative">
+                        <div className="cursor-pointer">
+                        <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" />
+                        </div>
+                        { cartData.length > 0 && (
+                          <span className="bg-red-500 absolute w-5 h-5 rounded-full top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-white text-center">
+                            {cartData?.length}
+                          </span>
+                        )}
+                      </div>
+                      {/* <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" /> */}
                       <span className="text-black text-xs	font-medium">
                         My cart
                       </span>

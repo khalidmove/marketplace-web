@@ -431,6 +431,7 @@ function ProductDetails(props) {
                       console.log("next state ::", nextState);
                       setCartData(nextState);
                       localStorage.setItem("addCartDetail", JSON.stringify(nextState));
+                      
                     }
                     else {
                       const nextState = produce(cartData, (draft) => {
@@ -442,7 +443,7 @@ function ProductDetails(props) {
                       localStorage.setItem("addCartDetail", JSON.stringify(nextState));
                       // router.push('/cart')
                     }
-                    setOpenCart(true);
+                    // setOpenCart(true);
                   }}
                 >
                   ADD

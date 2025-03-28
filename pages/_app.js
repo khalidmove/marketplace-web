@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import "@/styles/globals.css";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import Loader from "@/components/loader";
@@ -10,6 +10,7 @@ export const userContext = createContext();
 export const openCartContext = createContext();
 export const cartContext = createContext();
 export const wishlistContext = createContext();
+ 
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -36,7 +37,6 @@ export default function App({ Component, pageProps }) {
     if (user) {
       setUser(JSON.parse(user));
     }
-
     let cart = localStorage.getItem("addCartDetail");
     if (cart) {
       setCartData(JSON.parse(cart));
@@ -47,23 +47,27 @@ export default function App({ Component, pageProps }) {
     <div>
       <ToastContainer />
       <userContext.Provider value={[user, setUser]}>
-        <wishlistContext.Provider value={[wishlist, setWishlist]}> 
-        <openCartContext.Provider value={[openCart, setOpenCart]}>
-          <cartContext.Provider value={[cartData, setCartData]}>
-            <Layout loader={setOpen} constant={data} toaster={(t) => toast(t.message)}>
-              {open && <Loader open={open} />}
-              <Component
-                toaster={(t) => toast(t.message)}
-                {...pageProps}
+        <wishlistContext.Provider value={[wishlist, setWishlist]}>
+          <openCartContext.Provider value={[openCart, setOpenCart]}>
+            <cartContext.Provider value={[cartData, setCartData]}>
+              <Layout
                 loader={setOpen}
-                user={user}
-              />
-            </Layout>
-          </cartContext.Provider>
-        </openCartContext.Provider>
+                constant={data}
+                toaster={(t) => toast(t.message)}
+              >
+                {open && <Loader open={open} />}
+                <Component
+                  toaster={(t) => toast(t.message)}
+                  {...pageProps}
+                  loader={setOpen}
+                  user={user}
+                />
+              </Layout>
+            </cartContext.Provider>
+          </openCartContext.Provider>
         </wishlistContext.Provider>
       </userContext.Provider>
     </div>
     // <Component {...pageProps} />;
-  )
+  );
 }
