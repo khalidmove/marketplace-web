@@ -59,22 +59,25 @@ function Categories(props) {
     const [openCategory, setOpenCategory] = useState(true)
 
     useEffect(() => {
-        // if (category?._id) {
-        getproductByCategory(router?.query?.cat_id)
-        setSelectedCategories(router?.query?.cat_id)
-        // }
-    }, [router])
+        const { category, sort_by, cat_id } = router.query;
 
-    useEffect(() => {
-        getCategory()
-    }, [])
-
-
-    useEffect(() => {
-        if (selectedCategories) {
-            getproductByCategory(selectedCategories)
+         
+        if (category && sort_by) {
+            setOpenData(true)
+            setSelectedCategories(cat_id || 'all');
+            setSelectedSortBy(sort_by || 'is_top');   
+            getproductByCategory(cat_id || 'all', sort_by || 'is_top');
+        } else if (!selectedSortBy) {
+            // setSelectedSortBy('is_top');
+            getproductByCategory(router.query.cat_id || 'all',);
+        } else {
+            getproductByCategory(router.query.cat_id || 'all', selectedSortBy);
         }
-    }, [selectedSortBy])
+    }, [router.query]);  
+
+        useEffect(() => {
+            getCategory();
+        }, []);
 
     const getCategory = async (cat) => {
         props.loader(true);
@@ -96,16 +99,14 @@ function Categories(props) {
         );
     };
 
-    const getproductByCategory = async (cat) => {
+    const getproductByCategory = async (cat, sortBy = '') => {
         props.loader(true);
         let parmas = { status: 'verified' }
         let url = `getProductBycategoryId`
         if (cat) {
             parmas.category = cat
         }
-        if (selectedSortBy) {
-            parmas.sort_by = selectedSortBy
-        }
+        if (sortBy) parmas.sort_by = sortBy || selectedSortBy;
         Api("get", url, "", router, parmas).then(
             (res) => {
                 props.loader(false);
@@ -137,6 +138,17 @@ function Categories(props) {
         );
     };
 
+    const handleSortChange = (sortByValue) => {
+        props.loader(true)
+        setSelectedSortBy(sortByValue);  
+        getproductByCategory(selectedCategories, sortByValue);  
+        router.replace({
+            pathname: router.pathname,
+            query: { ...router.query, sort_by: sortByValue },
+        });
+        props.loader(false)
+    };
+
     return (
         <div className="bg-white w-full">
             <section className="bg-white w-full  relative flex flex-col justify-center items-center">
@@ -156,14 +168,10 @@ function Categories(props) {
                                     <FormGroup className='flex flex-col' >
                                         {sortByData.map((item, i) => (<FormControlLabel className='text-black' key={i}
                                             control={
-                                                <Checkbox onChange={() => {
-                                                    if (selectedSortBy === item?.value) {
-                                                        setSelectedSortBy('')
-                                                    } else {
-                                                        setSelectedSortBy(item?.value)
-                                                    }
-                                                }}
-                                                    checked={item?.value === selectedSortBy}
+                                                <Checkbox
+                                                onChange={() => handleSortChange(item.value)}  
+                                                checked={item.value === selectedSortBy}  
+                                                    
                                                 />}
                                             label={item?.name} />))}
                                     </FormGroup>

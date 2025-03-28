@@ -86,10 +86,10 @@ function orders(props) {
 
   const handleProductClick = (productId, productDetailId) => {
     router.push({
-        pathname: "/myorder",
-        query: { id: productId, productDetailId: productDetailId } // 
+      pathname: "/myorder",
+      query: { id: productId, productDetailId: productDetailId }, //
     });
-};
+  };
 
   return (
     <div className="bg-white w-full">
@@ -102,8 +102,13 @@ function orders(props) {
                   key={i}
                   className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]"
                 >
-                  <div className="col-span-2 flex gap-5"
-                    onClick={() => { router.push(`/myorder/${item?._id}?product_id=${item?.productDetail[0]?._id}`) }}
+                  <div
+                    className="col-span-2 flex gap-5"
+                    onClick={() => {
+                      router.push(
+                        `/myorder/${item?._id}?product_id=${item?.productDetail[0]?._id}`
+                      );
+                    }}
                   >
                     <img
                       className="w-20 h-20 rounded-[10px] object-contain"
