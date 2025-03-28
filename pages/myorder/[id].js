@@ -12,6 +12,8 @@ export default function MyOrder(props) {
   const [ordersData, setOrdersData] = useState([]);
   const [selectedImageList, setSelectedImageList] = useState([]);
   const { id, productDetailId } = router.query;
+  console.log("id--------->", id);
+  
   const [userAddress, setUserAddress] = useState([]);
 
   useEffect(() => {
@@ -52,7 +54,10 @@ export default function MyOrder(props) {
       props.loader(false);
       setOrdersData(res.data);
 
-      const d = res.data.productDetail.find(
+      console.log("res----------->", res?.data);
+      
+
+      const d = res.data.product.find(
         (f) => f._id === router?.query?.product_id
       );
       setProductsId(d);

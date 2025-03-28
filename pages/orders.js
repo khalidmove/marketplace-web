@@ -191,13 +191,17 @@ function orders(props) {
                   <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] border border-gray-200">
                     {expandedOrderId === order._id && (
                       order.productDetail.map((product, index) => {
+                        console.log("order------>", order);
                         return (
                           <div
                             key={index}
                             className="col-span-2 flex gap-5 cursor-pointer"
                             onClick={() => {
+                              // router.push(
+                              //   `/myorder/${product?._id}?product_id=${product?.product?._id}`
+                              // );
                               router.push(
-                                `/myorder/${product?._id}?product_id=${product?.product?._id}`
+                                `/myorder/${product?._id}`
                               );
                             }}
                           >
