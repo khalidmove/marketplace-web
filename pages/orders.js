@@ -197,12 +197,12 @@ function orders(props) {
                             key={index}
                             className="col-span-2 flex gap-5 cursor-pointer"
                             onClick={() => {
-                              // router.push(
-                              //   `/myorder/${product?._id}?product_id=${product?.product?._id}`
-                              // );
                               router.push(
-                                `/myorder/${product?._id}`
+                                `/myorder/${product?._id}?product_id=${product?.product?._id}`
                               );
+                              // router.push(
+                              //   `/myorder/${product?._id}`
+                              // );
                             }}
                           >
                             <img
