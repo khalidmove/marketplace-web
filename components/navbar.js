@@ -21,6 +21,7 @@ import Badge from "@mui/material/Badge";
 import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FiSearch } from "react-icons/fi";
+import { FaUserCircle } from "react-icons/fa";
 import {
   IoAddSharp,
   IoCloseCircleOutline,
@@ -36,6 +37,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { GoCart } from "react-icons/go";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { MdOutlineStar } from "react-icons/md";
+import { FaCircleUser } from "react-icons/fa6";
 
 const Navbar = (props) => {
   // console.log(props)
@@ -327,7 +329,7 @@ const Navbar = (props) => {
     });
     let newData = {
       productDetail: data,
-      total: CartTotal.toFixed(2),
+      total: mainTotal.toFixed(2),  // CartTotal
       shipping_address: shippingAddressData,
       // shipping_address: JSON.parse(address),
     };
@@ -501,12 +503,12 @@ const Navbar = (props) => {
                   <div className="md:flex hidden justify-start items-center">
                     {user?.token === undefined && (
                       <div
-                        className="bg-custom-purple text-white  h-[40px] w-[40px] rounded-full md:flex justify-center items-center hidden"
+                        className="bg-custom-purple cursor-pointer text-white  h-[35px] w-[35px] rounded-full md:flex justify-center items-center hidden"
                         onClick={() => {
                           router.push("/auth/signIn");
                         }}
                       >
-                        <LuLogIn className="text-white text-xl" />
+                       <FaUserCircle className="text-white text-3xl" />
                       </div>
                     )}
 
@@ -976,7 +978,7 @@ const Navbar = (props) => {
                 }
               }}
             >
-              CONTINUE TO PAY ₹{CartTotal}
+              CONTINUE TO PAY ₹{mainTotal}
             </button>
           )}
         </div>
