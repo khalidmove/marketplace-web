@@ -224,7 +224,7 @@ export default function Home(props) {
             <p
               className="text-custom-purple text-base font-bold cursor-pointer"
               onClick={() => {
-                router.push(`/categories/all`);
+                router.push(`/categories/all?category=all&sort_by=featured`);
               }}
             >
               View All
@@ -302,13 +302,23 @@ export default function Home(props) {
         </div>
       </section>
 
-      <section className="max-w-7xl  mx-auto w-full">
+      <section className="max-w-7xl mx-auto w-full">
         <div className="bg-white w-full md:py-10 py-5 md:px-0 px-5">
-          <div className="md:flex justify-between items-center w-full">
-            <div className="md:flex justify-start items-center gap-5 px-1 md:px-6 2xl:px-0">
+          <div className="md:flex md:justify-between items-center w-full">
+            <div className="md:flex w-full md:justify-between items-center gap-5 px-1 md:px-6 2xl:px-0">
               <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
                 Daily Best Sells
               </p>
+              <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end  justify-start md:pt-0 pt-2">
+            <p
+              className="text-custom-purple text-base font-bold cursor-pointer"
+              onClick={() => {
+                router.push(`/categories/all?category=all&sort_by=is_top`);
+              }}
+            >
+              View All
+            </p>
+              </div>
               {/* <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
                 <p className='text-custom-purple text-base font-semibold'>Featured</p>
                 <p className='text-custom-darkGray text-base font-medium'>Popular</p>
@@ -322,7 +332,7 @@ export default function Home(props) {
           </div>
 
           <div className="grid md:grid-cols-5 grid-cols-1 w-full gap-5 md:pt-10 pt-5 px-1 md:px-6 2xl:px-0">
-            {bestSellsData.map((item, i) => (
+            {bestSellsData?.map((item, i) => (
               <GroceryCategories
                 item={item}
                 i={i}
