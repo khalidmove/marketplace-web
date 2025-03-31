@@ -29,8 +29,8 @@ function Favourite(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full  relative flex flex-col justify-center items-center">
-        <div className="max-w-7xl mx-auto w-full px-1 md:px-6 2xl:px-0 md:pt-10 pt-5">
+      <section className="bg-white w-full relative flex flex-col justify-center items-center 2xl:container mx-auto lg:h-screen">
+        <div className="max-w-7xl mx-auto w-full px-1 md:px-6 2xl:px-0 md:pt-10 pt-5 h-full">
           <p className="text-2xl text-black font-bold pb-5">
             My Favourite Product
           </p>

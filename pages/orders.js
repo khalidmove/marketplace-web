@@ -7,6 +7,7 @@ import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import currencySign from "@/utils/currencySign";
 import { FaChevronDown } from "react-icons/fa";
+import dateFormat, { masks } from "dateformat";
 
 function orders(props) {
   const router = useRouter();
@@ -57,7 +58,6 @@ function orders(props) {
   // console.log("data---------->", groupedOrders);
 
   const toggleOrderDetails = (orderId) => {
-    
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
@@ -116,8 +116,18 @@ function orders(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full relative flex flex-col justify-start items-center 2xl:justify-start h-screen">
-        <div className="max-w-7xl mx-auto w-full px-5 md:pt-10 pt-5 md:pb-10 pb-5">
+      <section className="bg-white w-full relative flex flex-col justify-center items-center lg:h-screen">
+        <div className="max-w-7xl mx-auto w-full md:px-6 px-5 2xl:px-0 md:pt-10 pt-5 md:pb-10 pb-5 h-full">
+          {ordersData?.length > 0 && (
+            <div className=" my-5 md:mt-6 md:mb-10 flex flex-col gap-3 md:gap-3 justify-center items-center">
+              <p className="text-xl md:text-3xl text-custom-purple font-semibold">
+                My Order
+              </p>
+              <p className="text-base text-black">
+                View and manage all your order in one place.
+              </p>
+            </div>
+          )}
           {/* <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             {Object.keys(groupedOrders).length > 0 ? (
              Object.keys(groupedOrders).map((item, i) => (
@@ -175,58 +185,75 @@ function orders(props) {
           </div> */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-6 md:mx-auto md:gap-12 gap-8 max-w-6xl">
             {ordersData.length > 0 ? (
-              ordersData.map((order, key) => (
+              ordersData.map((order, index) => (
                 <div
-                  key={key}
+                  key={order?._id}
                   className="bg-white p-4 rounded-md border-2 border-[#999999] h-auto self-start"
                 >
-                  <div onClick={() => toggleOrderDetails(order._id)} className="flex items-center justify-between  ">
+                  <div className="flex items-center justify-between  ">
                     <div className="flex flex-col justify-start w-full">
-                      <div className="flex flex-row justify-end items-center mb-4">
-                        <p   className="text-[18px] text-black md:text-[24px]">
-                        <FaChevronDown className={`text-xl cursor-pointer ${expandedOrderId === order._id ? "transform rotate-180" : ""}`} />
+                      <div className="flex flex-row justify-between items-center mb-4">
+                        <p className="w-8 h-8 pt-1 text-center bg-custom-purple text-white rounded-full">
+                          {" "}
+                          {index + 1}
+                        </p>
+                        <p className="text-[18px] text-black md:text-[24px]">
+                          <FaChevronDown
+                            onClick={() => toggleOrderDetails(order._id)}
+                            className={`text-xl cursor-pointer ${
+                              expandedOrderId === order._id
+                                ? "transform rotate-180"
+                                : ""
+                            }`}
+                          />
+                        </p>
+                      </div>
+                      <div className="flex justify-start gap-3  pb-5">
+                        <p className="text-black  text-xl md:text-2xl ">
+                          My Booking
+                        </p>
+                        <p className="text-black text-xl md:text-2xl">
+                          ({dateFormat(order?.updatedAt, "isoDate")})
                         </p>
                       </div>
                     </div>
                   </div>
                   <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] border border-gray-200">
-                    {expandedOrderId === order._id && (
+                    {expandedOrderId === order._id &&
                       order.productDetail.map((product, index) => {
-                        console.log("order------>", order);
+                        // console.log("product------>", order);
+                        // console.log("order------>", product);
+
                         return (
                           <div
                             key={index}
                             className="col-span-2 flex gap-5 cursor-pointer"
                             onClick={() => {
                               router.push(
-                                `/myorder/${product?._id}?product_id=${product?.product?._id}`
+                                `/myorder/${order?._id}?product_id=${product?._id}`
                               );
-                              // router.push(
-                              //   `/myorder/${product?._id}`
-                              // );
                             }}
                           >
                             <img
-                              className="w-20 h-20 text-gray-600 rounded-[10px] object-contain "
-                              src={product.image[0] }
+                              className="w-20 h-20 text-black rounded-[10px] object-contain "
+                              src={product.image[0]}
                               alt="Product"
                             />
                             <div>
                               <p className="text-black text-base font-bold">
                                 {product.product?.name || "Product Name"}
                               </p>
-                              <p className="text-gray-600 text-xs font-bold pt-[6px]">
+                              <p className="text-black text-xs font-bold pt-[6px]">
                                 Quantity: {product.qty || 1}
                               </p>
-                              <p className="text-gray-600 text-xs font-bold pt-[6px]">
-                                Order Id: {order._id || 1}
+                              <p className="text-black text-xs   max-w-sm sm:w-full font-bold pt-[6px]">
+                                Order Id: {order._id}
                               </p>
                             </div>
                           </div>
                         );
-                      })
-                    )}
-                    
+                      })}
+
                     <div className="flex flex-col justify-center items-end">
                       <p className="text-gray-600 text-base font-bold">
                         Total: $ {order.total || "0.00"}
@@ -237,10 +264,10 @@ function orders(props) {
               ))
             ) : (
               <div className="flex justify-center items-center md:mt-5 w-full md:h-[300px] h-[200px] col-span-4">
-              <p className="text-center text-black text-2xl">
-                No orders available.
-              </p>
-            </div>
+                <p className="text-center text-black text-2xl">
+                  No orders available.
+                </p>
+              </div>
             )}
           </div>
           {showReviews && (
