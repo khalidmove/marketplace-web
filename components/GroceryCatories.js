@@ -57,7 +57,8 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             selectedColor: item?.varients[0] || {},
             selectedImage: item?.varients[0]?.image[0] || "",
             qty: 1,
-            total: item.price,
+            // total: item.price,
+            total: item.price_slot[0]?.our_price,
           };
 
           const updatedCart = [...prevCartData, newItem];
