@@ -37,7 +37,7 @@ function HeaderFirst(props) {
       (err) => {
         props.loader(false);
         console.log(err);
-        props.toaster({ type: "error", message: err?.message });
+        // props.toaster({ type: "error", message: err?.message });
       }
     );
   };

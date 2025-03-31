@@ -12,9 +12,10 @@ export default function MyOrder(props) {
   const [ordersData, setOrdersData] = useState([]);
   const [selectedImageList, setSelectedImageList] = useState([]);
   const { id, productDetailId } = router.query;
-  console.log("id--------->", id);
-  
   const [userAddress, setUserAddress] = useState([]);
+
+  // console.log("router------->", router);
+  
 
   useEffect(() => {
     if (router.isReady && id) {
@@ -51,19 +52,20 @@ export default function MyOrder(props) {
         "",
         router
       );
+      console.log("res---------->", res);
+      
       props.loader(false);
       setOrdersData(res.data);
 
-      console.log("res----------->", res?.data);
-      
-
-      const d = res.data.product.find(
+      const d = res.data.productDetail.find(
         (f) => f._id === router?.query?.product_id
       );
+      // console.log("d-------->", d);
+      
       setProductsId(d);
       setSelectedImageList(d?.image);
       const address = res.data.shipping_address;
-      console.log("addresss=>-----------", address);
+      // console.log("addresss=>-----------", address);
 
       setUserAddress(address);
     } catch (err) {
