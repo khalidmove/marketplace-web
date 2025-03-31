@@ -6,7 +6,12 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoRemoveSharp } from "react-icons/io5";
 import { IoAddSharp } from "react-icons/io5";
 import { useRouter } from "next/router";
-import { cartContext, openCartContext, userContext, wishlistContext } from "../_app";
+import {
+  cartContext,
+  openCartContext,
+  userContext,
+  wishlistContext,
+} from "../_app";
 import { Api } from "@/services/service";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -32,13 +37,53 @@ function ProductDetails(props) {
   const [priceSlot, setPriceSlote] = useState([]);
   const [priceIndex, setPriceIndex] = useState(0);
   const [selectedPrice, setSelectedPrice] = useState({});
-  console.log(selectedPrice)
+  const [isInCart, setIsInCart] = React.useState(false);
+  const [availableQty, setAvailableQty] = React.useState(0);
 
   useEffect(() => {
     if (router?.query?.id) {
       getProductById();
     }
   }, [router?.query?.id]);
+
+  console.log(selectedPrice);
+
+  // useEffect(() => {
+  //   if (cartData.length > 0) {
+  //     const cartItem = cartData.find((f) => f._id === productsId?._id);
+  //     if (cartItem) {
+  //       setIsInCart(true);
+  //       setAvailableQty(cartItem.qty);
+  //     } else {
+  //       setIsInCart(false);
+  //       setAvailableQty(0);
+  //     }
+  //   } else {
+  //     setIsInCart(false);
+  //     setAvailableQty(0);
+  //   }
+  // }, [cartData, productsId]);
+
+  useEffect(() => {
+    if (cartData.length > 0) {
+      const cartItem = cartData.find(
+        (f) =>
+          f._id === productsId?._id &&
+          f.price_slot?.value === selectedPrice?.value
+      );
+
+      if (cartItem) {
+        setIsInCart(true);
+        setAvailableQty(cartItem.qty);
+      } else {
+        setIsInCart(false);
+        setAvailableQty(0);
+      }
+    } else {
+      setIsInCart(false);
+      setAvailableQty(0);
+    }
+  }, [cartData, productsId, selectedPrice]);
 
   const responsive = {
     superLargeDesktop: {
@@ -52,7 +97,7 @@ function ProductDetails(props) {
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2,
+      items: 1,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
@@ -77,10 +122,7 @@ function ProductDetails(props) {
         res.data.qty = 1;
         res.data.total = (res.data?.our_price * res.data.qty).toFixed(2);
 
-
         setProductsId(res.data);
-
-
 
         console.log(res?.data?.minQuantity);
 
@@ -98,7 +140,7 @@ function ProductDetails(props) {
           createProductRquest();
         }
         setPriceSlote(res?.data?.price_slot);
-        setSelectedPrice(res?.data?.price_slot[0])
+        setSelectedPrice(res?.data?.price_slot[0]);
       },
       (err) => {
         props.loader(false);
@@ -136,8 +178,6 @@ function ProductDetails(props) {
         //   console.error("Unexpected response format:", res);
         //   props.toaster({ type: "error", message: "Unexpected response format" });
         // }
-
-
       },
       (err) => {
         props.loader(false);
@@ -156,7 +196,6 @@ function ProductDetails(props) {
       product: productsId?._id,
     };
 
-    console.log(data);
     props.loader(true);
     Api("post", "addremovefavourite", data, router).then(
       (res) => {
@@ -170,15 +209,15 @@ function ProductDetails(props) {
             setWishlist(updatedWishlist);
             localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
           } else if (res?.data?.message === "Product removed to favourite") {
-            const updatedWishlist = wishlist.filter(item => item._id !== productsId._id);
+            const updatedWishlist = wishlist.filter(
+              (item) => item._id !== productsId._id
+            );
             setWishlist(updatedWishlist);
             localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
           }
         } else {
           props.toaster({ type: "error", message: res?.data?.message });
-           
         }
-        
       },
       (err) => {
         props.loader(false);
@@ -187,10 +226,6 @@ function ProductDetails(props) {
       }
     );
   };
-
-  // console.log("wishlist----->", wishlist);
-  // console.log("product id----->", productsId);
-  
 
   return (
     <div className="bg-white w-full">
@@ -249,12 +284,16 @@ function ProductDetails(props) {
                         <div key={i}>
                           <div
                             // onClick={() => handleIndex(i)}
-                            onClick={() => { setSelectedPrice(data); setPriceIndex(i); }}
+                            onClick={() => {
+                              setSelectedPrice(data);
+                              setPriceIndex(i);
+                            }}
                             className={`bg-custom-lightPurple cursor-pointer w-full rounded-[8px] border border-custom-darkPurple p-[10px] relative
-                                        ${priceIndex == i
-                                ? "bg-custom-lightPurple"
-                                : "bg-white"
-                              }
+                                        ${
+                                          priceIndex == i
+                                            ? "bg-custom-lightPurple"
+                                            : "bg-white"
+                                        }
                             `}
                           >
                             <img
@@ -267,11 +306,13 @@ function ProductDetails(props) {
                             </p>
                             <p className="text-black font-normal text-base pt-1">
                               {currencySign(data.our_price)}
+                              <span className="text-custom-newGray font-normal line-through ml-1">
+                                {currencySign(data?.other_price)}
+                              </span>
                             </p>
                             <p className="text-custom-newPurpleColor font-semibold text-sm pt-2">
-
-                              <span className="text-custom-newGray font-normal line-through">
-                                {currencySign(data?.other_price)}
+                              <span className="text-custom-newGray font-normal">
+                                {data?.value}{" "} {data?.unit ?? "unit"}
                               </span>
                             </p>
                           </div>
@@ -302,11 +343,16 @@ function ProductDetails(props) {
                     </span>{" "}
                     <span className="text-sm">
                       {/* {percentageDifference?.toFixed(2)}% */}
-                      {(((selectedPrice?.other_price - selectedPrice?.our_price) / selectedPrice?.other_price) * 100).toFixed(2)}%
+                      {(
+                        ((selectedPrice?.other_price -
+                          selectedPrice?.our_price) /
+                          selectedPrice?.other_price) *
+                        100
+                      ).toFixed(2)}
+                      %
                     </span>
                   </p>
                 </div>
-
 
                 {/* <div className='bg-white w-full rounded-[8px] border border-custom-newLightGray p-[10px] relative'>
                                         <img className='w-[60px] h-[60px] object-contain absolute -top-[20px] -right-[18px]' src='/starImg.png' />
@@ -323,132 +369,225 @@ function ProductDetails(props) {
                                         <p className='text-black font-normal text-base pt-1'>₹54</p>
                                         <p className='text-custom-newPurpleColor font-normal text-sm pt-2'>₹ 3.6 / 100 gms</p>
                                     </div> */}
+                {isInCart ? (
+                  <div className="bg-slate-100 w-[100px] h-[32px] rounded-[8px] md:mt-5 mt-3 flex items-center">
+                    <div
+                      className="h-[32px] w-[32px] bg-custom-purple cursor-pointer rounded-[8px] rounded-r-none flex justify-center items-center"
+                      onClick={() => {
+                        if (!selectedPrice || !selectedPrice.our_price) {
+                          console.error("No price slot selected");
+                          return;
+                        }
 
-                <div className="bg-custom-offWhite w-[100px] h-[32px] rounded-[8px] md:mt-5 mt-3 flex items-center">
-                  <div
-                    className="h-[32px] w-[32px] bg-custom-purple cursor-pointer rounded-[8px] rounded-r-none	 flex justify-center items-center"
+                        if (availableQty > 1) {
+                          const updatedProduct = {
+                            ...productsId,
+                            qty: availableQty - 1,
+                            price: selectedPrice.our_price,
+                            price_slot: selectedPrice,
+                            total: (
+                              (selectedPrice.our_price || 0) *
+                              (availableQty - 1)
+                            ).toFixed(2),
+                            selectedImage:
+                              productsId.selectedImage ||
+                              productsId.varients?.[0]?.image?.[0] ||
+                              "",
+                            selectedColor:
+                              productsId.selectedColor ||
+                              productsId.varients?.[0] ||
+                              {},
+                          };
+
+                          setProductsId(updatedProduct);
+
+                          // Update only the matching product with the same price slot
+                          const updatedCart = cartData.map((item) =>
+                            item._id === updatedProduct._id &&
+                            item.price_slot.value === selectedPrice.value
+                              ? updatedProduct
+                              : item
+                          );
+
+                          setCartData(updatedCart);
+                          localStorage.setItem(
+                            "addCartDetail",
+                            JSON.stringify(updatedCart)
+                          );
+                        } else {
+                          // Remove only the specific price slot variation
+                          const updatedCart = cartData.filter(
+                            (item) =>
+                              !(
+                                item._id === productsId._id &&
+                                item.price_slot.value === selectedPrice.value
+                              )
+                          );
+
+                          setCartData(updatedCart);
+                          localStorage.setItem(
+                            "addCartDetail",
+                            JSON.stringify(updatedCart)
+                          );
+                          setIsInCart(false);
+                          setAvailableQty(0);
+                        }
+                      }}
+                    >
+                      <IoRemoveSharp className="h-[15px] w-[15px] text-white" />
+                    </div>
+
+                    <p className="text-black md:text-xl text-lg font-medium text-center mx-3">
+                      {availableQty || 0}
+                    </p>
+
+                    <div
+                      className="h-[32px] w-[32px] bg-custom-purple cursor-pointer rounded-[8px] rounded-l-none flex justify-center items-center"
+                      onClick={() => {
+                        if (!selectedPrice || !selectedPrice.our_price) {
+                          console.error("No price slot selected");
+                          return;
+                        }
+
+                        const updatedProduct = {
+                          ...productsId,
+                          qty: availableQty + 1,
+                          price: selectedPrice.our_price,
+                          price_slot: selectedPrice, 
+                          total: (
+                            (selectedPrice.our_price || 0) *
+                            (availableQty + 1)
+                          ).toFixed(2),
+                          selectedImage:
+                            productsId.selectedImage ||
+                            productsId.varients?.[0]?.image?.[0] ||
+                            "",
+                          selectedColor:
+                            productsId.selectedColor ||
+                            productsId.varients?.[0] ||
+                            {},
+                        };
+
+                        setProductsId(updatedProduct);
+
+                        const updatedCart = cartData.map((item) =>
+                          item._id === updatedProduct._id &&
+                          item.price_slot.value === selectedPrice.value
+                            ? updatedProduct
+                            : item
+                        );
+
+                        setCartData(updatedCart);
+                        localStorage.setItem(
+                          "addCartDetail",
+                          JSON.stringify(updatedCart)
+                        );
+                      }}
+                    >
+                      <IoAddSharp className="h-[15px] w-[15px] text-white" />
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    className="bg-custom-purple w-[96px] h-[32px] rounded-[8px] text-white font-semibold text-xl md:mt-5 mt-4"
                     onClick={() => {
-                      if (productsId.qty > 1) {
-                        productsId.qty = productsId.qty - 1;
-                        productsId.total = (
-                          priceSlot[priceIndex]?.our_price * productsId.qty
-                        ).toFixed(2);
-                        setProductsId({ ...productsId });
+                      if (
+                        !productsId ||
+                        !productsId._id ||
+                        !selectedPrice?.value
+                      ) {
+                        console.error(
+                          "Invalid product data or price selection:",
+                          productsId,
+                          selectedPrice
+                        );
+                        return;
                       }
-                    }}
-                  >
-                    <IoRemoveSharp className="h-[15px] w-[15px] text-white" />
-                  </div>
-                  <p className="text-black md:text-xl text-lg font-medium text-center mx-3">
-                    {productsId?.qty || 0}
-                  </p>
-                  <div
-                    className="h-[32px] w-[32px] bg-custom-purple cursor-pointer rounded-[8px] rounded-l-none flex justify-center items-center"
-                    onClick={() => {
-                      productsId.qty = productsId.qty + 1;
-                      productsId.total = (
-                        parseFloat(priceSlot[priceIndex]?.our_price) * productsId.qty
-                      ).toFixed(2);
 
-                      setProductsId({ ...productsId });
+                      const existingCart = Array.isArray(cartData)
+                        ? cartData
+                        : [];
+
+                      // Check if the exact product with selected price_slot exists
+                      const existingProduct = existingCart.find(
+                        (f) =>
+                          f._id === productsId._id &&
+                          f.price_slot?.value === selectedPrice?.value
+                      );
+
+                      if (!existingProduct) {
+                        const newProduct = {
+                          ...productsId,
+                          qty: availableQty || 1,
+                          price: selectedPrice.our_price,
+                          price_slot: selectedPrice,
+                          total: (
+                            (selectedPrice.our_price || 0) * (availableQty || 1)
+                          ).toFixed(2),
+                          selectedColor:
+                            productsId.selectedColor ||
+                            productsId.varients?.[0] ||
+                            {},
+                          selectedImage:
+                            productsId.selectedImage ||
+                            productsId.varients?.[0]?.image?.[0] ||
+                            "",
+                        };
+
+                        const updatedCart = [...existingCart, newProduct];
+                        setCartData(updatedCart);
+                        localStorage.setItem(
+                          "addCartDetail",
+                          JSON.stringify(updatedCart)
+                        );
+                        console.log("Product added to cart:", newProduct);
+                      } else {
+                        console.log(
+                          "Product already in cart with this price slot:",
+                          existingProduct
+                        );
+                      }
+
+                      props.toaster({
+                        type: "success",
+                        message: "Item added to cart",
+                      });
                     }}
                   >
-                    <IoAddSharp className="h-[15px] w-[15px] text-white" />
-                  </div>
-                </div>
+                    ADD
+                  </button>
+                )}
 
                 {productsId.attributes?.some(
                   (attribute) => attribute.name === "color"
                 ) && (
-                    <div className="w-full">
-                      <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
-                        Select Colors
-                      </p>
-                      <div className="flex gap-2 flex-wrap">
-                        {productsId?.varients?.map((item, i) => (
-                          <div
-                            key={i}
-                            className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
-                            style={{ background: item?.color }}
-                            onClick={() => {
-                              item.selected.forEach((ele) => {
-                                ele.request = 0;
-                              });
-                              setSelectedColor(item);
-                              setSelectedImageList(item?.image);
-                              setSelectedImage(item?.image[0]);
-                            }}
-                          >
-                            {selectedColor?.color === item?.color && (
-                              <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                  <div className="w-full">
+                    <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
+                      Select Colors
+                    </p>
+                    <div className="flex gap-2 flex-wrap">
+                      {productsId?.varients?.map((item, i) => (
+                        <div
+                          key={i}
+                          className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
+                          style={{ background: item?.color }}
+                          onClick={() => {
+                            item.selected.forEach((ele) => {
+                              ele.request = 0;
+                            });
+                            setSelectedColor(item);
+                            setSelectedImageList(item?.image);
+                            setSelectedImage(item?.image[0]);
+                          }}
+                        >
+                          {selectedColor?.color === item?.color && (
+                            <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  )}
-
-                <button
-                  className="bg-custom-purple w-[96px] h-[32px] rounded-[8px] text-white font-semibold text-xl md:mt-5 mt-4"
-                  onClick={() => {
-                    const d = cartData?.length > 0 ? cartData : [];
-                    const c = d.find((f) => f._id === productsId?._id);
-                    console.log(c);
-
-                    const price = parseFloat(priceSlot[priceIndex]?.price);
-                    const ourPrice = parseFloat(priceSlot[priceIndex]?.our_price);
-                    const value = parseFloat(priceSlot[priceIndex]?.value);
-                    const unit = parseFloat(priceSlot[priceIndex]?.unit);
-                    const percentageDifference = price && ourPrice ? ((price - ourPrice) / price) * 100
-                      : 0;
-
-                    if (!c) {
-                      // console.log(d)
-                      // // if (selectedColor) {
-                      // //     productsId.selectedColor = selectedColor
-                      // // }
-                      // productsId.total = productsId.price
-                      // productsId.image = selectedImage
-                      // d.push(productsId)
-                      // setCartData(d)
-                      // localStorage.setItem("addCartDetail", JSON.stringify(d));
-
-                      const nextState = produce(cartData, (draft) => {
-                        draft.push({
-                          ...productsId,
-                          selectedColor,
-                          selectedImage,
-
-                          qty: productsId.qty,
-                          total: (parseFloat(ourPrice) * productsId.qty).toFixed(2),
-                          our_price: ourPrice,
-                          other_price: priceSlot[priceIndex]?.other_price,
-                          value: priceSlot[priceIndex]?.value,
-                          unit: priceSlot[priceIndex]?.unit,
-                          percentageDifference: percentageDifference.toFixed(2),
-                        });
-
-                      });
-                      console.log("next state ::", nextState);
-                      setCartData(nextState);
-                      localStorage.setItem("addCartDetail", JSON.stringify(nextState));
-                      
-                    }
-                    else {
-                      const nextState = produce(cartData, (draft) => {
-                        const existingItem = draft.find((item) => item._id === c._id);
-                        existingItem.qty += productsId.qty;
-                        existingItem.total = (parseFloat(existingItem.our_price) * existingItem.qty).toFixed(2);
-                      });
-                      setCartData(nextState);
-                      localStorage.setItem("addCartDetail", JSON.stringify(nextState));
-                      // router.push('/cart')
-                    }
-                    // setOpenCart(true);
-                  }}
-                >
-                  ADD
-                </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -507,7 +646,7 @@ function ProductDetails(props) {
                     i={i}
                     url={`/product-details/${item?.slug}`}
                     loader={props?.loader}
-                toaster={props?.toaster}
+                    toaster={props?.toaster}
                   />
                 </div>
               ))}
@@ -526,7 +665,7 @@ function ProductDetails(props) {
                     i={i}
                     url={`/product-details/${item?.slug}`}
                     loader={props?.loader}
-                toaster={props?.toaster}
+                    toaster={props?.toaster}
                   />
                 </div>
               ))}

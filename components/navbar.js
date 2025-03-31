@@ -331,7 +331,7 @@ const Navbar = (props) => {
     });
     let newData = {
       productDetail: data,
-      total: mainTotal.toFixed(2),  // CartTotal
+      total: mainTotal.toFixed(2), // CartTotal
       shipping_address: shippingAddressData,
       // shipping_address: JSON.parse(address),
     };
@@ -366,7 +366,7 @@ const Navbar = (props) => {
 
   // console.log("cart data::", cartData);
 
-  const pricePerPoint = 0.001; 
+  const pricePerPoint = 0.001;
   const minPointsRequired = 25000;
   let redeemablePoints;
   if (user?.referalpoints > minPointsRequired) {
@@ -384,12 +384,11 @@ const Navbar = (props) => {
   const redeemableAmount = redeemablePoints * pricePerPoint;
   const finalAmount = CartTotal - redeemableAmount;
 
-   
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
-      setMainTotal(finalAmount);  
+      setMainTotal(finalAmount);
     } else {
-      setMainTotal(CartTotal + deliveryCharge + deliveryPartnerTip); 
+      setMainTotal(CartTotal + deliveryCharge + deliveryPartnerTip);
     }
   };
 
@@ -485,11 +484,11 @@ const Navbar = (props) => {
                         setMobileMenu(!mobileMenu);
                       }}
                     >
-                       <div className="relative">
+                      <div className="relative">
                         <div className="cursor-pointer">
-                        <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" />
+                          <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" />
                         </div>
-                        { cartData.length > 0 && (
+                        {cartData.length > 0 && (
                           <span className="bg-red-500 absolute w-5 h-5 rounded-full top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-white text-center">
                             {cartData?.length}
                           </span>
@@ -510,7 +509,7 @@ const Navbar = (props) => {
                           router.push("/auth/signIn");
                         }}
                       >
-                       <FaUserCircle className="text-white text-3xl" />
+                        <FaUserCircle className="text-white text-3xl" />
                       </div>
                     )}
 
@@ -799,8 +798,16 @@ const Navbar = (props) => {
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="pl-3">{currencySign(item?.price_slot[0]?.value)}</span>{" "}
-                      <span>{currencySign(item?.price_slot[0]?.unit)}</span>
+                      <span className="pl-3">
+                        {item?.price_slot?.value}
+                      </span>{" "}
+                      <span>{item?.price_slot?.unit ?? 'unit'}</span>
+                    </p>
+                    <p className="text-custom-newGrayColors font-normal text-sm pt-2">
+                      <span className="pl-3">
+                        {currencySign(item?.price_slot?.our_price)}
+                      </span>{" "}
+                      <span className="line-through">{currencySign(item?.price_slot?.price)}</span>
                     </p>
                   </div>
                   <div className="flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-2 md:hidden">
@@ -828,8 +835,7 @@ const Navbar = (props) => {
                           const nextState = produce(cartData, (draft) => {
                             draft[i].qty -= 1;
                             draft[i].total = (
-                              parseFloat(draft[i].price_slot[0]?.our_price) *
-                              draft[i].qty
+                              parseFloat(draft[i].price) * draft[i].qty
                             ).toFixed(2);
                           });
                           setCartData(nextState);
@@ -838,6 +844,17 @@ const Navbar = (props) => {
                             JSON.stringify(nextState)
                           );
                         }
+                        // Remove only the specific price slot variation when qty = 1
+
+                        // else {
+                        //   const updatedCart = cartData.filter(
+                        //     (cartItem) =>
+                        //       !(cartItem._id === item._id && cartItem.price_slot.value === item.price_slot.value)
+                        //   );
+
+                        //   setCartData(updatedCart);
+                        //   localStorage.setItem("addCartDetail", JSON.stringify(updatedCart));
+                        // }
                       }}
                     >
                       <IoRemoveSharp className="h-[30px] w-[30px] text-white" />
@@ -851,8 +868,7 @@ const Navbar = (props) => {
                         const nextState = produce(cartData, (draft) => {
                           draft[i].qty += 1;
                           draft[i].total = (
-                            parseFloat(draft[i].price_slot[0]?.our_price) *
-                            draft[i].qty
+                            parseFloat(draft[i].price) * draft[i].qty
                           ).toFixed(2);
                         });
                         setCartData(nextState);
@@ -892,7 +908,7 @@ const Navbar = (props) => {
                   Total Amount
                 </p>
                 <p className="text-custom-purple font-normal text-base">
-                  ₹{CartTotal}
+                  {currencySign(CartTotal)}
                 </p>
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
@@ -973,24 +989,32 @@ const Navbar = (props) => {
                   shippingAddressData.address ||
                   shippingAddressData.city ||
                   shippingAddressData.country) && (
-              <div onClick={() => {
-                setOpenCart(false);
-                setShowcart(true);
-              }} className="flex justify-between items-center w-full pt-5">
-                <p className="text-custom-purple font-normal text-base">
-                  Delivery Address
-                </p>
-                <p className="text-custom-purple font-medium text-base">
-                <FaMapMarkerAlt/>  {formatShippingAddress(shippingAddressData)}
-                </p>
-              </div>
-            )}
+                  <div
+                    onClick={() => {
+                      setOpenCart(false);
+                      setShowcart(true);
+                    }}
+                    className="flex justify-between items-center w-full pt-5"
+                  >
+                    <p className="text-custom-purple font-normal text-base">
+                      Delivery Address
+                    </p>
+                    <p className="text-custom-purple font-medium text-base">
+                      <FaMapMarkerAlt />{" "}
+                      {formatShippingAddress(shippingAddressData)}
+                    </p>
+                  </div>
+                )}
             </div>
           )}
 
           {productList.map((item, i) => (
-            <GroceryCategories item={item} i={i} loader={props?.loader}
-            toaster={props?.toaster} />
+            <GroceryCategories
+              item={item}
+              i={i}
+              loader={props?.loader}
+              toaster={props?.toaster}
+            />
           ))}
 
           {cartData.length > 0 && (
@@ -1289,7 +1313,7 @@ const Navbar = (props) => {
                         i={i}
                         url={`/product-details/${item?.slug}`}
                         loader={props?.loader}
-                toaster={props?.toaster}
+                        toaster={props?.toaster}
                       />
                     </div>
                   ))}
