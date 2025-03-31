@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { TiArrowSortedUp } from "react-icons/ti";
@@ -152,7 +152,28 @@ const Navbar = (props) => {
 
   // console.log("wish list data----->", wishlist);
 
-  console.log(productList);
+  const getShippingAddress = useCallback(() => {
+    props.loader(true);
+
+    Api("get", "getShippingAddress", "", router)
+      .then((res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setShippingAddressData(res?.data || {});
+      })
+      .catch((err) => {
+        props.loader(false);
+        console.log(err);
+        // props.toaster({
+        //   type: "error",
+        //   message: err?.message || "Failed to fetch shipping address",
+        // });
+      });
+  }, [router]);
+
+  useEffect(() => {
+    if (user?.token) getShippingAddress();
+  }, [user, getShippingAddress]);
 
   const getproductByCategory = async () => {
     props.loader(true);
