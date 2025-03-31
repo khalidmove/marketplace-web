@@ -239,7 +239,7 @@ const Layout = ({ children, loader, toaster, constant }) => {
               </>
             }
           </div>
-          <div className="z-0 md:pt-[145px] pt-[67px] max-w-screen overflow-x-hidden" >
+          <div className="z-0 lg:pt-[145px] pt-[67px] max-w-screen overflow-x-hidden" >
             {/* md:min-h-screen  */}
             <main className={"flex-1"}>{children}</main>
           </div>
