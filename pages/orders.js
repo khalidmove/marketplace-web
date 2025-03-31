@@ -254,9 +254,9 @@ function orders(props) {
                         );
                       })}
 
-                    <div className="flex flex-col justify-center items-end">
+                    <div className={`${expandedOrderId === order._id ? "col-span-1" : "col-span-3"} flex flex-col justify-center items-end`}>
                       <p className="text-gray-600 text-base font-bold">
-                        Total: $ {order.total || "0.00"}
+                        Total: {currencySign(order.total) || "0.00"}
                       </p>
                     </div>
                   </div>

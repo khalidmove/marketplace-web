@@ -307,7 +307,9 @@ const Navbar = (props) => {
   const createProductRquest = (e) => {
     console.log("im address ", shippingAddressData);
 
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     // if (cartData?.length === 0) {
     //   toaster({ type: "warning", message: 'Your cart is empty' });
     //   return
@@ -798,16 +800,16 @@ const Navbar = (props) => {
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="pl-3">
-                        {item?.price_slot?.value}
-                      </span>{" "}
-                      <span>{item?.price_slot?.unit ?? 'unit'}</span>
+                      <span className="pl-3">{item?.price_slot?.value}</span>{" "}
+                      <span>{item?.price_slot?.unit ?? "unit"}</span>
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
                       <span className="pl-3">
                         {currencySign(item?.price_slot?.our_price)}
                       </span>{" "}
-                      <span className="line-through">{currencySign(item?.price_slot?.price)}</span>
+                      <span className="line-through">
+                        {currencySign(item?.price_slot?.price)}
+                      </span>
                     </p>
                   </div>
                   <div className="flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-2 md:hidden">
@@ -999,7 +1001,7 @@ const Navbar = (props) => {
                     <p className="text-custom-purple font-normal text-base">
                       Delivery Address
                     </p>
-                    <p className="text-custom-purple font-medium text-base">
+                    <p className="text-custom-purple font-medium text-base flex items-center">
                       <FaMapMarkerAlt />{" "}
                       {formatShippingAddress(shippingAddressData)}
                     </p>
@@ -1034,10 +1036,16 @@ const Navbar = (props) => {
                     message: "Your cart is empty",
                   });
                   return;
-                } else {
+                }
+
+                if (!shippingAddressData?.address || !user?.token) {
                   setShowcart(true);
                   setOpenCart(false);
+                  return;
                 }
+
+                createProductRquest();
+                setOpenCart(false);
               }}
             >
               CONTINUE TO PAY {currencySign(CartTotal)}
