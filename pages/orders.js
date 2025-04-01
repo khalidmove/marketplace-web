@@ -183,7 +183,7 @@ function orders(props) {
               </div>
             )}
           </div> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-6 md:mx-auto md:gap-12 gap-8 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-5 md:mx-auto md:gap-12 gap-8 max-w-7xl sm:max-w-6xl">
             {ordersData.length > 0 ? (
               ordersData.map((order, index) => (
                 <div
@@ -218,7 +218,7 @@ function orders(props) {
                         </p>
                         </div>
                       <div>
-                        <p className="text-black text-lg ">Total Amount : <span className="text-custom-purple font-semibold">${order?.total}</span> </p>
+                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">${order?.total}</span> </p>
                       </div>
                       </div>
                     </div>
@@ -232,7 +232,7 @@ function orders(props) {
                         return (
                           <div
                             key={index}
-                            className="col-span-3 rounded p-2 border border-custom-purple flex gap-5 cursor-pointer"
+                            className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"
                             onClick={() => {
                               router.push(
                                 `/myorder/${order?._id}?product_id=${product?._id}`
@@ -259,11 +259,13 @@ function orders(props) {
                         );
                       })}
 
-                    {/* <div className="flex flex-col justify-center items-end">
-                      <p className="text-gray-600 text-base font-bold">
-                        Total: $ {order.total || "0.00"}
+                    <div className="block sm:hidden">
+                    <div className="flex flex-col justify-center items-end">
+                      <p className="text-black  text-base font-bold"> Total:
+                        <span className="text-custom-purple"> ${order.total}</span>
                       </p>
-                    </div> */}
+                    </div>
+                    </div>
                   </div>
                 </div>
               ))
