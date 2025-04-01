@@ -226,9 +226,6 @@ function orders(props) {
                   <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] ">
                     {expandedOrderId === order._id &&
                       order.productDetail.map((product, index) => {
-                        // console.log("product------>", order);
-                        // console.log("order------>", product);
-
                         return (
                           <div
                             key={index}
