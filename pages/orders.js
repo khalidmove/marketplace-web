@@ -5,6 +5,9 @@ import { RxCrossCircled } from "react-icons/rx";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
+import currencySign from "@/utils/currencySign";
+import { FaChevronDown } from "react-icons/fa";
+import dateFormat, { masks } from "dateformat";
 
 function orders(props) {
   const router = useRouter();
@@ -17,6 +20,8 @@ function orders(props) {
   const [productId, setProductId] = useState("");
   const [reviews, setReviews] = useState("product");
   const [sellerId, setSellerId] = useState("");
+  const [showProduct, setShowProduct] = useState(false);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
 
   useEffect(() => {
     getProductRequestbyUser();
@@ -36,6 +41,24 @@ function orders(props) {
         props.toaster({ type: "error", message: err?.message });
       }
     );
+  };
+
+  const groupOrdersByBookingId = () => {
+    return ordersData.reduce((groups, order) => {
+      const bookingId = order.bookingId;
+      if (!groups[bookingId]) {
+        groups[bookingId] = [];
+      }
+      groups[bookingId].push(order);
+      return groups;
+    }, {});
+  };
+
+  const groupedOrders = groupOrdersByBookingId();
+  // console.log("data---------->", groupedOrders);
+
+  const toggleOrderDetails = (orderId) => {
+    setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
   const createProductRquest = (e) => {
@@ -84,20 +107,30 @@ function orders(props) {
     );
   };
 
-  const handleProductClick = (productId, productDetailId) => {
-    router.push({
-        pathname: "/myorder",
-        query: { id: productId, productDetailId: productDetailId } // 
-    });
-};
+  //   const handleProductClick = (productId, productDetailId) => {
+  //     router.push({
+  //         pathname: "/myorder",
+  //         query: { id: productId, productDetailId: productDetailId }
+  //     });
+  // };
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full  relative flex flex-col justify-center items-center">
-        <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
-          <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
-            {ordersData && ordersData.length > 0 ? (
-              ordersData.map((item, i) => (
+      <section className="bg-white w-full relative flex flex-col justify-center items-center lg:h-screen">
+        <div className="max-w-7xl mx-auto w-full md:px-6 px-5 2xl:px-0 md:pt-10 pt-5 md:pb-10 pb-5 h-full">
+          {ordersData?.length > 0 && (
+            <div className=" my-5 md:mt-6 md:mb-10 flex flex-col gap-3 md:gap-3 justify-center items-center">
+              <p className="text-xl md:text-3xl text-custom-purple font-semibold">
+                My Order
+              </p>
+              <p className="text-base text-black">
+                View and manage all your order in one place.
+              </p>
+            </div>
+          )}
+          {/* <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
+            {Object.keys(groupedOrders).length > 0 ? (
+             Object.keys(groupedOrders).map((item, i) => (
                 <div
                   key={i}
                   className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white shadow-2xl p-5 rounded-[10px]"
@@ -111,7 +144,7 @@ function orders(props) {
                     />
                     <div>
                       <p className="text-black text-base font-bold">
-                        {item?.productDetail?.product?.name}
+                      {item?.productDetail[0]?.product?.name}
                       </p>
                       {item?.productDetail?.color && (
                         <div className="flex justify-start items-center pt-[6px]">
@@ -133,14 +166,12 @@ function orders(props) {
                         Order ID: {item?._id}
                       </p>
                     </div>
-                  </div>
+                 </div>
+                 
                   <div className="flex flex-col">
                     <p className="text-custom-red text-base font-bold text-right">
                       $ {item?.total}
                     </p>
-                    {/* <div className='flex justify-end items-end mt-2'>
-                                            <button className='bg-custom-purple h-[30px] w-24 rounded-[5px] text-white font-semibold text-sm' onClick={() => { setShowReviews(true); setProductId(item?.productDetail?.product?._id); setSellerId(item?.productDetail?.seller_id) }}>Reviews</button>
-                                        </div> */}
                   </div>
                 </div>
               ))
@@ -151,8 +182,98 @@ function orders(props) {
                 </p>
               </div>
             )}
-          </div>
+          </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-5 md:mx-auto md:gap-12 gap-8 max-w-7xl sm:max-w-6xl">
+            {ordersData.length > 0 ? (
+              ordersData.map((order, index) => (
+                <div
+                  key={order?._id}
+                  className="bg-white p-4 rounded-md border-2 border-custom-purple h-auto self-start"
+                >
+                  <div className="flex items-center justify-between  ">
+                    <div className="flex flex-col justify-start w-full">
+                      <div className="flex flex-row justify-between items-center mb-4">
+                        <p className="w-8 h-8 pt-1 text-center bg-custom-purple text-white rounded-full">
+                          {" "}
+                          {index + 1}
+                        </p>
+                        <p className="text-[18px] text-black md:text-[24px]">
+                          <FaChevronDown
+                            onClick={() => toggleOrderDetails(order._id)}
+                            className={`text-xl cursor-pointer ${
+                              expandedOrderId === order._id
+                                ? "transform rotate-180"
+                                : ""
+                            }`}
+                          />
+                        </p>
+                      </div>
+                      <div className="flex justify-between gap-3 ">
+                        <div className="flex justify-start gap-5">
+                        <p className="text-black  text-xl md:text-2xl ">
+                          My Booking
+                        </p>
+                        <p className="text-black text-xl md:text-2xl">
+                          ({dateFormat(order?.updatedAt, "isoDate")})
+                        </p>
+                        </div>
+                      <div>
+                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">${order?.total}</span> </p>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] ">
+                    {expandedOrderId === order._id &&
+                      order.productDetail.map((product, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"
+                            onClick={() => {
+                              router.push(
+                                `/myorder/${order?._id}?product_id=${product?._id}`
+                              );
+                            }}
+                          >
+                            <img
+                              className="w-20 h-20 text-black rounded-[10px] object-contain "
+                              src={product.image[0]}
+                              alt="Product"
+                            />
+                            <div>
+                              <p className="text-black text-base font-bold">
+                                {product.product?.name || "Product Name"}
+                              </p>
+                              <p className="text-black text-xs font-bold pt-[6px]">
+                                Quantity: {product.qty || 1}
+                              </p>
+                              <p className="text-black text-xs   max-w-sm sm:w-full font-bold pt-[6px]">
+                                Order Id: {order._id}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
 
+                    <div className="block sm:hidden">
+                    <div className="flex flex-col justify-center items-end">
+                      <p className="text-black  text-base font-bold"> Total:
+                        <span className="text-custom-purple"> ${order.total}</span>
+                      </p>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-center items-center md:mt-5 w-full md:h-[300px] h-[200px] col-span-4">
+                <p className="text-center text-black font-semibold text-xl sm:text-3xl">
+                  No orders available.
+                </p>
+              </div>
+            )}
+          </div>
           {showReviews && (
             <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
               <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">

@@ -43,6 +43,8 @@ function SearchResult(props) {
                   i={i}
                   item={data}
                   url={`product-details/${data?.slug}`}
+                  loader={props?.loader}
+                toaster={props?.toaster}
                 />
               </div>
             ))

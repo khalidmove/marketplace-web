@@ -37,13 +37,13 @@ function HeaderFirst(props) {
       (err) => {
         props.loader(false);
         console.log(err);
-        props.toaster({ type: "error", message: err?.message });
+        // props.toaster({ type: "error", message: err?.message });
       }
     );
   };
 
   return (
-    <div className="w-full md:border-b border-b-0 border-b-gray-400">
+    <div className="w-full md:border-b border-b-0 border-b-gray-400 px-1 md:px-6 2xl:px-0">
       <div className="max-w-7xl  mx-auto w-full bg-white">
         <div className="hidden lg:flex justify-between my-2 ">
           <div className="relative group" onClick={() => { setShowHover(true) }} >

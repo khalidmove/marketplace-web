@@ -49,7 +49,7 @@ function Footer(props) {
     <div>
       <div className="bg-white relative">
         <div className="max-w-7xl mx-auto h-full border-b border-b-[#00000050] md:pb-10 pb-5"></div>
-        <div className="max-w-7xl  mx-auto h-full  md:py-10 py-5">
+        <div className="max-w-7xl  mx-auto h-full  md:py-10 py-5 px-6">
           <div className="grid md:grid-cols-5 grid-cols-1">
             <div className="text-white px-5 md:px-0 flex flex-col md:justify-start justify-center md:items-start items-start  md:col-span-2">
               <div className="py-5">
@@ -124,7 +124,7 @@ function Footer(props) {
         </div>
 
         <div className="max-w-7xl mx-auto h-full border-t border-t-[#00000050] md:pb-10 pb-5"></div>
-        <div className="max-w-7xl mx-auto w-full md:pb-10 pb-5 md:px-0 px-5">
+        <div className="max-w-7xl mx-auto w-full md:pb-10 pb-5 px-6">
           <div className="md:flex justify-between items-center">
             <p className="text-custom-darkGray text-base font-medium">© {moment().format('YYYY')}, All rights reserved</p>
             <div className="flex gap-5 md:pt-0 pt-5">
