@@ -260,6 +260,7 @@ function orders(props) {
                     <div className="flex flex-col justify-center items-end">
                       <p className="text-black  text-base font-bold"> Total:
                         <span className="text-custom-purple"> ${order.total}</span>
+>>>>>>>>> Temporary merge branch 2
                       </p>
                     </div>
                     </div>
