@@ -1069,7 +1069,7 @@ const Navbar = (props) => {
                 setOpenCart(false);
               }}
             >
-              CONTINUE TO PAY {currencySign(CartTotal)}
+              CONTINUE TO PAY {currencySign(mainTotal)}
             </button>
           )}
         </div>

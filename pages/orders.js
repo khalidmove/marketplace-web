@@ -183,12 +183,12 @@ function orders(props) {
               </div>
             )}
           </div> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-6 md:mx-auto md:gap-12 gap-8 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-5 md:mx-auto md:gap-12 gap-8 max-w-7xl sm:max-w-6xl">
             {ordersData.length > 0 ? (
               ordersData.map((order, index) => (
                 <div
                   key={order?._id}
-                  className="bg-white p-4 rounded-md border-2 border-[#999999] h-auto self-start"
+                  className="bg-white p-4 rounded-md border-2 border-custom-purple h-auto self-start"
                 >
                   <div className="flex items-center justify-between  ">
                     <div className="flex flex-col justify-start w-full">
@@ -208,26 +208,28 @@ function orders(props) {
                           />
                         </p>
                       </div>
-                      <div className="flex justify-start gap-3  pb-5">
+                      <div className="flex justify-between gap-3 ">
+                        <div className="flex justify-start gap-5">
                         <p className="text-black  text-xl md:text-2xl ">
                           My Booking
                         </p>
                         <p className="text-black text-xl md:text-2xl">
                           ({dateFormat(order?.updatedAt, "isoDate")})
                         </p>
+                        </div>
+                      <div>
+                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">${order?.total}</span> </p>
+                      </div>
                       </div>
                     </div>
                   </div>
-                  <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] border border-gray-200">
+                  <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] ">
                     {expandedOrderId === order._id &&
                       order.productDetail.map((product, index) => {
-                        // console.log("product------>", order);
-                        // console.log("order------>", product);
-
                         return (
                           <div
                             key={index}
-                            className="col-span-2 flex gap-5 cursor-pointer"
+                            className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"
                             onClick={() => {
                               router.push(
                                 `/myorder/${order?._id}?product_id=${product?._id}`
@@ -254,17 +256,19 @@ function orders(props) {
                         );
                       })}
 
-                    <div className={`${expandedOrderId === order._id ? "col-span-1" : "col-span-3"} flex flex-col justify-center items-end`}>
-                      <p className="text-gray-600 text-base font-bold">
-                        Total: {currencySign(order.total) || "0.00"}
+                    <div className="block sm:hidden">
+                    <div className="flex flex-col justify-center items-end">
+                      <p className="text-black  text-base font-bold"> Total:
+                        <span className="text-custom-purple"> ${order.total}</span>
                       </p>
+                    </div>
                     </div>
                   </div>
                 </div>
               ))
             ) : (
               <div className="flex justify-center items-center md:mt-5 w-full md:h-[300px] h-[200px] col-span-4">
-                <p className="text-center text-black text-2xl">
+                <p className="text-center text-black font-semibold text-xl sm:text-3xl">
                   No orders available.
                 </p>
               </div>
