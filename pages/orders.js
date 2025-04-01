@@ -218,7 +218,7 @@ function orders(props) {
                         </p>
                         </div>
                       <div>
-                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">${order?.total}</span> </p>
+                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">{currencySign(order?.total) || "0.00"}</span></p>
                       </div>
                       </div>
                     </div>
