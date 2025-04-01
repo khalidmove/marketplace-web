@@ -218,7 +218,7 @@ function orders(props) {
                         </p>
                         </div>
                       <div>
-                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">${order?.total}</span> </p>
+                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">{currencySign(order?.total)}</span> </p>
                       </div>
                       </div>
                     </div>
@@ -259,7 +259,7 @@ function orders(props) {
                     <div className="block sm:hidden">
                     <div className="flex flex-col justify-center items-end">
                       <p className="text-black  text-base font-bold"> Total:
-                        <span className="text-custom-purple"> ${order.total}</span>
+                        <span className="text-custom-purple"> {currencySign(order.total)}</span>
                       </p>
                     </div>
                     </div>
