@@ -327,6 +327,11 @@ const Navbar = (props) => {
 
   const emptyCart = async () => {
     setCartData([]);
+    setOpenCart(false);
+    props?.toaster({
+      type: "success",
+      message: "Items removed from cart",
+    });
     localStorage.removeItem("addCartDetail");
   };
 
@@ -374,7 +379,6 @@ const Navbar = (props) => {
       total: mainTotal.toFixed(2),
       shipping_address: {
         ...shippingAddressData,
-        // address: `${shippingAddressData.houseNo}, ${shippingAddressData.address}`,
         location: {
           type: "Point",
           coordinates: [
@@ -771,8 +775,40 @@ const Navbar = (props) => {
             {cartData.length > 0 && (
               <button
                 className="text-white font-medium text-base bg-custom-red rounded-[12px] md:h-[50px] h-[40px] md:w-[112px] w-[105px]"
+                // onClick={() => {
+                //   emptyCart();
+                // }}
                 onClick={() => {
-                  emptyCart();
+                  // Get the drawer element reference
+                  const drawerElement =
+                    document.querySelector(".MuiDrawer-paper");
+
+                  // Set up SweetAlert
+                  Swal.fire({
+                    title: "Are you sure you want to empty your cart?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    confirmButtonColor: "#35035C",
+                    cancelButtonColor: "#d33",  
+                    reverseButtons: true,
+                    // width: "320px",
+                    target: drawerElement,
+                    didOpen: () => {
+                      // Add custom styling to position the alert within the drawer
+                      const swalContainer = document.querySelector(
+                        ".swal2-drawer-container"
+                      );
+                      if (swalContainer) {
+                        swalContainer.style.position = "absolute";
+                        swalContainer.style.zIndex = "9999";
+                      }
+                    },
+                  }).then(function (result) {
+                    if (result.isConfirmed) {
+                      emptyCart();
+                    }
+                  });
                 }}
               >
                 Empty Cart
@@ -853,7 +889,9 @@ const Navbar = (props) => {
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="pl-3">{item?.price_slot?.value}</span>{" "}
+                      <span className="pl-3">
+                        {item?.price_slot?.value ?? 1}
+                      </span>{" "}
                       <span>{item?.price_slot?.unit ?? "unit"}</span>
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
@@ -861,7 +899,7 @@ const Navbar = (props) => {
                         {currencySign(item?.price_slot?.our_price)}
                       </span>{" "}
                       <span className="line-through">
-                        {currencySign(item?.price_slot?.price)}
+                        {currencySign(item?.price_slot?.other_price)}
                       </span>
                     </p>
                   </div>
@@ -890,7 +928,8 @@ const Navbar = (props) => {
                           const nextState = produce(cartData, (draft) => {
                             draft[i].qty -= 1;
                             draft[i].total = (
-                              parseFloat(draft[i].price) * draft[i].qty
+                              parseFloat(draft[i]?.price_slot?.our_price) *
+                              draft[i].qty
                             ).toFixed(2);
                           });
                           setCartData(nextState);
@@ -923,7 +962,8 @@ const Navbar = (props) => {
                         const nextState = produce(cartData, (draft) => {
                           draft[i].qty += 1;
                           draft[i].total = (
-                            parseFloat(draft[i].price) * draft[i].qty
+                            parseFloat(draft[i]?.price_slot?.our_price) *
+                            draft[i].qty
                           ).toFixed(2);
                         });
                         setCartData(nextState);
@@ -942,7 +982,7 @@ const Navbar = (props) => {
                   <p className="text-custom-purple font-semibold text-base">
                     {currencySign(item?.total)}
                     <del className="text-custom-red font-normal text-xs ml-2">
-                      {currencySign(item?.other_price)}
+                      {currencySign(item?.price_slot?.other_price * item?.qty)}
                     </del>
                   </p>
                   <IoMdClose

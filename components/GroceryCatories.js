@@ -58,7 +58,12 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             selectedImage: item?.varients[0]?.image[0] || "",
             qty: 1,
             // total: item.price,
-            total: item.price_slot[0]?.our_price,
+            // total: item.price_slot[0]?.our_price,
+            total: Number(item.price_slot?.[0]?.our_price ?? 0).toFixed(2),
+            price_slot : item.price_slot[0],
+            // our_price: item.price_slot[0]?.our_price,
+            // other_price: item.price_slot[0]?.other_price,
+            // unit: item.price_slot[0]?.unit,
           };
 
           const updatedCart = [...prevCartData, newItem];

@@ -522,7 +522,7 @@ function ProductDetails(props) {
                           price: selectedPrice.our_price,
                           price_slot: selectedPrice,
                           total: (
-                            (selectedPrice.our_price || 0) * (availableQty || 1)
+                            Number(selectedPrice?.our_price || 0) * Number(availableQty || 1)
                           ).toFixed(2),
                           selectedColor:
                             productsId.selectedColor ||

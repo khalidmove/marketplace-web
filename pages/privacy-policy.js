@@ -42,7 +42,7 @@ function PrivacyPolicy(props) {
 
     return (
         <section className="bg-white w-full flex flex-col justify-center items-center">
-            <div className="max-w-6xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5 md:min-h-screen">
+            <div className="max-w-7xl mx-auto w-full md:px-6 px-5 2xl:px-0 md:pt-10 pt-5 md:pb-10 pb-5 md:min-h-screen">
 
 
                 {/* {loading ? (
