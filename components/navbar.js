@@ -40,6 +40,12 @@ import { MdOutlineStar } from "react-icons/md";
 import currencySign from "@/utils/currencySign";
 import formatShippingAddress from "@/utils/formatShippingAddress";
 import { FaCircleUser } from "react-icons/fa6";
+import AddressInput from "./AddressInput ";
+import { useJsApiLoader } from "@react-google-maps/api";
+// Google place api integration
+
+// Set google api key
+const GOOGLE_API_KEY = "AIzaSyDHd5FoyP2sDBo0vO2i0Zq7TIUZ_7GhBcI";
 
 const Navbar = (props) => {
   // console.log(props)
@@ -55,6 +61,7 @@ const Navbar = (props) => {
     { href: "/history", title: "History" },
   ]);
   const [currentCity, setCurrentCity] = useState("");
+
   // const [commonCity, setCommonCity] = useContext(cityContext)
   // const [initial, setInitial] = useContext(Context)
   // const [mobile, setMobile] = useState(false);
@@ -83,11 +90,14 @@ const Navbar = (props) => {
   const [showcart, setShowcart] = useState(false);
   const [shippingAddressData, setShippingAddressData] = useState({
     firstName: "",
+    houseNo: "",
     address: "",
     pinCode: "",
     phoneNumber: "",
     city: "",
     country: "",
+    lat: null,
+    lng: null,
   });
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [deliveryPartnerTip, setDeliveryPartnerTip] = useState(0);
@@ -110,6 +120,11 @@ const Navbar = (props) => {
   //   }
   // };
 
+  // const { isLoaded } = useJsApiLoader({
+  //   googleMapsApiKey: GOOGLE_API_KEY,
+  //   libraries: ["places"],
+  // });
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearchData(value);
@@ -131,16 +146,16 @@ const Navbar = (props) => {
     };
   }, []);
 
-  useEffect(() => {
-    // const d = cartData.find(
-    //   (f) => f._id === f.category._id
-    // );
-    // console.log(d)
-    if (cartData?.length > 0) {
-      getproductByCategory();
-    }
-    // getCategory()
-  }, []);
+  // useEffect(() => {
+  //   // const d = cartData.find(
+  //   //   (f) => f._id === f.category._id
+  //   // );
+  //   // console.log(d)
+  //   if (cartData?.length > 0) {
+  //     getproductByCategory();
+  //   }
+  //   // getCategory()
+  // }, []);
 
   useEffect(() => {
     const wishList = localStorage.getItem("wishlist");
@@ -352,15 +367,32 @@ const Navbar = (props) => {
         seller_id: element.userid,
       });
     });
+
     let newData = {
       productDetail: data,
-      total: mainTotal.toFixed(2), // CartTotal
-      shipping_address: shippingAddressData,
-      // shipping_address: JSON.parse(address),
+      sold_pieces: d?.qty,
+      total: mainTotal.toFixed(2),
+      shipping_address: {
+        ...shippingAddressData,
+        // address: `${shippingAddressData.houseNo}, ${shippingAddressData.address}`,
+        location: {
+          type: "Point",
+          coordinates: [
+            shippingAddressData.lng ? Number(shippingAddressData.lng) : 0,
+            shippingAddressData.lat ? Number(shippingAddressData.lat) : 0,
+          ],
+        },
+      },
+      location: {
+        type: "Point",
+        coordinates: [
+          shippingAddressData.lng ? Number(shippingAddressData.lng) : 0,
+          shippingAddressData.lat ? Number(shippingAddressData.lat) : 0,
+        ],
+      },
+      paymentmode: "cod",
     };
 
-    console.log(data);
-    console.log("newData ::", newData);
     // return
     props.loader(true);
     Api("post", "createProductRquest", newData, router).then(
@@ -1031,14 +1063,14 @@ const Navbar = (props) => {
             </div>
           )}
 
-          {productList.map((item, i) => (
+          {/* {productList.map((item, i) => (
             <GroceryCategories
               item={item}
               i={i}
               loader={props?.loader}
               toaster={props?.toaster}
             />
-          ))}
+          ))} */}
 
           {cartData.length > 0 && (
             <button
@@ -1153,7 +1185,7 @@ const Navbar = (props) => {
 
       {showcart && (
         <div className="fixed top-0 left-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50">
-          <div className="relative w-[300px] md:w-[360px] h-auto  bg-white rounded-[15px] m-auto">
+          <div className="relative w-[300px] md:w-[360px] h-auto max-h-[90vh] overflow-y-auto  bg-white rounded-[15px] m-auto">
             <div
               className="absolute top-2 right-2 p-1 rounded-full  text-black w-8 h-8 cursor-pointer"
               onClick={() => {
@@ -1188,15 +1220,22 @@ const Navbar = (props) => {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="Address"
+                  placeholder="House No. / Street Address"
                   required
-                  value={shippingAddressData?.address}
+                  value={shippingAddressData?.houseNo}
                   onChange={(text) => {
                     setShippingAddressData({
                       ...shippingAddressData,
-                      address: text.target.value,
+                      houseNo: text.target.value,
                     });
                   }}
+                />
+              </div>
+
+              <div className="w-full">
+                <AddressInput
+                  setShippingAddressData={setShippingAddressData}
+                  shippingAddressData={shippingAddressData}
                 />
               </div>
 

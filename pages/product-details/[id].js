@@ -612,12 +612,12 @@ function ProductDetails(props) {
                     {productsId?.origin}
                   </span>
                 </p>
-                <p className="text-black font-medium md:text-xl text-base pt-2">
+                {/* <p className="text-black font-medium md:text-xl text-base pt-2">
                   Self Life :{" "}
                   <span className="text-custom-newGray font-normal md:text-xl text-base">
                     {productsId?.selflife}
                   </span>
-                </p>
+                </p> */}
                 <p className="text-black font-medium md:text-xl text-base pt-2">
                   Manufacturer Name :{" "}
                   <span className="text-custom-newGray font-normal md:text-xl text-base">

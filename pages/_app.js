@@ -10,7 +10,8 @@ export const userContext = createContext();
 export const openCartContext = createContext();
 export const cartContext = createContext();
 export const wishlistContext = createContext();
- 
+
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();

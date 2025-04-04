@@ -16,6 +16,10 @@ export default function Home(props) {
   const [productsList, setProductsList] = useState([]);
   const [bestSellsData, setBestSellsData] = useState([]);
   const [carouselImg, setCarouselImg] = useState([]);
+  // Paginations
+  const [currentProductPage, setCurrentProductPage] = useState(1);
+  const [totalProductPages, setTotalProductPages] = useState(1);
+  const limit = 10;
 
   useEffect(() => {
     getCategory();
@@ -23,6 +27,10 @@ export default function Home(props) {
     getBestSells();
     getsetting();
   }, []);
+
+  // useEffect(() => {
+  //   getProduct(currentProductPage);
+  // }, [currentProductPage]);
 
   const responsive = {
     superLargeDesktop: {
@@ -80,9 +88,9 @@ export default function Home(props) {
     );
   };
 
-  const getProduct = async () => {
+  const getProduct = async (page) => {
     props.loader(true);
-    Api("get", "getProduct", "", router).then(
+    Api("get", `getProduct`, "", router).then(
       (res) => {
         props.loader(false);
         if (res.data && Array.isArray(res.data)) {
@@ -91,6 +99,7 @@ export default function Home(props) {
           );
 
           console.log("Filtered Data: featured products", activeProducts);
+          // setTotalProductPages(res.data.totalPages);
 
           if (activeProducts.length > 0) {
             setProductsList(activeProducts);
@@ -116,18 +125,24 @@ export default function Home(props) {
     );
   };
 
-  const getBestSells = async () => {
+  const getBestSells = async (page) => {
     props.loader(true);
-    Api("get", "getProduct", "", router).then(
+    Api(
+      "get",
+      `getTopSoldProduct?page=${page}&limit=${limit}`,
+      "",
+      router
+    ).then(
       (res) => {
         props.loader(false);
-
+        console.log("res================> best sells", res);
         if (res.data && Array.isArray(res.data)) {
           const activeProducts = res.data.filter(
             (product) => product.status !== "suspended"
           );
 
           console.log("Filtered Data: best sells", activeProducts);
+          setTotalProductPages(res?.pagination?.totalPages);
 
           if (activeProducts.length > 0) {
             setBestSellsData(activeProducts);
@@ -161,7 +176,7 @@ export default function Home(props) {
         console.log("res================>", res);
         if (res?.success) {
           if (res?.setting.length > 0) {
-            setCarouselImg(res?.setting[0].carousel?.slice(2,4));
+            setCarouselImg(res?.setting[0].carousel?.slice(2, 4));
           }
         } else {
           props.loader(false);
@@ -175,6 +190,12 @@ export default function Home(props) {
         props.toaster({ type: "error", message: err?.message });
       }
     );
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalProductPages) return;
+    setCurrentProductPage(newPage);
+    getBestSells(newPage);
   };
 
   return (
@@ -310,14 +331,14 @@ export default function Home(props) {
                 Daily Best Sells
               </p>
               <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end  justify-start md:pt-0 pt-2">
-            <p
-              className="text-custom-purple text-base font-bold cursor-pointer"
-              onClick={() => {
-                router.push(`/categories/all?category=all&sort_by=is_top`);
-              }}
-            >
-              View All
-            </p>
+                <p
+                  className="text-custom-purple text-base font-bold cursor-pointer"
+                  onClick={() => {
+                    router.push(`/categories/all?category=all&sort_by=is_top`);
+                  }}
+                >
+                  View All
+                </p>
               </div>
               {/* <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>
                 <p className='text-custom-purple text-base font-semibold'>Featured</p>
@@ -344,6 +365,28 @@ export default function Home(props) {
             {/* {bestSellsData.map((item, i) => (<BestSells item={item} i={i} />))} */}
           </div>
         </div>
+        {/* <div className="bg-custom-newPurpleColor/10 border border-custom-newPurpleColor text-custom-purple w-32 mx-auto justify-center items-center flex rounded-[10px] py-2">
+        <button className="">
+          More
+        </button>
+        </div> */}
+        {/* <div className="text-black">
+          <button
+            onClick={() => handlePageChange(currentProductPage - 1)}
+            disabled={currentProductPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentProductPage} of {totalProductPages}{" "}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentProductPage + 1)}
+            disabled={currentProductPage === totalProductPages}
+          >
+            Next
+          </button>
+        </div> */}
       </section>
 
       <section className="w-full md:pt-10 pt-5">

@@ -2,7 +2,7 @@ import React from 'react'
 
 function ShopFasterMarketplace() {
     return (
-        <div className="bg-[url('/backgroundImg-1a.png')] bg-cover bg-no-repeat w-full md:h-[750px]  md:p-0 p-5">
+        <div className="bg-[url('/backgroundImg-1a.png')] bg-cover bg-no-repeat w-full md:h-[550px]  md:p-0 p-5">
             <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5 max-w-7xl  mx-auto h-full px-1 md:px-6 2xl:px-0">
                 <div className="flex flex-col justify-center items-start">
                     <p className="md:text-[55px] text-2xl font-bold text-custom-purple md:leading-[60px]">Shop Faster With Marketplace App</p>
