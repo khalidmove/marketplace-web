@@ -105,3 +105,7 @@ box-shadow: 0px 4px 4px 0px #00000040 !important;
 .MuiDrawer-paper{
   background: #35035c !important;
 }
+
+.refund-policy span{
+  background-color: transparent !important;
+}

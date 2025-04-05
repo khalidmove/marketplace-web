@@ -156,14 +156,30 @@ const Navbar = (props) => {
   //   }
   //   // getCategory()
   // }, []);
+  
+    const getFavourite = async () => {
+      props.loader(true);
+      Api("get", "getFavourite", "", router).then(
+        (res) => {
+          props.loader(false);
+          console.log("res================>", res);
+          setWishlist(res.data);
+        },
+        (err) => {
+          props.loader(false);
+          console.log(err);
+          props.toaster({ type: "error", message: err?.message });
+        }
+      );
+    };
 
-  useEffect(() => {
-    const wishList = localStorage.getItem("wishlist");
-    if (wishList) {
-      const wishListData = JSON.parse(wishList);
-      setWishlist(wishListData);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const wishList = localStorage.getItem("wishlist");
+  //   if (wishList) {
+  //     const wishListData = JSON.parse(wishList);
+  //     setWishlist(wishListData);
+  //   }
+  // }, []);
 
   // console.log("wish list data----->", wishlist);
 
@@ -187,7 +203,10 @@ const Navbar = (props) => {
   }, [router]);
 
   useEffect(() => {
-    if (user?.token) getShippingAddress();
+    if (user?.token) {
+      getFavourite();
+      getShippingAddress();
+    }
   }, [user, getShippingAddress]);
 
   const getproductByCategory = async () => {
