@@ -31,6 +31,7 @@ function Api(method, url, data, router, params) {
               !router.pathname.includes("signIn")
             ) {
               localStorage.removeItem("userDetail");
+              localStorage.removeItem("token");
               router.push("/auth/signIn/");
               err.response.data.message = 'Login required'
             }

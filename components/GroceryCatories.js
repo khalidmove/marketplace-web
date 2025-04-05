@@ -59,6 +59,7 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             qty: 1,
             // total: item.price,
             // total: item.price_slot[0]?.our_price,
+            price: item.price_slot[0]?.our_price,
             total: Number(item.price_slot?.[0]?.our_price ?? 0).toFixed(2),
             price_slot : item.price_slot[0],
             // our_price: item.price_slot[0]?.our_price,

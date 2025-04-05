@@ -110,7 +110,7 @@ function signUp(props) {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5"
                   type="number"
-                  placeholder="Referal"
+                  placeholder="Referral"
                   value={userDetail.referal}
                   onChange={(text) => {
                     setUserDetail({
