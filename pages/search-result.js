@@ -7,7 +7,7 @@ function SearchResult(props) {
   const router = useRouter();
   const [searchData, setSearchData] = useState([]);
   const { query } = router.query;
-  console.log("query ::", query);
+  // console.log("query ::", query);
 
   useEffect(() => {
     if (query) {
@@ -35,7 +35,7 @@ function SearchResult(props) {
   return (
     <div className="bg-white w-full">
       <div className="max-w-7xl  mx-auto w-full">
-        <div className="grid md:grid-cols-5 grid-cols-1 md:pt-10 pt-5">
+        <div className="grid md:grid-cols-5 gap-3 grid-cols-1 md:pt-10 pt-5">
           {searchData.length > 0 ? (
             searchData.map((data, i) => (
               <div key={i} className="">
