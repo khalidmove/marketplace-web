@@ -45,7 +45,7 @@ function RefundPolicy(props) {
                 ) : ( */}
                     <div>
                         <p className='text-2xl text-black font-bold md:pb-5 pb-2'>Refund Policy and Exchange</p>
-                        <div className="text-base text-black font-normal md:pb-5" dangerouslySetInnerHTML={{ __html: returnPolicyData?.returnPolicy }} />
+                        <div className="text-base text-black font-normal md:pb-5 refund-policy" dangerouslySetInnerHTML={{ __html: returnPolicyData?.returnPolicy }} />
                     </div>
 
 

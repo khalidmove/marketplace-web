@@ -15,8 +15,49 @@ function signUp(props) {
   });
   const [eyeIcon, setEyeIcon] = useState(false);
 
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const submit = (e) => {
     e.preventDefault();
+
+    if (
+      userDetail.name === "" ||
+      userDetail.phoneNumber === "" ||
+      userDetail.password === "" ||
+      userDetail.email === "" ||
+      userDetail.referal === ""
+    ) {
+      props.toaster({ type: "error", message: "Please fill all fields" });
+      return;
+    }
+    if (userDetail.password.length < 6) {
+      props.toaster({
+        type: "error",
+        message: "Password should be at least 8 characters",
+      });
+      return;
+    }
+
+    if (userDetail.phoneNumber.length < 10) {
+      props.toaster({
+        type: "error",
+        message: "Phone number should be at least 10 digits",
+      });
+      return;
+    }
+
+    if (userDetail.referal.length < 5) {
+      props.toaster({
+        type: "error",
+        message: "Referral code should be at least 5 characters",
+      });
+      return;
+    }
+
+    if (!regex.test(userDetail.email)) {
+      props.toaster({ type: "error", message: "Please enter a valid email" });
+      return;
+    }
 
     props.loader(true);
     const data = {
@@ -168,7 +209,13 @@ function signUp(props) {
                 </div>
 
                 <button
-                  className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5 mt-5"
+                  // disabled={
+                  //   userDetail.name === "" ||
+                  //   userDetail.phoneNumber === "" ||
+                  //   userDetail.password === "" ||
+                  //   !regex.test(userDetail.email)
+                  // }
+                  className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5 mt-5 disabled:bg-opacity-50"
                   type="submit"
                 >
                   Sign up

@@ -229,8 +229,8 @@ function ProductDetails(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full md:pt-10 pt-5 md:pb-5 pb-5 px-1 md:px-6 2xl:px-0">
-        <div className="max-w-7xl  mx-auto w-full">
+      <section className="bg-white w-full md:pt-10 pt-5 md:pb-5 pb-5 px-1 md:px-6 px-5 2xl:px-0">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             <div className="border border-black p-[10px] rounded-[15px]">
               <Carousel
