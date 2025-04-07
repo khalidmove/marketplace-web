@@ -157,35 +157,24 @@ const Navbar = (props) => {
   //   // getCategory()
   // }, []);
   
-    const getFavourite = async () => {
-      props.loader(true);
-      Api("get", "getFavourite", "", router).then(
-        (res) => {
-          props.loader(false);
-          console.log("res================>", res);
-          setWishlist(res.data);
-        },
-        (err) => {
-          props.loader(false);
-          console.log(err);
-          props.toaster({ type: "error", message: err?.message });
-        }
-      );
-    };
-
-  // useEffect(() => {
-  //   const wishList = localStorage.getItem("wishlist");
-  //   if (wishList) {
-  //     const wishListData = JSON.parse(wishList);
-  //     setWishlist(wishListData);
-  //   }
-  // }, []);
-
-  // console.log("wish list data----->", wishlist);
-
+  const getFavourite = useCallback(() => {
+    props.loader(true);
+    Api("get", "getFavourite", "", router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res);
+        setWishlist(res.data);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  }, [router]);
+  
   const getShippingAddress = useCallback(() => {
     props.loader(true);
-
     Api("get", "getShippingAddress", "", router)
       .then((res) => {
         props.loader(false);
@@ -195,19 +184,16 @@ const Navbar = (props) => {
       .catch((err) => {
         props.loader(false);
         console.log(err);
-        // props.toaster({
-        //   type: "error",
-        //   message: err?.message || "Failed to fetch shipping address",
-        // });
       });
   }, [router]);
-
+  
+  // ⬇ Effect runs only when token is available
   useEffect(() => {
     if (user?.token) {
       getFavourite();
       getShippingAddress();
     }
-  }, [user, getShippingAddress]);
+  }, [user?.token]);
 
   const getproductByCategory = async () => {
     props.loader(true);
