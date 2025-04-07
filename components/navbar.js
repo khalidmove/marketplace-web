@@ -1065,14 +1065,14 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-              <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
+             {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
                 <p className="text-custom-grayColors font-normal text-base">
                   Delivery Partner Tip
                 </p>
                 <p className="font-normal text-base text-custom-purple">
                   {currencySign(deliveryPartnerTip)}
                 </p>
-              </div>
+              </div> */}
 
               <div className="flex justify-between items-center w-full pt-5">
                 <p className="text-custom-purple font-normal text-base">
