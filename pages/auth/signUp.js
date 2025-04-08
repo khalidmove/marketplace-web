@@ -24,8 +24,7 @@ function signUp(props) {
       userDetail.name === "" ||
       userDetail.phoneNumber === "" ||
       userDetail.password === "" ||
-      userDetail.email === "" ||
-      userDetail.referal === ""
+      userDetail.email === ""
     ) {
       props.toaster({ type: "error", message: "Please fill all fields" });
       return;
@@ -46,10 +45,10 @@ function signUp(props) {
       return;
     }
 
-    if (userDetail.referal.length < 5) {
+    if (userDetail.referal.length < 12) {
       props.toaster({
         type: "error",
-        message: "Referral code should be at least 5 characters",
+        message: "Referral code should be at least 12 characters",
       });
       return;
     }
@@ -150,7 +149,7 @@ function signUp(props) {
 
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5"
-                  type="number"
+                  type="text"
                   placeholder="Referral"
                   value={userDetail.referal}
                   onChange={(text) => {
@@ -159,6 +158,7 @@ function signUp(props) {
                       referal: text.target.value,
                     });
                   }}
+                  maxLength={12}
                 />
 
                 <input
