@@ -90,8 +90,8 @@ const Navbar = (props) => {
   const [cartData, setCartData] = useContext(cartContext);
   const [showcart, setShowcart] = useState(false);
   const [shippingAddressData, setShippingAddressData] = useState({
-    firstName: "",
-    houseNo: "",
+    username: "",
+    house_no: "",
     address: "",
     pinCode: "",
     phoneNumber: "",
@@ -348,7 +348,10 @@ const Navbar = (props) => {
     );
     setCartItem(sumWithInitial1);
     setCartTotal(sumWithInitial);
-    setMainTotal(sumWithInitial + deliveryCharge + deliveryPartnerTip);
+    // setMainTotal(sumWithInitial + deliveryCharge + deliveryPartnerTip);
+    // main total with tax
+    const totalWithTax = sumWithInitial + (sumWithInitial * tax) / 100;
+    setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip);
   }, [cartData, openCart]);
 
   const emptyCart = async () => {
@@ -404,7 +407,14 @@ const Navbar = (props) => {
       sold_pieces: d?.qty,
       total: mainTotal.toFixed(2),
       shipping_address: {
-        ...shippingAddressData,
+        // ...shippingAddressData,
+        username: shippingAddressData.username,
+        house_no: shippingAddressData.house_no,
+        address: shippingAddressData.address,
+        pinCode: shippingAddressData.pinCode,
+        phoneNumber: shippingAddressData.phoneNumber,
+        city: shippingAddressData.city,
+        country: shippingAddressData.country,
         location: {
           type: "Point",
           coordinates: [
@@ -465,15 +475,20 @@ const Navbar = (props) => {
   } else {
     redeemablePoints = 0;
   }
-
+  const sumWithInitial = cartData?.reduce(
+    (accumulator, currentValue) =>
+      accumulator + Number(currentValue?.total || 0),
+    0
+  );
+  const totalWithTax = sumWithInitial + (sumWithInitial * tax) / 100;
   const redeemableAmount = redeemablePoints * pricePerPoint;
-  const finalAmount = CartTotal - redeemableAmount;
+  const finalAmount = totalWithTax + deliveryCharge + deliveryPartnerTip - redeemableAmount;
 
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
       setMainTotal(finalAmount);
     } else {
-      setMainTotal(CartTotal + deliveryCharge + deliveryPartnerTip);
+      setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip);
     }
   };
 
@@ -620,6 +635,28 @@ const Navbar = (props) => {
                               <ul>
                                 <li className="px-5 shadow-inner feature1  py-2">
                                   <div
+                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                    aria-current="page"
+                                    onClick={() => {
+                                      router.push("/MyProfile");
+                                    }}
+                                  >
+                                    {"My Profile"}
+                                  </div>
+                                </li>
+                                <li className="px-5 shadow-inner feature1  py-2">
+                                  <div
+                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                    aria-current="page"
+                                    onClick={() => {
+                                      router.push("/orders");
+                                    }}
+                                  >
+                                    {"My order"}
+                                  </div>
+                                </li>
+                                <li className="px-5 shadow-inner feature1  py-2">
+                                  <div
                                     onClick={() => {
                                       Swal.fire({
                                         title: "Are you sure?",
@@ -643,28 +680,6 @@ const Navbar = (props) => {
                                     aria-current="page"
                                   >
                                     {"Sign out"}
-                                  </div>
-                                </li>
-                                <li className="px-5 shadow-inner feature1  py-2">
-                                  <div
-                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
-                                    aria-current="page"
-                                    onClick={() => {
-                                      router.push("/MyProfile");
-                                    }}
-                                  >
-                                    {"My Profile"}
-                                  </div>
-                                </li>
-                                <li className="px-5 shadow-inner feature1  py-2">
-                                  <div
-                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
-                                    aria-current="page"
-                                    onClick={() => {
-                                      router.push("/orders");
-                                    }}
-                                  >
-                                    {"My order"}
                                   </div>
                                 </li>
                               </ul>
@@ -1033,6 +1048,14 @@ const Navbar = (props) => {
                 </p>
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
+              <div className="flex justify-between items-center w-full pt-1">
+                <p className="font-normal text-base">
+                  Tax
+                </p>
+                <p className="text-custom-purple font-normal text-base">
+                  {tax}%
+                </p>
+              </div>
               <div className="flex items-center justify-between mt-1">
                 <p className="text-custom-purple text-base">
                   You have total point
@@ -1067,7 +1090,7 @@ const Navbar = (props) => {
                 </p>
               )}
 
-              <div className="flex justify-between items-center w-full pt-3">
+              <div className="flex justify-between items-center w-full pt-1">
                 <p className="text-custom-red font-normal text-base">
                   Delivery Fee ({currencySign(35)} Saved)
                 </p>
@@ -1077,7 +1100,7 @@ const Navbar = (props) => {
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹35</del> */}
               </div>
 
-              <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
+              <div className="flex justify-between items-center w-full pt-1 border-b border-b-[#97999B80] pb-3">
                 <p className="text-custom-grayColors font-normal text-base">
                   Delivery Partner Tip
                 </p>
@@ -1086,16 +1109,16 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-              <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
+             {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
                 <p className="text-custom-grayColors font-normal text-base">
                   Delivery Partner Tip
                 </p>
                 <p className="font-normal text-base text-custom-purple">
                   {currencySign(deliveryPartnerTip)}
                 </p>
-              </div>
+              </div> */}
 
-              <div className="flex justify-between items-center w-full pt-5">
+              <div className="flex justify-between items-center w-full pt-3">
                 <p className="text-custom-purple font-normal text-base">
                   Total Payable
                 </p>
@@ -1106,7 +1129,7 @@ const Navbar = (props) => {
 
               {shippingAddressData &&
                 user?.token &&
-                (shippingAddressData.firstName ||
+                (shippingAddressData.username ||
                   shippingAddressData.address ||
                   shippingAddressData.city ||
                   shippingAddressData.country) && (
@@ -1272,11 +1295,11 @@ const Navbar = (props) => {
                   type="text"
                   placeholder="First Name"
                   required
-                  value={shippingAddressData?.firstName}
+                  value={shippingAddressData?.username}
                   onChange={(text) => {
                     setShippingAddressData({
                       ...shippingAddressData,
-                      firstName: text.target.value,
+                      username: text.target.value,
                     });
                   }}
                 />
@@ -1288,11 +1311,11 @@ const Navbar = (props) => {
                   type="text"
                   placeholder="House No. / Street Address"
                   required
-                  value={shippingAddressData?.houseNo}
+                  value={shippingAddressData?.house_no}
                   onChange={(text) => {
                     setShippingAddressData({
                       ...shippingAddressData,
-                      houseNo: text.target.value,
+                      house_no: text.target.value,
                     });
                   }}
                 />

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -59,6 +59,12 @@ function Categories(props) {
   const [openData, setOpenData] = useState(false);
   const [openCategory, setOpenCategory] = useState(true);
   const [open, setOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    totalPages: 1,
+    currentPage: 1,
+    itemsPerPage: 10,
+  });
 
   //   useEffect(() => {
   //     // if (category?._id) {
@@ -74,13 +80,13 @@ function Categories(props) {
       setOpenData(true);
       setSelectedCategories(cat_id || "all");
       setSelectedSortBy(sort_by || "is_top");
-      getproductByCategory(cat_id || "all", sort_by || "is_top");
+      // getproductByCategory(cat_id || "all", sort_by || "is_top", currentPage);
     } else if (!selectedSortBy) {
       // setSelectedSortBy('is_top');
-      getproductByCategory(router.query.cat_id || "all");
+      // getproductByCategory(router.query.cat_id || "all", currentPage);
       setSelectedCategories(cat_id || "all");
     } else {
-      getproductByCategory(router.query.cat_id || "all", selectedSortBy);
+      // getproductByCategory(router.query.cat_id || "all", selectedSortBy, currentPage);
       setSelectedCategories(cat_id || "all");
     }
   }, [router]);
@@ -109,44 +115,113 @@ function Categories(props) {
     );
   };
 
+  // const getproductByCategory = useCallback(
+  //   async (cat, sortBy = "", page = 1, limit = 2) => {
+  //     props.loader(true);
+  //     page = Number(page) || 1;
+  //     limit = Number(limit) || 2;
+  //     let parmas = { status: "verified" };
+  //     let url = `getProductBycategoryId?page=${page}&limit=${limit}`;
+  //     if (cat) {
+  //       parmas.category = cat;
+  //     }
+  //     if (sortBy) parmas.sort_by = sortBy || selectedSortBy;
+  //     Api("get", url, "", router, parmas).then(
+  //       (res) => {
+  //         props.loader(false);
+  //         console.log("res================>12", res);
+
+  //         if (res.data && Array.isArray(res.data)) {
+  //           console.log("original data", res.data[0]?.status);
+
+  //           const activeProducts = res.data.filter(
+  //             (product) => product.status !== "suspended"
+  //           );
+
+  //           console.log("Filtered Data:", activeProducts);
+
+  //           if (activeProducts.length > 0) {
+  //             SetProductList(activeProducts);
+  //             setPagination(res?.pagination);
+  //             setCurrentPage(res?.pagination?.currentPage);
+  //           } else {
+  //             SetProductList([]);
+  //             setPagination({ ...pagination, totalPages: 1 });
+  //             setCurrentPage(1);
+  //             props.toaster({
+  //               type: "info",
+  //               message: "No active products found",
+  //             });
+  //           }
+  //         } else {
+  //           console.error("Unexpected response format:", res);
+  //           props.toaster({
+  //             type: "error",
+  //             message: "Unexpected response format",
+  //           });
+  //         }
+  //       },
+  //       (err) => {
+  //         props.loader(false);
+  //         console.log(err);
+  //         props.toaster({ type: "error", message: err?.message });
+  //       }
+  //     );
+  //   },
+  //   [router, selectedSortBy, selectedCategories, currentPage]
+  // );
+
+  // useEffect(() => {
+  //   if (selectedCategories) {
+  //     getproductByCategory(
+  //       selectedCategories,
+  //       selectedSortBy,
+  //       currentPage || 1
+  //     );
+  //   }
+  // }, [selectedCategories, selectedSortBy, currentPage]);
+
+  // ✅ Controlled version: no internal fallback logic
   const getproductByCategory = useCallback(
-    async (cat, sortBy = "") => {
+    async (cat, sortBy, page, limit = 2) => {
       props.loader(true);
-      let parmas = { status: "verified" };
-      let url = `getProductBycategoryId`;
-      if (cat) {
-        parmas.category = cat;
-      }
-      if (sortBy) parmas.sort_by = sortBy || selectedSortBy;
-      Api("get", url, "", router, parmas).then(
+      page = Number(page) || 1;
+      limit = Number(limit) || 2;
+
+      let params = { status: "verified" };
+      let url = `getProductBycategoryId?page=${page}&limit=${limit}`;
+
+      if (cat) params.category = cat;
+      if (sortBy) params.sort_by = sortBy;
+
+      Api("get", url, "", router, params).then(
         (res) => {
-          props.loader(false);
-          console.log("res================>12", res);
+          // props.loader(false);
 
           if (res.data && Array.isArray(res.data)) {
-            console.log("original data", res.data[0]?.status);
-
             const activeProducts = res.data.filter(
               (product) => product.status !== "suspended"
             );
 
-            console.log("Filtered Data:", activeProducts);
-
             if (activeProducts.length > 0) {
               SetProductList(activeProducts);
+              setPagination(res?.pagination);
             } else {
               SetProductList([]);
+              setPagination({ totalPages: 1 });
               props.toaster({
                 type: "info",
                 message: "No active products found",
               });
             }
+            props.loader(false);
           } else {
             console.error("Unexpected response format:", res);
             props.toaster({
               type: "error",
               message: "Unexpected response format",
             });
+            props.loader(false);
           }
         },
         (err) => {
@@ -156,18 +231,44 @@ function Categories(props) {
         }
       );
     },
-    [router, selectedSortBy, selectedCategories]
+    // [router]
+    // []
+    [selectedCategories, selectedSortBy, currentPage]
   );
+
+  // useEffect(() => {
+  //   if (selectedCategories) {
+  //     getproductByCategory(selectedCategories, selectedSortBy, currentPage);
+  //   }
+  // }, [selectedCategories, selectedSortBy, currentPage]);
+
+  // const stableCategories = useMemo(
+  //   () => selectedCategories,
+  //   [selectedCategories]
+  // );
+
+  // useEffect(() => {
+  //   getproductByCategory(stableCategories, selectedSortBy, currentPage);
+  // }, [stableCategories, selectedSortBy, currentPage]);
 
   const handleSortChange = (sortByValue) => {
     props.loader(true);
     setSelectedSortBy(sortByValue);
-    getproductByCategory(selectedCategories, sortByValue);
+    getproductByCategory(selectedCategories, sortByValue, currentPage);
     router.replace({
       pathname: router.pathname,
       query: { ...router.query, sort_by: sortByValue },
     });
+    setCurrentPage(1);
     props.loader(false);
+  };
+
+  const handlePageChange = (_, value) => {
+    setPagination((prev) => ({
+      ...prev,
+      currentPage: value,
+    }));
+    setCurrentPage(value);
   };
 
   return (
@@ -343,6 +444,11 @@ function Categories(props) {
                             onChange={() => {
                               router.replace(`/categories/${item.slug}`);
                               setSelectedCategories(item?.slug);
+                              getproductByCategory(
+                                item?.slug,
+                                selectedSortBy,
+                                currentPage
+                              );
                             }}
                             checked={item.slug === selectedCategories}
                           />
@@ -387,15 +493,33 @@ function Categories(props) {
                   </div>
                 )}
               </div>
+              {pagination?.totalPages > 1 && (
+                <div className="py-5 flex justify-center items-end">
+                  <Pagination
+                    count={pagination?.totalPages || 1}
+                    page={currentPage}
+                    onChange={(event, value) => {
+                      if (!isNaN(value)) {
+                        setCurrentPage(value);
+                        getproductByCategory(
+                          selectedCategories,
+                          selectedSortBy,
+                          value
+                        );
+                      }
+                    }}
+                    // currentPage={currentPage}
+                    variant="outlined"
+                    color="primary"
+                    shape="rounded"
+                    showFirstButton
+                    showLastButton
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
-
-        {/* <div className='pt-5 flex justify-end items-end'>
-                        <Stack spacing={2}>
-                            <Pagination count={10} shape="rounded" size="small" />
-                        </Stack>
-                    </div> */}
       </section>
     </div>
   );

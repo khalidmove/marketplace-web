@@ -116,7 +116,7 @@ function orders(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full relative flex flex-col justify-center items-center lg:h-screen">
+      <section className="bg-white w-full relative flex flex-col justify-center items-center h-full min-h-screen">
         <div className="max-w-7xl mx-auto w-full md:px-6 px-5 2xl:px-0 md:pt-10 pt-5 md:pb-10 pb-5 h-full">
           {ordersData?.length > 0 && (
             <div className=" my-5 md:mt-6 md:mb-10 flex flex-col gap-3 md:gap-3 justify-center items-center">
