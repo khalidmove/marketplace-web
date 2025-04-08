@@ -56,6 +56,7 @@ const Navbar = (props) => {
   const [user, setUser] = useContext(userContext);
   const [wishlist, setWishlist] = useContext(wishlistContext);
   const [services, setServices] = useState([]);
+  const [tax, setTax] = useState(0);
   const [list, setList] = useState([
     { href: "/profile", title: "Profile" },
     { href: "/history", title: "History" },
@@ -156,7 +157,7 @@ const Navbar = (props) => {
   //   }
   //   // getCategory()
   // }, []);
-  
+
   const getFavourite = useCallback(() => {
     props.loader(true);
     Api("get", "getFavourite", "", router).then(
@@ -172,7 +173,7 @@ const Navbar = (props) => {
       }
     );
   }, [router]);
-  
+
   const getShippingAddress = useCallback(() => {
     props.loader(true);
     Api("get", "getShippingAddress", "", router)
@@ -186,7 +187,7 @@ const Navbar = (props) => {
         console.log(err);
       });
   }, [router]);
-  
+
   // ⬇ Effect runs only when token is available
   useEffect(() => {
     if (user?.token) {
@@ -194,6 +195,26 @@ const Navbar = (props) => {
       getShippingAddress();
     }
   }, [user?.token]);
+
+  const getTax = useCallback(() => {
+    Api("get", `getTax`, router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res.status);
+        setTax(res?.data[0]?.taxRate);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        props.toaster({ type: "error", message: err?.data?.message });
+        props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  }, [router]);
+
+  useEffect(() => {
+    getTax();
+  }, [getTax]);
 
   const getproductByCategory = async () => {
     props.loader(true);
@@ -795,7 +816,7 @@ const Navbar = (props) => {
                     confirmButtonText: "Yes",
                     cancelButtonText: "No",
                     confirmButtonColor: "#35035C",
-                    cancelButtonColor: "#d33",  
+                    cancelButtonColor: "#d33",
                     reverseButtons: true,
                     // width: "320px",
                     target: drawerElement,

@@ -229,7 +229,7 @@ function ProductDetails(props) {
 
   return (
     <div className="bg-white w-full">
-      <section className="bg-white w-full md:pt-10 pt-5 md:pb-5 pb-5 px-1 md:px-6 px-5 2xl:px-0">
+      <section className="bg-white w-full md:pt-10 pt-5 md:pb-5 pb-5 md:px-6 px-5 2xl:px-0">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
             <div className="border border-black p-[10px] rounded-[15px]">
@@ -312,7 +312,7 @@ function ProductDetails(props) {
                             </p>
                             <p className="text-custom-newPurpleColor font-semibold text-sm pt-2">
                               <span className="text-custom-newGray font-normal">
-                                {data?.value}{" "} {data?.unit ?? "unit"}
+                                {data?.value} {data?.unit ?? "unit"}
                               </span>
                             </p>
                           </div>
@@ -453,7 +453,7 @@ function ProductDetails(props) {
                           ...productsId,
                           qty: availableQty + 1,
                           price: selectedPrice.our_price,
-                          price_slot: selectedPrice, 
+                          price_slot: selectedPrice,
                           total: (
                             (selectedPrice.our_price || 0) *
                             (availableQty + 1)
@@ -522,7 +522,8 @@ function ProductDetails(props) {
                           price: selectedPrice.our_price,
                           price_slot: selectedPrice,
                           total: (
-                            Number(selectedPrice?.our_price || 0) * Number(availableQty || 1)
+                            Number(selectedPrice?.our_price || 0) *
+                            Number(availableQty || 1)
                           ).toFixed(2),
                           selectedColor:
                             productsId.selectedColor ||
