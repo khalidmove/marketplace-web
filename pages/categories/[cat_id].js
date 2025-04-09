@@ -183,10 +183,10 @@ function Categories(props) {
 
   // ✅ Controlled version: no internal fallback logic
   const getproductByCategory = useCallback(
-    async (cat, sortBy, page, limit = 2) => {
+    async (cat, sortBy, page, limit = 12) => {
       props.loader(true);
       page = Number(page) || 1;
-      limit = Number(limit) || 2;
+      limit = Number(limit) || 12;
 
       let params = { status: "verified" };
       let url = `getProductBycategoryId?page=${page}&limit=${limit}`;
@@ -242,14 +242,18 @@ function Categories(props) {
   //   }
   // }, [selectedCategories, selectedSortBy, currentPage]);
 
-  // const stableCategories = useMemo(
-  //   () => selectedCategories,
-  //   [selectedCategories]
-  // );
+  const stableCategories = useMemo(
+    () => selectedCategories,
+    [selectedCategories]
+  );
 
   // useEffect(() => {
   //   getproductByCategory(stableCategories, selectedSortBy, currentPage);
   // }, [stableCategories, selectedSortBy, currentPage]);
+
+  useEffect(() => {
+    getproductByCategory(stableCategories, selectedSortBy, currentPage);
+  }, [router]);
 
   const handleSortChange = (sortByValue) => {
     props.loader(true);
