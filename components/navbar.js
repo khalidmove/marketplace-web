@@ -181,6 +181,11 @@ const Navbar = (props) => {
         props.loader(false);
         console.log("res================>", res);
         setShippingAddressData(res?.data || {});
+        setShippingAddressData((prev) => ({
+          ...prev,
+          lat: res?.data?.location?.coordinates[1],
+          lng: res?.data?.location?.coordinates[0],
+        }));
       })
       .catch((err) => {
         props.loader(false);

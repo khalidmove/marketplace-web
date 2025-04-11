@@ -45,13 +45,13 @@ function signUp(props) {
       return;
     }
 
-    if (userDetail.referal.length < 12) {
-      props.toaster({
-        type: "error",
-        message: "Referral code should be at least 12 characters",
-      });
-      return;
-    }
+    // if (userDetail.referal.length < 12) {
+    //   props.toaster({
+    //     type: "error",
+    //     message: "Referral code should be at least 12 characters",
+    //   });
+    //   return;
+    // }
 
     if (!regex.test(userDetail.email)) {
       props.toaster({ type: "error", message: "Please enter a valid email" });
