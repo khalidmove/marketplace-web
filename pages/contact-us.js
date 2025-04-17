@@ -12,6 +12,7 @@ function contactUs(props) {
     email: "",
     phoneNumber: "",
     description: "",
+    reason: ""
   });
 
   const submit = (e) => {
@@ -29,6 +30,7 @@ function contactUs(props) {
       email: getInTouchData.email.toLowerCase(),
       phone: getInTouchData.phoneNumber,
       description: getInTouchData.description,
+      reason: getInTouchData.reason
     };
     Api("post", "getInTouch", data, router).then(
       (res) => {
@@ -41,6 +43,7 @@ function contactUs(props) {
             email: "",
             phoneNumber: "",
             description: "",
+            reason: ""
           });
           props.toaster({
             type: "success",
@@ -157,6 +160,32 @@ function contactUs(props) {
                     });
                   }}
                 />
+              </div>
+
+              <div className="w-full">
+                <p className="text-black font-normal  text-base">
+                  Reason
+                </p>
+                <select
+                  className="bg-white md:w-[428px] w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
+                  type="text"
+                  placeholder="Abc@def.com"
+                  required
+                  value={getInTouchData.reason}
+                  onChange={(text) => {
+                    setGetInTouchData({
+                      ...getInTouchData,
+                      reason: text.target.value,
+                    });
+                  }}
+                >
+                  <option hidden value="">Select Reason</option>
+                  <option value="Product Inquiry">Product Inquiry</option>
+                  <option value="Technical Support">Technical Support</option>
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Feedback">Feedback</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
               <div className="w-full">
