@@ -391,7 +391,6 @@ const Navbar = (props) => {
     // }
     let data = [];
     let cart = localStorage.getItem("addCartDetail");
-    // let address = localStorage.getItem("shippingAddressData");
     let d = JSON.parse(cart);
     d.forEach((element) => {
       console.log(element);
@@ -404,6 +403,7 @@ const Navbar = (props) => {
         price: element.price,
         qty: element.qty,
         seller_id: element.userid,
+        price_slot: element.price_slot
       });
     });
 

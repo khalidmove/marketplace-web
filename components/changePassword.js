@@ -70,7 +70,7 @@ function ChangePassword(props) {
                 <div className="w-full mx-auto max-w-[500px] h-full">
                     <div className="flex w-full items-center justify-center h-full">
                         <div className="flex w-full  px-3 flex-col justify-center items-center md:px-7  border rounded-xl shadow-xl">
-                            <p className="text-custom-orange text-3xl font-bold my-5">
+                            <p className="text-custom-black text-3xl font-bold my-5">
                                 {" "}
                                 Change Password
                             </p>
