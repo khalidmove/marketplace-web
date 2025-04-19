@@ -101,7 +101,7 @@ function Profile(props) {
   return (
     <>
       <div className="bg-white w-full">
-        <div className="max-w-7xl  mx-auto w-full">
+        <div className="max-w-7xl px-6 md:px-6 2xl:px-0  mx-auto w-full">
           <h1 className="text-black my-5 text-2xl font-semibold">
             Edit <span className="text-custom-orange">Profile</span>
           </h1>
