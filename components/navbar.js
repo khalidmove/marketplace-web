@@ -89,6 +89,7 @@ const Navbar = (props) => {
   const [CartItem, setCartItem] = useState(0);
   const [cartData, setCartData] = useContext(cartContext);
   const [showcart, setShowcart] = useState(false);
+  const [timeslot, setTimeslot] = useState("9:00 AM to 10:00 AM");
   const [shippingAddressData, setShippingAddressData] = useState({
     username: "",
     house_no: "",
@@ -403,7 +404,7 @@ const Navbar = (props) => {
         price: element.price,
         qty: element.qty,
         seller_id: element.userid,
-        price_slot: element.price_slot
+        price_slot: element.price_slot,
       });
     });
 
@@ -411,6 +412,7 @@ const Navbar = (props) => {
       productDetail: data,
       sold_pieces: d?.qty,
       total: mainTotal.toFixed(2),
+      timeslot: timeslot,
       shipping_address: {
         // ...shippingAddressData,
         username: shippingAddressData.username,
@@ -487,7 +489,8 @@ const Navbar = (props) => {
   );
   const totalWithTax = sumWithInitial + (sumWithInitial * tax) / 100;
   const redeemableAmount = redeemablePoints * pricePerPoint;
-  const finalAmount = totalWithTax + deliveryCharge + deliveryPartnerTip - redeemableAmount;
+  const finalAmount =
+    totalWithTax + deliveryCharge + deliveryPartnerTip - redeemableAmount;
 
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
@@ -660,6 +663,19 @@ const Navbar = (props) => {
                                     {"My order"}
                                   </div>
                                 </li>
+                                {user?.type === "SELLER" && (
+                                <li className="px-5 shadow-inner feature1  py-2">
+                                  <div
+                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                    aria-current="page"
+                                    onClick={() => {
+                                      router.push("https://main.d2a9crwz9t6xro.amplifyapp.com/");
+                                    }}
+                                  >
+                                    {"Dashboard"}
+                                  </div>
+                                </li>
+                                )}
                                 <li className="px-5 shadow-inner feature1  py-2">
                                   <div
                                     onClick={() => {
@@ -1054,9 +1070,7 @@ const Navbar = (props) => {
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
               <div className="flex justify-between items-center w-full pt-1">
-                <p className="font-normal text-base">
-                  Tax
-                </p>
+                <p className="font-normal text-base">Tax</p>
                 <p className="text-custom-purple font-normal text-base">
                   {tax}%
                 </p>
@@ -1114,7 +1128,7 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-             {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
+              {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
                 <p className="text-custom-grayColors font-normal text-base">
                   Delivery Partner Tip
                 </p>
@@ -1122,6 +1136,30 @@ const Navbar = (props) => {
                   {currencySign(deliveryPartnerTip)}
                 </p>
               </div> */}
+
+              <div className="flex justify-between items-center w-full pt-3">
+                <p className="text-custom-purple font-normal text-base">
+                  Time Slot
+                </p>
+                <select
+                  className="bg-white text-custom-purple font-normal text-base outline-none border border-custom-purple rounded-[8px] h-[40px] w-fit px-2"
+                  value={timeslot}
+                  onChange={(e) => {
+                    setTimeslot(e.target.value);
+                  }}
+                >
+                  <option value="9:00 AM to 10:00 AM">9:00 AM to 10:00 AM</option>
+                  <option value="10:00 AM to 11:00 AM">10:00 AM to 11:00 AM</option>
+                  <option value="11:00 AM to 12:00 PM">11:00 AM to 12:00 PM</option>
+                  <option value="12:00 PM to 1:00 PM">12:00 PM to 1:00 PM</option>
+                  <option value="1:00 PM to 2:00 PM">1:00 PM to 2:00 PM</option>
+                  <option value="2:00 PM to 3:00 PM">2:00 PM to 3:00 PM</option>
+                  <option value="3:00 PM to 4:00 PM">3:00 PM to 4:00 PM</option>
+                  <option value="4:00 PM to 5:00 PM">4:00 PM to 5:00 PM</option>
+                  <option value="5:00 PM to 6:00 PM">5:00 PM to 6:00 PM</option>
+                  <option value="6:00 PM to 7:00 PM">6:00 PM to 7:00 PM</option>
+                </select>
+              </div>
 
               <div className="flex justify-between items-center w-full pt-3">
                 <p className="text-custom-purple font-normal text-base">

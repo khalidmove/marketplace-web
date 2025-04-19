@@ -17,7 +17,7 @@ function contactUs(props) {
 
   const submit = (e) => {
       e.preventDefault();
-      if (!getInTouchData?.firstName || !getInTouchData?.email || !getInTouchData?.phoneNumber || !getInTouchData?.description) {
+      if (!getInTouchData?.firstName || !getInTouchData?.email || !getInTouchData?.phoneNumber || !getInTouchData?.description || !getInTouchData?.reason) {
           props.toaster({ type: "error", message: "All field are required !" });
           return
       }
@@ -32,6 +32,7 @@ function contactUs(props) {
       description: getInTouchData.description,
       reason: getInTouchData.reason
     };
+    
     Api("post", "getInTouch", data, router).then(
       (res) => {
         console.log("res================>", res);
@@ -130,14 +131,15 @@ function contactUs(props) {
                 </p>
                 <input
                   className="bg-white md:w-[428px] w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                  type="number"
+                  type="tel"
                   placeholder="Phone number"
                   required
+                  maxLength={10}
                   value={getInTouchData.phoneNumber}
                   onChange={(text) => {
                     setGetInTouchData({
                       ...getInTouchData,
-                      phoneNumber: text.target.value,
+                      phoneNumber: text.target.value.replace(/[^0-9]/g, ""),
                     });
                   }}
                 />
@@ -172,10 +174,10 @@ function contactUs(props) {
                   placeholder="Abc@def.com"
                   required
                   value={getInTouchData.reason}
-                  onChange={(text) => {
+                  onChange={(e) => {
                     setGetInTouchData({
                       ...getInTouchData,
-                      reason: text.target.value,
+                      reason: e.target.value,
                     });
                   }}
                 >
