@@ -8,6 +8,7 @@ import StarIcon from "@mui/icons-material/Star";
 import currencySign from "@/utils/currencySign";
 import { FaChevronDown } from "react-icons/fa";
 import dateFormat, { masks } from "dateformat";
+import RefundButton from "@/components/RefundButton";
 
 function orders(props) {
   const router = useRouter();
@@ -229,22 +230,25 @@ function orders(props) {
                         return (
                           <div
                             key={index}
-                            className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"
+                            className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"                          >
+                            <img
                             onClick={() => {
                               router.push(
                                 `/myorder/${order?._id}?product_id=${product?._id}`
                               );
                             }}
-                          >
-                            <img
                               className="w-20 h-20 text-black rounded-[10px] object-contain "
                               src={product.image[0]}
                               alt="Product"
                             />
-                            <div>
+                            <div className="w-full">
+                            <div className="flex items-center justify-between w-full">
                               <p className="text-black text-base font-bold">
                                 {product.product?.name || "Product Name"}
                               </p>
+                              <RefundButton refund={order?.return} deliveredAt={order?.deliveredAt} id={order?._id} productId={product?.product?._id}
+                               loader={props?.loader} toaster={props?.toaster} getProductRequestbyUser={getProductRequestbyUser} />
+                              </div>
                               <p className="text-black text-xs font-bold pt-[6px]">
                                 Quantity: {product.qty || 1}
                               </p>
