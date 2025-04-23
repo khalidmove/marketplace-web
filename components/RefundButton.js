@@ -8,7 +8,8 @@ import { RxCrossCircled } from "react-icons/rx";
 
 const RefundButton = ({
   deliveredAt,
-  refund,
+  refunded,
+  returned,
   id,
   productId,
   loader,
@@ -22,14 +23,18 @@ const RefundButton = ({
   const router = useRouter();
   const shouldShowRefund = useMemo(() => {
     if (!deliveredAt) return false;
-    if (refund) return false;
+    if (returned) return false;
+    if (refunded) return false;
+    // if (returned && refunded) return false;
 
     const deliveredTime = new Date(deliveredAt).getTime();
     const currentTime = Date.now();
     const fiveMinutes = 15 * 60 * 1000;
 
     return currentTime - deliveredTime <= fiveMinutes;
-  }, [deliveredAt, refund]);
+  }, [deliveredAt, returned, refunded]);
+
+  console.log(deliveredAt, returned, refunded, id, productId);
 
   const refundProduct = (order_id) => {
     if (!reason) {
