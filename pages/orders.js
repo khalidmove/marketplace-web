@@ -8,6 +8,7 @@ import StarIcon from "@mui/icons-material/Star";
 import currencySign from "@/utils/currencySign";
 import { FaChevronDown } from "react-icons/fa";
 import dateFormat, { masks } from "dateformat";
+import RefundButton from "@/components/RefundButton";
 
 function orders(props) {
   const router = useRouter();
@@ -210,16 +211,21 @@ function orders(props) {
                       </div>
                       <div className="flex justify-between gap-3 ">
                         <div className="flex justify-start gap-5">
-                        <p className="text-black  text-xl md:text-2xl ">
-                          My Booking
-                        </p>
-                        <p className="text-black text-xl md:text-2xl">
-                          ({dateFormat(order?.updatedAt, "isoDate")})
-                        </p>
+                          <p className="text-black  text-xl md:text-2xl ">
+                            My Booking
+                          </p>
+                          <p className="text-black text-xl md:text-2xl">
+                            ({dateFormat(order?.updatedAt, "isoDate")})
+                          </p>
                         </div>
-                      <div>
-                        <p className="text-black text-lg hidden sm:block">Total Amount : <span className="text-custom-purple font-semibold">{currencySign(order?.total) || "0.00"}</span></p>
-                      </div>
+                        <div>
+                          <p className="text-black text-lg hidden sm:block">
+                            Total Amount :{" "}
+                            <span className="text-custom-purple font-semibold">
+                              {currencySign(order?.total) || "0.00"}
+                            </span>
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -230,21 +236,42 @@ function orders(props) {
                           <div
                             key={index}
                             className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"
-                            onClick={() => {
-                              router.push(
-                                `/myorder/${order?._id}?product_id=${product?._id}`
-                              );
-                            }}
                           >
                             <img
+                              onClick={() => {
+                                router.push(
+                                  `/myorder/${order?._id}?product_id=${product?._id}`
+                                );
+                              }}
                               className="w-20 h-20 text-black rounded-[10px] object-contain "
                               src={product.image[0]}
                               alt="Product"
                             />
-                            <div>
-                              <p className="text-black text-base font-bold">
-                                {product.product?.name || "Product Name"}
-                              </p>
+                            <div className="w-full">
+                              <div className="flex items-center justify-between w-full">
+                                <p className="text-black text-base font-bold">
+                                  {product.product?.name || "Product Name"}
+                                </p>
+                                {/* {order?.productDetail?.map((item) => ( */}
+                                  <RefundButton
+                                    // key={product?.product?._id}
+                                    returned={
+                                      product?.returnDetails?.isReturned
+                                    }
+                                    refunded={
+                                      product?.returnDetails?.isRefunded
+                                    }
+                                    deliveredAt={order?.deliveredAt}
+                                    id={order?._id}
+                                    productId={product?.product?._id}
+                                    loader={props?.loader}
+                                    toaster={props?.toaster}
+                                    getProductRequestbyUser={
+                                      getProductRequestbyUser
+                                    }
+                                  />
+                                {/* // ))} */}
+                              </div>
                               <p className="text-black text-xs font-bold pt-[6px]">
                                 Quantity: {product.qty || 1}
                               </p>
@@ -257,11 +284,16 @@ function orders(props) {
                       })}
 
                     <div className="block sm:hidden">
-                    <div className="flex flex-col justify-center items-end">
-                      <p className="text-black  text-base font-bold"> Total:
-                        <span className="text-custom-purple"> ${order.total}</span>
-                      </p>
-                    </div>
+                      <div className="flex flex-col justify-center items-end">
+                        <p className="text-black  text-base font-bold">
+                          {" "}
+                          Total:
+                          <span className="text-custom-purple">
+                            {" "}
+                            ${order.total}
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
