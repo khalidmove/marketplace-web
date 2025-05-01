@@ -195,7 +195,7 @@ const RefundButton = ({
                     setReason("");
                     setSingleImg("");
                   }}
-                  className="bg-red-500 text-sm font-bold px-4 py-2 rounded-sm"
+                  className="bg-red-500 text-sm font-bold px-4 py-2 rounded-sm !text-white"
                 >
                   Cancel
                 </button>
@@ -204,7 +204,7 @@ const RefundButton = ({
                   onClick={() => {
                     refundProduct({ id });
                   }}
-                  className="bg-custom-purple text-sm font-bold px-4 py-2 rounded-sm disabled:bg-custom-purple/50 disabled:cursor-not-allowed"
+                  className="bg-custom-purple text-sm font-bold px-4 py-2 rounded-sm disabled:bg-custom-purple/50 disabled:cursor-not-allowed !text-white"
                 >
                   Confirm
                 </button>
@@ -215,7 +215,7 @@ const RefundButton = ({
       )}
       <button
         onClick={() => setOpen(true)}
-        className="bg-custom-purple text-xs font-bold px-4 py-2 rounded-sm"
+        className="bg-custom-purple text-xs font-bold px-4 py-2 rounded-sm !text-white"
       >
         Return
       </button>
