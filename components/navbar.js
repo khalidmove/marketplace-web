@@ -517,9 +517,9 @@ const Navbar = (props) => {
                     onClick={() => {
                       router.push("/");
                     }}
-                    className="md:w-[165px] w-[130px] h-[43px] object-contain cursor-pointer"
-                    src="/logo.png"
-                    alt="MarketPlace Logo"
+                    className="md:w-[165px] w-[130px] h-[43px] object-cover cursor-pointer"
+                    src="/logo.jpeg"
+                    alt="Resaz Logo"
                   />
                 </div>
 
@@ -763,9 +763,9 @@ const Navbar = (props) => {
                     onClick={() => {
                       router.push("/");
                     }}
-                    className="md:w-[165px] w-[130px] h-[43px] object-contain cursor-pointer"
-                    src="/logo.png"
-                    alt="MarketPlace Logo"
+                    className="md:w-[165px] w-[130px] h-[43px] object-cover cursor-pointer"
+                    src="/logo.jpeg"
+                    alt="Resaz Logo"
                   />
                 </div>
 

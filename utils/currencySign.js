@@ -1,8 +1,8 @@
 function currencySign(amount) {
     if (amount == null || isNaN(amount)) {
-        return '₹0';
+        return '0 IQD';
     }
-    return `₹${amount}`;
+    return `${amount} IQD`;
 }
 
 export default currencySign;

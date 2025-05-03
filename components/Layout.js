@@ -157,7 +157,7 @@ const Layout = ({ children, loader, toaster, constant }) => {
           {/* border-r-2 border-custom-lightBlue */}
           <div className=" w-60 h-60 p-4   flex justify-center items-center  border-b-2 border-custom-lightBlue">
             {/* border-4 border-b-2 border-custom-lightBlue */}
-            <img onClick={() => router.push("/")} src="/logo.png" className="rounded-md overflow-hidden" />
+            <img onClick={() => router.push("/")} src="/logo.jpeg" className="rounded-md overflow-hidden" />
           </div>
 
           <nav>

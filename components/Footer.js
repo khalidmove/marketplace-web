@@ -55,7 +55,7 @@ function Footer(props) {
               <div className="py-5">
                 <img
                   className="md:w-[165px] h-[43px]  object-cover  rounded-[5px] -mt-6"
-                  src="/logo.png"
+                  src="/logo.jpeg"
                   alt=""
                 />
               </div>
@@ -128,10 +128,10 @@ function Footer(props) {
           <div className="md:flex justify-between items-center">
             <p className="text-custom-darkGray text-base font-medium">© {moment().format('YYYY')}, All rights reserved</p>
             <div className="flex gap-5 md:pt-0 pt-5">
-              <img className="w-[44px] h-[44px] cursor-pointer" src="/facebookImg.png" />
-              <img className="w-[44px] h-[44px] cursor-pointer" src="/linkedinImg.png" />
-              <img className="w-[44px] h-[44px] cursor-pointer" src="/instagramImg.png" />
-              <img className="w-[44px] h-[44px] cursor-pointer" src="/twitterImg.png " />
+              <img onClick={() => window.open("https://www.facebook.com/share/16HHQtMX53/?mibextid=wwXIfr", "_blank")} className="w-[44px] h-[44px] cursor-pointer" src="/facebookImg.png" />
+              {/* <img className="w-[44px] h-[44px] cursor-pointer" src="/linkedinImg.png" /> */}
+              <img onClick={() => window.open("https://www.instagram.com/resazonline?igsh=a3pkbXo4OHd6dzhv&utm_source=qr", "_blank")} className="w-[44px] h-[44px] cursor-pointer" src="/instagramImg.png" />
+              {/* <img className="w-[44px] h-[44px] cursor-pointer" src="/twitterImg.png " /> */}
             </div>
           </div>
         </div>

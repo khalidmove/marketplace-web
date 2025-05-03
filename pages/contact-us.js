@@ -98,11 +98,17 @@ function contactUs(props) {
                     Phone
                   </p>
                 </div>
-                <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
+                {/* <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
                   Mobile: +(84) 546-6789
                 </p>
                 <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
                   Hotline: +(84) 456-6789
+                </p> */}
+                <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
+                  Mobile: +964-751-092-1850
+                </p>
+                <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
+                  Hotline: +964-751-092-1850
                 </p>
               </div>
             </div>
