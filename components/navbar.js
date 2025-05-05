@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { TiArrowSortedUp } from "react-icons/ti";
+import { TiArrowSortedUp, TiTimes } from "react-icons/ti";
 import { useContext } from "react";
 import {
   cartContext,
@@ -62,6 +62,7 @@ const Navbar = (props) => {
     { href: "/history", title: "History" },
   ]);
   const [currentCity, setCurrentCity] = useState("");
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
   // const [commonCity, setCommonCity] = useContext(cityContext)
   // const [initial, setInitial] = useContext(Context)
@@ -89,7 +90,6 @@ const Navbar = (props) => {
   const [CartItem, setCartItem] = useState(0);
   const [cartData, setCartData] = useContext(cartContext);
   const [showcart, setShowcart] = useState(false);
-  const [timeslot, setTimeslot] = useState("9:00 AM to 10:00 AM");
   const [shippingAddressData, setShippingAddressData] = useState({
     username: "",
     house_no: "",
@@ -104,8 +104,10 @@ const Navbar = (props) => {
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [deliveryPartnerTip, setDeliveryPartnerTip] = useState(0);
   const [mainTotal, setMainTotal] = useState(0);
+  const [timeslot, setTimeslot] = useState("");
   const [productList, SetProductList] = useState([]);
   const [noProductsFound, setNoProductsFound] = useState(false);
+  const [tips, setTips] = useState([]);
   const timeoutRef = useRef(null);
 
   // const handleSearch = () => {
@@ -194,11 +196,40 @@ const Navbar = (props) => {
       });
   }, [router]);
 
+  const getTimeSlot = useCallback(() => {
+    Api("get", `get-timeslot`, router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res.status);
+        if (res?.status === true) {
+          console.log(res?.data?.timeSlots);
+          setAvailableTimeSlots(res?.data?.timeSlots);
+        } else {
+          props.loader(false);
+          console.log(res?.data?.message);
+          props.toaster({ type: "error", message: res?.data?.message });
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        // props.toaster({ type: "error", message: err?.data?.message });
+        // props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  }, [router]);
+
   // ⬇ Effect runs only when token is available
   useEffect(() => {
     if (user?.token) {
       getFavourite();
       getShippingAddress();
+    }
+  }, [user?.token]);
+
+  useEffect(() => {
+    if (user?.token) {
+      getTimeSlot();
     }
   }, [user?.token]);
 
@@ -218,9 +249,56 @@ const Navbar = (props) => {
     );
   }, [router]);
 
+  const getDeliveryCharge = useCallback(() => {
+    Api("get", `getDeliveryCharge`, router).then(
+      (res) => {
+        props.loader(false);
+        console.log(res?.data);
+        setDeliveryCharge(res?.data?.deliveryCharge);
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        // props.toaster({ type: "error", message: err?.data?.message });
+        // props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  }, [props.loader, router]);
+
+  const getDeliveryPartnerTip = useCallback(() => {
+    Api("get", `getDeliveryPartnerTip`, router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res.status);
+        if (res?.status === true) {
+          console.log(res?.data?.timeSlots);
+          setTips(res?.data?.deliveryPartnerTip);
+        } else {
+          props.loader(false);
+          console.log(res?.data?.message);
+          props.toaster({ type: "error", message: res?.data?.message });
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+        // props.toaster({ type: "error", message: err?.data?.message });
+        // props.toaster({ type: "error", message: err?.message });
+      }
+    );
+  }, [props.loader, router]);
+
   useEffect(() => {
     getTax();
   }, [getTax]);
+
+  useEffect(() => {
+    getDeliveryCharge();
+  }, [getDeliveryCharge]);
+
+  useEffect(() => {
+    getDeliveryPartnerTip();
+  }, [getDeliveryPartnerTip]);
 
   const getproductByCategory = async () => {
     props.loader(true);
@@ -386,6 +464,11 @@ const Navbar = (props) => {
     if (e) {
       e.preventDefault();
     }
+
+    if (timeslot === "") {
+      props.toaster({ type: "warning", message: "Please select time slot" });
+      return;
+    }
     // if (cartData?.length === 0) {
     //   toaster({ type: "warning", message: 'Your cart is empty' });
     //   return
@@ -438,6 +521,8 @@ const Navbar = (props) => {
         ],
       },
       paymentmode: "cod",
+      deliveryCharge: deliveryCharge,
+      deliveryTip: deliveryPartnerTip,
     };
 
     // return
@@ -664,17 +749,19 @@ const Navbar = (props) => {
                                   </div>
                                 </li>
                                 {user?.type === "SELLER" && (
-                                <li className="px-5 shadow-inner feature1  py-2">
-                                  <div
-                                    className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
-                                    aria-current="page"
-                                    onClick={() => {
-                                      router.push("https://main.d2a9crwz9t6xro.amplifyapp.com/");
-                                    }}
-                                  >
-                                    {"Dashboard"}
-                                  </div>
-                                </li>
+                                  <li className="px-5 shadow-inner feature1  py-2">
+                                    <div
+                                      className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
+                                      aria-current="page"
+                                      onClick={() => {
+                                        router.push(
+                                          "https://main.d2a9crwz9t6xro.amplifyapp.com/"
+                                        );
+                                      }}
+                                    >
+                                      {"Dashboard"}
+                                    </div>
+                                  </li>
                                 )}
                                 <li className="px-5 shadow-inner feature1  py-2">
                                   <div
@@ -946,18 +1033,16 @@ const Navbar = (props) => {
                     className="md:w-[145px] md:h-[104px] w-[50px] h-[50px] object-contain"
                     src={item?.selectedImage || item?.image}
                   />
-                  <div className="pt-2">
-                    <p className="text-custom-purple font-semibold text-base pl-3">
+                  <div className="pt-2 items-start pl-2">
+                    <p className="text-custom-purple font-semibold text-base">
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="pl-3">
-                        {item?.price_slot?.value ?? 1}
-                      </span>{" "}
+                      <span className="">{item?.price_slot?.value ?? 1}</span>{" "}
                       <span>{item?.price_slot?.unit ?? "unit"}</span>
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="pl-3">
+                      <span className="">
                         {currencySign(item?.price_slot?.our_price)}
                       </span>{" "}
                       <span className="line-through">
@@ -1111,7 +1196,7 @@ const Navbar = (props) => {
 
               <div className="flex justify-between items-center w-full pt-1">
                 <p className="text-custom-red font-normal text-base">
-                  Delivery Fee ({currencySign(35)} Saved)
+                  Delivery Fee {deliveryCharge <= 0 ? "(Free)" : ""}
                 </p>
                 <p className="text-custom-purple font-normal text-base">
                   {currencySign(deliveryCharge)}
@@ -1120,12 +1205,42 @@ const Navbar = (props) => {
               </div>
 
               <div className="flex justify-between items-center w-full pt-1 border-b border-b-[#97999B80] pb-3">
-                <p className="text-custom-grayColors font-normal text-base">
+                <p className="text-gray-500 font-normal text-base">
                   Delivery Partner Tip
                 </p>
-                <p className="font-normal text-base text-custom-purple">
-                  {currencySign(deliveryPartnerTip)}
-                </p>
+                {deliveryPartnerTip ? (
+                  // Tip is selected: show tip + cancel icon
+                  <p className="relative flex items-center font-normal text-base text-custom-purple">
+                    {currencySign(deliveryPartnerTip)}
+                    <TiTimes
+                      className="text-red-700 cursor-pointer h-5 w-5 ml-2"
+                      onClick={() => {
+                        setDeliveryPartnerTip("");
+                        setMainTotal(totalWithTax + deliveryCharge);
+                      }}
+                    />
+                  </p>
+                ) : (
+                  // No tip selected: show dropdown
+                  <select
+                    className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
+                    onChange={(e) => {
+                      setDeliveryPartnerTip(Number(e.target.value));
+                      setMainTotal(
+                        totalWithTax + deliveryCharge + Number(e.target.value)
+                      );
+                    }}
+                  >
+                    <option value="" disabled selected>
+                      Select Tip
+                    </option>
+                    {tips?.map((item, i) => (
+                      <option key={i} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
@@ -1148,16 +1263,17 @@ const Navbar = (props) => {
                     setTimeslot(e.target.value);
                   }}
                 >
-                  <option value="9:00 AM to 10:00 AM">9:00 AM to 10:00 AM</option>
-                  <option value="10:00 AM to 11:00 AM">10:00 AM to 11:00 AM</option>
-                  <option value="11:00 AM to 12:00 PM">11:00 AM to 12:00 PM</option>
-                  <option value="12:00 PM to 1:00 PM">12:00 PM to 1:00 PM</option>
-                  <option value="1:00 PM to 2:00 PM">1:00 PM to 2:00 PM</option>
-                  <option value="2:00 PM to 3:00 PM">2:00 PM to 3:00 PM</option>
-                  <option value="3:00 PM to 4:00 PM">3:00 PM to 4:00 PM</option>
-                  <option value="4:00 PM to 5:00 PM">4:00 PM to 5:00 PM</option>
-                  <option value="5:00 PM to 6:00 PM">5:00 PM to 6:00 PM</option>
-                  <option value="6:00 PM to 7:00 PM">6:00 PM to 7:00 PM</option>
+                  <option value="" disabled>
+                    Select Time Slot
+                  </option>
+                  {availableTimeSlots?.map((item, i) => (
+                    <option
+                      key={i}
+                      value={item?.startTime + "-" + item?.endTime}
+                    >
+                      {item?.startTime} - {item?.endTime}
+                    </option>
+                  ))}
                 </select>
               </div>
 

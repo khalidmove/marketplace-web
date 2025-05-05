@@ -276,7 +276,7 @@ function orders(props) {
                                 Quantity: {product.qty || 1}
                               </p>
                               <p className="text-black text-xs   max-w-sm sm:w-full font-bold pt-[6px]">
-                                Order Id: {order._id}
+                                Order Id: {order.orderId || order._id}
                               </p>
                             </div>
                           </div>
