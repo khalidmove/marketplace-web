@@ -38,7 +38,10 @@ const RefundButton = ({
 
   const refundProduct = (order_id) => {
     if (!reason) {
-      toaster({ type: "error", message: "Please enter a reason for the return" });
+      toaster({
+        type: "error",
+        message: "Please enter a reason for the return",
+      });
       return;
     }
 
@@ -80,15 +83,18 @@ const RefundButton = ({
     if (!file) return;
     const fileSizeInMb = file.size / (1024 * 1024);
     if (fileSizeInMb > 1) {
-      toaster({ type: "error", message: "Too large file. Please upload a smaller image" });
+      toaster({
+        type: "error",
+        message: "Too large file. Please upload a smaller image",
+      });
       return;
     } else {
       new Compressor(file, {
         quality: 0.6,
         success: (compressedResult) => {
-          console.log(compressedResult)
-          const data = new FormData()
-          data.append('file', compressedResult)
+          console.log(compressedResult);
+          const data = new FormData();
+          data.append("file", compressedResult);
           loader(true);
           ApiFormData("post", "user/fileupload", data, router).then(
             (res) => {
@@ -106,7 +112,7 @@ const RefundButton = ({
             }
           );
           // compressedResult has the compressed file.
-          // Use the compressed file to upload the images to your server.        
+          // Use the compressed file to upload the images to your server.
           //   setCompressedFile(res)
         },
       });
@@ -152,7 +158,6 @@ const RefundButton = ({
                     type="text"
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    // className="border border-gray-300 rounded-sm px-2 py-1"
                     className="bg-white w-full h-[40px] px-2 rounded-[5px] border border-black/30 font-medium text-base text-black outline-none"
                     placeholder="Enter reason"
                   />
@@ -164,29 +169,32 @@ const RefundButton = ({
                   <input
                     type="file"
                     className="bg-white w-full h-[40px] py-1 px-2 rounded-[5px] border border-black/30 font-medium text-base text-black outline-none"
-                    accept="image/*"
+                    accept="image/*,video/*"
                     onChange={(event) => {
                       handleImageChange(event);
                     }}
                   />
-                  <span className="text-xs text-gray-700">Upload atleast two images</span>
+                  <span className="text-xs text-gray-700">
+                    Upload atleast two images
+                  </span>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
-                {singleImg && singleImg?.map((item, i) => (
-                <div className="relative" key={i}>
-                  <img
-                    className="md:w-20 w-[85px] h-20 object-contain"
-                    src={item}
-                  />
-                  <IoCloseCircleOutline
-                    className="text-red-700 cursor-pointer h-3 w-3 absolute left-[5px] top-[10px]"
-                    onClick={() => {
-                      closeIcon(item);
-                    }}
-                  />
+                  {singleImg &&
+                    singleImg?.map((item, i) => (
+                      <div className="relative" key={i}>
+                        <img
+                          className="md:w-20 w-[85px] h-20 object-contain"
+                          src={item}
+                        />
+                        <IoCloseCircleOutline
+                          className="text-red-700 cursor-pointer h-3 w-3 absolute left-[5px] top-[10px]"
+                          onClick={() => {
+                            closeIcon(item);
+                          }}
+                        />
+                      </div>
+                    ))}
                 </div>
-              ))}
-              </div>
               </div>
               <div className="flex mt-4 space-x-2">
                 <button
@@ -200,7 +208,7 @@ const RefundButton = ({
                   Cancel
                 </button>
                 <button
-                disabled={!reason || !singleImg}
+                  disabled={!reason || !singleImg}
                   onClick={() => {
                     refundProduct({ id });
                   }}

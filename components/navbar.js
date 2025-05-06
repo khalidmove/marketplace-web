@@ -1243,6 +1243,19 @@ const Navbar = (props) => {
                 )}
               </div>
 
+              <div className="flex justify-between items-center w-full border-b border-b-[#97999B80] py-3">
+                <p className="text-gray-500 font-normal text-base">
+                  Payment Method
+                </p>
+                  <select
+                    className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
+                  >
+                    <option value="" disabled selected>
+                      Cash
+                    </option>
+                  </select>
+              </div>
+
               {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
                 <p className="text-custom-grayColors font-normal text-base">
                   Delivery Partner Tip
