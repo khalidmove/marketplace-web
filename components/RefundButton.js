@@ -78,21 +78,67 @@ const RefundButton = ({
     );
   };
 
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (!file) return;
+  //   const fileSizeInMb = file.size / (1024 * 1024);
+  //   if (fileSizeInMb > 1) {
+  //     toaster({
+  //       type: "error",
+  //       message: "Too large file. Please upload a smaller image",
+  //     });
+  //     return;
+  //   } else {
+  //     new Compressor(file, {
+  //       quality: 0.6,
+  //       success: (compressedResult) => {
+  //         console.log(compressedResult);
+  //         const data = new FormData();
+  //         data.append("file", compressedResult);
+  //         loader(true);
+  //         ApiFormData("post", "user/fileupload", data, router).then(
+  //           (res) => {
+  //             loader(false);
+  //             if (res.status) {
+  //               // setSingleImg(res.data.file)
+  //               setSingleImg((prev) => [...prev, res.data.file]);
+  //               toaster({ type: "success", message: res.data.message });
+  //             }
+  //           },
+  //           (err) => {
+  //             loader(false);
+  //             console.log(err);
+  //             toaster({ type: "error", message: err?.message });
+  //           }
+  //         );
+  //         // compressedResult has the compressed file.
+  //         // Use the compressed file to upload the images to your server.
+  //         //   setCompressedFile(res)
+  //       },
+  //     });
+  //   }
+  //   const reader = new FileReader();
+  // };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
+
     const fileSizeInMb = file.size / (1024 * 1024);
-    if (fileSizeInMb > 1) {
-      toaster({
-        type: "error",
-        message: "Too large file. Please upload a smaller image",
-      });
-      return;
-    } else {
+    const fileType = file.type;
+
+    if (fileType.startsWith("image/")) {
+      if (fileSizeInMb > 1) {
+        toaster({
+          type: "error",
+          message: "Image too large. Please upload an image under 1MB.",
+        });
+        return;
+      }
+
       new Compressor(file, {
         quality: 0.6,
         success: (compressedResult) => {
-          console.log(compressedResult);
           const data = new FormData();
           data.append("file", compressedResult);
           loader(true);
@@ -100,24 +146,60 @@ const RefundButton = ({
             (res) => {
               loader(false);
               if (res.status) {
-                // setSingleImg(res.data.file)
                 setSingleImg((prev) => [...prev, res.data.file]);
                 toaster({ type: "success", message: res.data.message });
               }
             },
             (err) => {
               loader(false);
-              console.log(err);
               toaster({ type: "error", message: err?.message });
             }
           );
-          // compressedResult has the compressed file.
-          // Use the compressed file to upload the images to your server.
-          //   setCompressedFile(res)
         },
       });
+    } else if (fileType.startsWith("video/")) {
+      if (fileSizeInMb > 2) {
+        toaster({
+          type: "error",
+          message: "Video too large. Please upload a video under 2MB.",
+        });
+        return;
+      }
+
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        if (video.duration > 15) {
+          toaster({
+            type: "error",
+            message: "Video too long. Maximum allowed duration is 15 seconds.",
+          });
+          return;
+        }
+
+        const data = new FormData();
+        data.append("file", file);
+        loader(true);
+        ApiFormData("post", "user/fileupload", data, router).then(
+          (res) => {
+            loader(false);
+            if (res.status) {
+              setSingleImg((prev) => [...prev, res.data.file]);
+              toaster({ type: "success", message: res.data.message });
+            }
+          },
+          (err) => {
+            loader(false);
+            toaster({ type: "error", message: err?.message });
+          }
+        );
+      };
+
+      video.src = URL.createObjectURL(file);
+    } else {
+      toaster({ type: "error", message: "Unsupported file type." });
     }
-    const reader = new FileReader();
   };
 
   const closeIcon = (itemToRemove) => {
@@ -180,20 +262,32 @@ const RefundButton = ({
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {singleImg &&
-                    singleImg?.map((item, i) => (
-                      <div className="relative" key={i}>
-                        <img
-                          className="md:w-20 w-[85px] h-20 object-contain"
-                          src={item}
-                        />
-                        <IoCloseCircleOutline
-                          className="text-red-700 cursor-pointer h-3 w-3 absolute left-[5px] top-[10px]"
-                          onClick={() => {
-                            closeIcon(item);
-                          }}
-                        />
-                      </div>
-                    ))}
+                    singleImg.map((item, i) => {
+                      const isVideo = item?.match(/\.(mp4|webm|ogg)$/i);
+
+                      return (
+                        <div className="relative" key={i}>
+                          {isVideo ? (
+                            <video
+                              className="md:w-20 w-[85px] h-20 object-contain"
+                              src={item}
+                              alt={`uploaded-${i}`}
+                              autoPlay
+                            />
+                          ) : (
+                            <img
+                              className="md:w-20 w-[85px] h-20 object-contain"
+                              src={item}
+                              alt={`uploaded-${i}`}
+                            />
+                          )}
+                          <IoCloseCircleOutline
+                            className="text-red-700 cursor-pointer h-3 w-3 absolute left-[5px] top-[10px]"
+                            onClick={() => closeIcon(item)}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div className="flex mt-4 space-x-2">
