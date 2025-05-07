@@ -101,11 +101,11 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
   return (
     <div
       key={i}
-      className="flex border border-featuredProducts-borderColor bg-white flex-col md:pb-5 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-5"
+      className="flex border border-featuredProducts-borderColor bg-white flex-col md:pb-5 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-3"
     >
       {/* w-[228px]  */}
       <img
-        className="h-[144px] w-full object-contain"
+        className="h-[144px] w-full object-cover"
         src={item?.varients[0]?.image[0]}
         onClick={() => {
           router.push(url);
