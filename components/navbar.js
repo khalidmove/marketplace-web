@@ -228,10 +228,10 @@ const Navbar = (props) => {
   }, [user?.token]);
 
   useEffect(() => {
-    if (user?.token) {
+    // if (user?.token) {
       getTimeSlot();
-    }
-  }, [user?.token]);
+    // }
+  }, [user?.token, router]);
 
   const getTax = useCallback(() => {
     Api("get", `getTax`, router).then(

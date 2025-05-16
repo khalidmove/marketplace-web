@@ -175,8 +175,8 @@ export default function Home(props) {
         props.loader(false);
         console.log("res================>", res);
         if (res?.success) {
-          if (res?.setting.length > 0) {
-            setCarouselImg(res?.setting[0].carousel?.slice(2, 4));
+          if (res?.setting?.length > 0) {
+            setCarouselImg(res?.setting[0].carousel?.slice(0, 2));
           }
         } else {
           props.loader(false);
