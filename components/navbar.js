@@ -621,7 +621,7 @@ const Navbar = (props) => {
                     <input
                       type="text"
                       placeholder="Search for items..."
-                      className="w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
+                      className="md:w-[255px] w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
                       ref={inputRef2}
                       value={serchData}
                       onChange={handleInputChange}
