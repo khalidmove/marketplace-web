@@ -285,13 +285,13 @@ function orders(props) {
                       })}
 
                     <div className="col-span-3 flex flex-wrap w-full gap-4 items-end text-black">
-                      <span class="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
+                      <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
                         Tax: {"  "}<span>{currencySign(order.tax)}</span>
                       </span>
-                      <span class="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
+                      <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
                         Delivery Charge: {"  "}<span>{currencySign(order.deliveryCharge)}</span>
                       </span>
-                      <span class="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
+                      <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
                         Delivery Tip: {"  "}<span>{currencySign(order.deliveryTip)}</span>
                       </span>
                     </div>

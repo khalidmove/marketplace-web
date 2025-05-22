@@ -535,6 +535,8 @@ const Navbar = (props) => {
           setCartData([]);
           setCartTotal(0);
           setShowcart(false);
+          setDeliveryPartnerTip(0);
+          setTimeslot("");
           // localStorage.setItem("shippingAddressData", JSON.stringify(shippingAddressData));
           localStorage.removeItem("addCartDetail");
           props.toaster({ type: "success", message: res.data?.message });
@@ -621,7 +623,7 @@ const Navbar = (props) => {
                     <input
                       type="text"
                       placeholder="Search for items..."
-                      className="md:w-[255px] w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
+                      className="md:w-[255px] lg:w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
                       ref={inputRef2}
                       value={serchData}
                       onChange={handleInputChange}
@@ -868,7 +870,7 @@ const Navbar = (props) => {
                         inputRef2.current.focus();
                       }, 200);
                     }}
-                    className="bg-white min-w-32 justify-start items-center px-3 h-10 w-full rounded-[62px] outline-none flex  text-black text-xs font-normal"
+                    className="bg-white min-w-32 justify-start items-center px-3 h-10 w-full rounded-[62px] outline-none flex text-black text-xs font-normal"
                   >
                     {" "}
                     {serchData || "Search for items..."}
@@ -1215,7 +1217,7 @@ const Navbar = (props) => {
                     <TiTimes
                       className="text-red-700 cursor-pointer h-5 w-5 ml-2"
                       onClick={() => {
-                        setDeliveryPartnerTip("");
+                        setDeliveryPartnerTip(0);
                         setMainTotal(totalWithTax + deliveryCharge);
                       }}
                     />

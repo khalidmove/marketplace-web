@@ -18,7 +18,7 @@ const Loader = (props) => {
         color="#35035C"
         ariaLabel="circles-loading"
         wrapperStyle={{}}
-        wrapperClass=""
+        wrapperclassName=""
         visible={true}
       />
     </Backdrop>
