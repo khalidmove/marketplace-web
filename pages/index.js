@@ -72,6 +72,25 @@ export default function Home(props) {
     },
   };
 
+  const responsiveCarousel = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 3,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 2,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
   const getCategory = async () => {
     props.loader(true);
     Api("get", "getCategory", "", router).then(
@@ -175,8 +194,9 @@ export default function Home(props) {
         props.loader(false);
         console.log("res================>", res);
         if (res?.success) {
-          if (res?.setting.length > 0) {
-            setCarouselImg(res?.setting[0].carousel?.slice(2, 4));
+          if (res?.setting?.length > 0) {
+            // setCarouselImg(res?.setting[0].carousel?.slice(0, 2));
+            setCarouselImg(res?.setting[0].carousel);
           }
         } else {
           props.loader(false);
@@ -280,7 +300,14 @@ export default function Home(props) {
 
       <section className="w-full bg-white px-1 md:px-6 2xl:px-0 hidden md:block">
         <div className="max-w-7xl  mx-auto w-full md:py-10 py-5 md:px-0 px-5">
-          <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
+          <div className="w-full gap-5">
+            <Carousel
+              className="h-full w-full gap-5"
+              responsive={responsiveCarousel}
+              autoPlay={true}
+              infinite={true}
+              arrows={false}
+            >
             {carouselImg.map((d, i) => {
               return (
                 <div
@@ -297,6 +324,7 @@ export default function Home(props) {
                 </div>
               );
             })}
+            </Carousel>
 
             {/* <div className="bg-[url('/backgroundImg-2.png')] bg-cover bg-no-repeat w-full md:h-[300px]">
               <div className="grid grid-cols-3 w-full gap-5">
