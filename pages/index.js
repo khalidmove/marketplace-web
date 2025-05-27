@@ -9,9 +9,11 @@ import { Api } from "@/services/service";
 import { useRouter } from "next/router";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useTranslation } from "react-i18next";
 
 export default function Home(props) {
   const router = useRouter();
+  const {t} = useTranslation()
   const [categoryData, setCategoryData] = useState([]);
   const [productsList, setProductsList] = useState([]);
   const [bestSellsData, setBestSellsData] = useState([]);
@@ -227,7 +229,7 @@ export default function Home(props) {
       <section className="max-w-7xl mx-auto w-full md:py-10 py-5 md:px-0 px-5">
         <div className="md:flex justify-between items-center w-full">
           <p className="text-black md:text-[32px] text-2xl font-semibold w-full px-1 md:px-6 2xl:px-0">
-            Explore by Categories
+            {t("Explore by Categories")}
           </p>
           {/* <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
             <p className="text-custom-purple text-base font-bold cursor-pointer" onClick={() => { router.push(`/categories/all?is_top=true`) }}>View All</p>
@@ -259,7 +261,7 @@ export default function Home(props) {
       <section className="max-w-7xl  mx-auto w-full   md:py-10 py-5 md:px-0 px-5">
         <div className="md:flex justify-between items-center w-full  md:mb-10 mb-5 px-1 md:px-6 2xl:px-0">
           <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
-            Featured Products
+            {t('Featured Products')}
           </p>
           <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end justify-start md:pt-0 pt-2">
             <p
@@ -268,7 +270,7 @@ export default function Home(props) {
                 router.push(`/categories/all?category=all&sort_by=featured`);
               }}
             >
-              View All
+              {t("View All")}
             </p>
             {/* <p className="text-custom-purple text-base font-semibold">Vegetables</p>
             <p className="text-custom-darkGray text-base font-medium">Fruits</p>
@@ -356,7 +358,7 @@ export default function Home(props) {
           <div className="md:flex md:justify-between items-center w-full">
             <div className="md:flex w-full md:justify-between items-center gap-5 px-1 md:px-6 2xl:px-0">
               <p className="text-black md:text-[32px] text-2xl font-semibold w-full">
-                Daily Best Sells
+                {t("Daily Best Sells")}
               </p>
               <div className="flex md:gap-5 gap-3 w-full md:items-end items-center md:justify-end  justify-start md:pt-0 pt-2">
                 <p
@@ -365,7 +367,7 @@ export default function Home(props) {
                     router.push(`/categories/all?category=all&sort_by=is_top`);
                   }}
                 >
-                  View All
+                  {t("View All")}
                 </p>
               </div>
               {/* <div className='flex justify-start items-center gap-5 md:pt-0 pt-3'>

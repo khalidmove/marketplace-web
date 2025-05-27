@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Api } from '@/services/service';
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 function PrivacyPolicy(props) {
 
@@ -9,7 +10,7 @@ function PrivacyPolicy(props) {
     });
     const [loading, setLoading] = useState(true);
     const router = useRouter();
-
+    const { t } = useTranslation()
     const getPrivacyPolicy = () => {
         props.loader(true);  // Show the loader while fetching
         Api("get", "/content", router).then(
@@ -48,11 +49,11 @@ function PrivacyPolicy(props) {
                 {/* {loading ? (
                     <p className="text-base text-black font-normal md:pb-5">Loading...</p>
                 ) : ( */}
-                    <div>
-                        <p
-                            className='text-2xl text-black font-bold md:pb-5 pb-2'>Privacy policy</p>
-                        <div className="text-base text-black font-normal md:pb-5" dangerouslySetInnerHTML={{ __html: privacyPolicy?.privacy }} />
-                    </div>
+                <div>
+                    <p
+                        className='text-2xl text-black font-bold md:pb-5 pb-2'>{t("Privacy Policy")}</p>
+                    <div className="text-base text-black font-normal md:pb-5" dangerouslySetInnerHTML={{ __html: privacyPolicy?.privacy }} />
+                </div>
 
 
                 {/* )} */}

@@ -22,6 +22,7 @@ import { FaMapMarker, FaMapMarkerAlt, FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FiSearch } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import {
   IoAddSharp,
   IoCloseCircleOutline,
@@ -63,7 +64,7 @@ const Navbar = (props) => {
   ]);
   const [currentCity, setCurrentCity] = useState("");
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-
+  const { t } = useTranslation()
   // const [commonCity, setCommonCity] = useContext(cityContext)
   // const [initial, setInitial] = useContext(Context)
   // const [mobile, setMobile] = useState(false);
@@ -229,7 +230,7 @@ const Navbar = (props) => {
 
   useEffect(() => {
     // if (user?.token) {
-      getTimeSlot();
+    getTimeSlot();
     // }
   }, [user?.token, router]);
 
@@ -416,7 +417,7 @@ const Navbar = (props) => {
     },
   ];
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
   // console.log(props?.user);
 
   useEffect(() => {
@@ -613,16 +614,16 @@ const Navbar = (props) => {
                 <div className="hidden md:flex gap-10 font-medium">
                   <div
                     className="relative flex justify-end w-full "
-                    // onClick={() => {
-                    //   setShowCategory1(true)
-                    //   setTimeout(() => {
-                    //     inputRef2.current.focus();
-                    //   }, 200);
-                    // }}
+                  // onClick={() => {
+                  //   setShowCategory1(true)
+                  //   setTimeout(() => {
+                  //     inputRef2.current.focus();
+                  //   }, 200);
+                  // }}
                   >
                     <input
                       type="text"
-                      placeholder="Search for items..."
+                      placeholder={t("Search for items...")}
                       className="md:w-[255px] lg:w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
                       ref={inputRef2}
                       value={serchData}
@@ -669,7 +670,7 @@ const Navbar = (props) => {
                         )}
                       </div>
                       <span className="text-black text-xs	font-medium">
-                        Wishlist
+                        {t("Wishlist")}
                       </span>
                     </li>
                     <li
@@ -691,7 +692,7 @@ const Navbar = (props) => {
                       </div>
                       {/* <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" /> */}
                       <span className="text-black text-xs	font-medium">
-                        My cart
+                        {t("My cart")}
                       </span>
                     </li>
                   </ul>
@@ -907,9 +908,8 @@ const Navbar = (props) => {
         anchor={"right"}
       >
         <div
-          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${
-            !cartData.length ? "h-full" : ""
-          }`}
+          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${!cartData.length ? "h-full" : ""
+            }`}
         >
           <div className="bg-white w-full rounded-[5px]  boxShadows md:p-5 p-2 flex justify-between items-center">
             <div
@@ -1249,13 +1249,13 @@ const Navbar = (props) => {
                 <p className="text-gray-500 font-normal text-base">
                   Payment Method
                 </p>
-                  <select
-                    className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
-                  >
-                    <option value="" disabled selected>
-                      Cash
-                    </option>
-                  </select>
+                <select
+                  className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
+                >
+                  <option value="" disabled selected>
+                    Cash
+                  </option>
+                </select>
               </div>
 
               {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">
