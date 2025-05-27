@@ -146,7 +146,7 @@ function HeaderFirst(props) {
             <p className="my-1 text-red-500">
               <FaPhoneAlt />
             </p>
-            <a href="tel:6393274099" className="text-red-500 font-medium cursor-pointer">1237849112</a>
+            <a href="tel:+964-751-092-1850" className="text-red-500 font-medium cursor-pointer">+964-751-092-1850</a>
             {/* <p className="font-medium text-gray-500 cursor-pointer"
               onClick={()=>{router.push("/create-store")}}
             >

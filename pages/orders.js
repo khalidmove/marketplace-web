@@ -210,7 +210,7 @@ function orders(props) {
                         </p>
                       </div>
                       <div className="flex justify-between gap-3 ">
-                        <div className="flex justify-start gap-5">
+                        <div className="grid md:flex justify-start md:gap-5">
                           <p className="text-black  text-xl md:text-2xl ">
                             My Booking
                           </p>
@@ -235,7 +235,7 @@ function orders(props) {
                         return (
                           <div
                             key={index}
-                            className="md:col-span-3 md:rounded p-2 md:border md:border-custom-purple flex gap-5 cursor-pointer"
+                            className="md:col-span-3 col-span-1 md:rounded p-2 md:border md:border-custom-purple flex flex-wrap md:flex-nowrap gap-5 cursor-pointer"
                           >
                             <img
                               onClick={() => {
@@ -253,35 +253,48 @@ function orders(props) {
                                   {product.product?.name || "Product Name"}
                                 </p>
                                 {/* {order?.productDetail?.map((item) => ( */}
-                                  <RefundButton
-                                    // key={product?.product?._id}
-                                    returned={
-                                      product?.returnDetails?.isReturned
-                                    }
-                                    refunded={
-                                      product?.returnDetails?.isRefunded
-                                    }
-                                    deliveredAt={order?.deliveredAt}
-                                    id={order?._id}
-                                    productId={product?.product?._id}
-                                    loader={props?.loader}
-                                    toaster={props?.toaster}
-                                    getProductRequestbyUser={
-                                      getProductRequestbyUser
-                                    }
-                                  />
+                                <RefundButton
+                                  // key={product?.product?._id}
+                                  returned={product?.returnDetails?.isReturned}
+                                  refunded={product?.returnDetails?.isRefunded}
+                                  deliveredAt={order?.deliveredAt}
+                                  id={order?._id}
+                                  productId={product?.product?._id}
+                                  loader={props?.loader}
+                                  toaster={props?.toaster}
+                                  getProductRequestbyUser={
+                                    getProductRequestbyUser
+                                  }
+                                />
                                 {/* // ))} */}
                               </div>
                               <p className="text-black text-xs font-bold pt-[6px]">
                                 Quantity: {product.qty || 1}
                               </p>
                               <p className="text-black text-xs   max-w-sm sm:w-full font-bold pt-[6px]">
-                                Order Id: {order._id}
+                                Order Id: {order.orderId || order._id}
                               </p>
                             </div>
+                            <div className="w-[150px] flex flex-col justify-center md:items-end">
+                              <p className="text-black text-base font-bold">
+                                $ {currencySign(product?.price)}
+                              </p>
+                          </div>
                           </div>
                         );
                       })}
+
+                    <div className="col-span-3 flex flex-wrap w-full gap-4 items-end text-black">
+                      <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
+                        Tax: {"  "}<span>{currencySign(order.tax)}</span>
+                      </span>
+                      <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
+                        Delivery Charge: {"  "}<span>{currencySign(order.deliveryCharge)}</span>
+                      </span>
+                      <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
+                        Delivery Tip: {"  "}<span>{currencySign(order.deliveryTip)}</span>
+                      </span>
+                    </div>
 
                     <div className="block sm:hidden">
                       <div className="flex flex-col justify-center items-end">

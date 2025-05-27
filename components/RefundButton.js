@@ -38,7 +38,10 @@ const RefundButton = ({
 
   const refundProduct = (order_id) => {
     if (!reason) {
-      toaster({ type: "error", message: "Please enter a reason for the return" });
+      toaster({
+        type: "error",
+        message: "Please enter a reason for the return",
+      });
       return;
     }
 
@@ -75,43 +78,128 @@ const RefundButton = ({
     );
   };
 
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (!file) return;
+  //   const fileSizeInMb = file.size / (1024 * 1024);
+  //   if (fileSizeInMb > 1) {
+  //     toaster({
+  //       type: "error",
+  //       message: "Too large file. Please upload a smaller image",
+  //     });
+  //     return;
+  //   } else {
+  //     new Compressor(file, {
+  //       quality: 0.6,
+  //       success: (compressedResult) => {
+  //         console.log(compressedResult);
+  //         const data = new FormData();
+  //         data.append("file", compressedResult);
+  //         loader(true);
+  //         ApiFormData("post", "user/fileupload", data, router).then(
+  //           (res) => {
+  //             loader(false);
+  //             if (res.status) {
+  //               // setSingleImg(res.data.file)
+  //               setSingleImg((prev) => [...prev, res.data.file]);
+  //               toaster({ type: "success", message: res.data.message });
+  //             }
+  //           },
+  //           (err) => {
+  //             loader(false);
+  //             console.log(err);
+  //             toaster({ type: "error", message: err?.message });
+  //           }
+  //         );
+  //         // compressedResult has the compressed file.
+  //         // Use the compressed file to upload the images to your server.
+  //         //   setCompressedFile(res)
+  //       },
+  //     });
+  //   }
+  //   const reader = new FileReader();
+  // };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
+
     const fileSizeInMb = file.size / (1024 * 1024);
-    if (fileSizeInMb > 1) {
-      toaster({ type: "error", message: "Too large file. Please upload a smaller image" });
-      return;
-    } else {
+    const fileType = file.type;
+
+    if (fileType.startsWith("image/")) {
+      if (fileSizeInMb > 1) {
+        toaster({
+          type: "error",
+          message: "Image too large. Please upload an image under 1MB.",
+        });
+        return;
+      }
+
       new Compressor(file, {
         quality: 0.6,
         success: (compressedResult) => {
-          console.log(compressedResult)
-          const data = new FormData()
-          data.append('file', compressedResult)
+          const data = new FormData();
+          data.append("file", compressedResult);
           loader(true);
           ApiFormData("post", "user/fileupload", data, router).then(
             (res) => {
               loader(false);
               if (res.status) {
-                // setSingleImg(res.data.file)
                 setSingleImg((prev) => [...prev, res.data.file]);
                 toaster({ type: "success", message: res.data.message });
               }
             },
             (err) => {
               loader(false);
-              console.log(err);
               toaster({ type: "error", message: err?.message });
             }
           );
-          // compressedResult has the compressed file.
-          // Use the compressed file to upload the images to your server.        
-          //   setCompressedFile(res)
         },
       });
+    } else if (fileType.startsWith("video/")) {
+      if (fileSizeInMb > 2) {
+        toaster({
+          type: "error",
+          message: "Video too large. Please upload a video under 2MB.",
+        });
+        return;
+      }
+
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        if (video.duration > 15) {
+          toaster({
+            type: "error",
+            message: "Video too long. Maximum allowed duration is 15 seconds.",
+          });
+          return;
+        }
+
+        const data = new FormData();
+        data.append("file", file);
+        loader(true);
+        ApiFormData("post", "user/fileupload", data, router).then(
+          (res) => {
+            loader(false);
+            if (res.status) {
+              setSingleImg((prev) => [...prev, res.data.file]);
+              toaster({ type: "success", message: res.data.message });
+            }
+          },
+          (err) => {
+            loader(false);
+            toaster({ type: "error", message: err?.message });
+          }
+        );
+      };
+
+      video.src = URL.createObjectURL(file);
+    } else {
+      toaster({ type: "error", message: "Unsupported file type." });
     }
-    const reader = new FileReader();
   };
 
   const closeIcon = (itemToRemove) => {
@@ -152,7 +240,6 @@ const RefundButton = ({
                     type="text"
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    // className="border border-gray-300 rounded-sm px-2 py-1"
                     className="bg-white w-full h-[40px] px-2 rounded-[5px] border border-black/30 font-medium text-base text-black outline-none"
                     placeholder="Enter reason"
                   />
@@ -164,29 +251,44 @@ const RefundButton = ({
                   <input
                     type="file"
                     className="bg-white w-full h-[40px] py-1 px-2 rounded-[5px] border border-black/30 font-medium text-base text-black outline-none"
-                    accept="image/*"
+                    accept="image/*,video/*"
                     onChange={(event) => {
                       handleImageChange(event);
                     }}
                   />
-                  <span className="text-xs text-gray-700">Upload atleast two images</span>
+                  <span className="text-xs text-gray-700">
+                    Upload atleast two images
+                  </span>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
-                {singleImg && singleImg?.map((item, i) => (
-                <div className="relative" key={i}>
-                  <img
-                    className="md:w-20 w-[85px] h-20 object-contain"
-                    src={item}
-                  />
-                  <IoCloseCircleOutline
-                    className="text-red-700 cursor-pointer h-3 w-3 absolute left-[5px] top-[10px]"
-                    onClick={() => {
-                      closeIcon(item);
-                    }}
-                  />
+                  {singleImg &&
+                    singleImg.map((item, i) => {
+                      const isVideo = item?.match(/\.(mp4|webm|ogg)$/i);
+
+                      return (
+                        <div className="relative" key={i}>
+                          {isVideo ? (
+                            <video
+                              className="md:w-20 w-[85px] h-20 object-contain"
+                              src={item}
+                              alt={`uploaded-${i}`}
+                              autoPlay
+                            />
+                          ) : (
+                            <img
+                              className="md:w-20 w-[85px] h-20 object-contain"
+                              src={item}
+                              alt={`uploaded-${i}`}
+                            />
+                          )}
+                          <IoCloseCircleOutline
+                            className="text-red-700 cursor-pointer h-3 w-3 absolute left-[5px] top-[10px]"
+                            onClick={() => closeIcon(item)}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
-              ))}
-              </div>
               </div>
               <div className="flex mt-4 space-x-2">
                 <button
@@ -195,16 +297,16 @@ const RefundButton = ({
                     setReason("");
                     setSingleImg("");
                   }}
-                  className="bg-red-500 text-sm font-bold px-4 py-2 rounded-sm"
+                  className="bg-red-500 text-sm font-bold px-4 py-2 rounded-sm !text-white"
                 >
                   Cancel
                 </button>
                 <button
-                disabled={!reason || !singleImg}
+                  disabled={!reason || !singleImg}
                   onClick={() => {
                     refundProduct({ id });
                   }}
-                  className="bg-custom-purple text-sm font-bold px-4 py-2 rounded-sm disabled:bg-custom-purple/50 disabled:cursor-not-allowed"
+                  className="bg-custom-purple text-sm font-bold px-4 py-2 rounded-sm disabled:bg-custom-purple/50 disabled:cursor-not-allowed !text-white"
                 >
                   Confirm
                 </button>
@@ -215,7 +317,7 @@ const RefundButton = ({
       )}
       <button
         onClick={() => setOpen(true)}
-        className="bg-custom-purple text-xs font-bold px-4 py-2 rounded-sm"
+        className="bg-custom-purple text-xs font-bold px-4 py-2 rounded-sm !text-white"
       >
         Return
       </button>
