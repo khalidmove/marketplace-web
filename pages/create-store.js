@@ -6,12 +6,13 @@ import countryList from 'react-select-country-list'
 import { useRouter } from "next/router";
 import { userContext } from './_app';
 import Swal from 'sweetalert2';
-
+import { useTranslation } from 'react-i18next';
 
 function CreateStore(props) {
     const f = useRef(null);
     const f1 = useRef(null);
     const router = useRouter();
+    const { t } = useTranslation();
     const [createStoreData,  setCreateStoreData] = useState({
         firstName: "",
         lastName: "",
@@ -136,12 +137,12 @@ function CreateStore(props) {
                         <div className='grid md:grid-cols-2 grid-cols-1 w-full gap-x-24'>
 
                             <div className='md:order-1 order-2'>
-                                <p className='text-black font-semibold md:text-4xl text-2xl pb-5'>Create Store</p>
+                                <p className='text-black font-semibold md:text-4xl text-2xl pb-5'>{t("Create Store")}</p>
 
                                 <div className='grid grid-cols-2 w-full gap-5'>
                                     <div className='w-full'>
-                                        <p className='text-black font-normal  text-base'>First Name</p>
-                                        <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3" type="text" placeholder="First Name"
+                                        <p className='text-black font-normal  text-base'>{t("First Name")}</p>
+                                        <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3" type="text" placeholder={t("First Name")}
                                             required
                                             value={createStoreData.firstName}
                                             onChange={(text) => {
@@ -153,9 +154,9 @@ function CreateStore(props) {
                                         />
                                     </div>
                                     <div className='w-full'>
-                                        <p className='text-black font-normal  text-base'>Last Name</p>
+                                        <p className='text-black font-normal  text-base'>{t("Last Name")}</p>
                                         <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                                            type="text" placeholder="Last Name"
+                                            type="text" placeholder={t("Last Name")}
                                             required
                                             value={createStoreData.lastName}
                                             onChange={(text) => {
@@ -169,10 +170,10 @@ function CreateStore(props) {
                                 </div>
 
                                 <div className='w-full'>
-                                    <p className='text-black font-normal  text-base'>Company Name (Optional)</p>
+                                    <p className='text-black font-normal  text-base'>{t("Company Name (Optional)")}</p>
                                     <input
                                         className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                                        type="text" placeholder="Company Name (Optional)"
+                                        type="text" placeholder={t("Company Name (Optional)")}
                                         // required
                                         value={createStoreData.companyName}
                                         onChange={(text) => {
@@ -185,7 +186,7 @@ function CreateStore(props) {
                                 </div>
 
                                 <div className='w-full'>
-                                    <p className='text-black font-normal  text-base'>Country / Region</p>
+                                    <p className='text-black font-normal  text-base'>{t("Country / Region")}</p>
                                     <Select className='md:min-h-[50px] min-h-[40px] md:my-5 my-3' options={options}
                                         value={createStoreData.country}
                                         onChange={(text) => {
@@ -206,9 +207,9 @@ function CreateStore(props) {
 
                         <div className='grid md:grid-cols-2 grid-cols-1 w-full gap-x-24'>
                             <div className='w-full'>
-                                <p className='text-black font-normal  text-base'>Street address</p>
+                                <p className='text-black font-normal  text-base'>{t("Street address")}</p>
                                 <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                                    type="text" placeholder="Street address"
+                                    type="text" placeholder={t("Street address")}
                                     required
                                     value={createStoreData.address}
                                     onChange={(text) => {
@@ -221,9 +222,9 @@ function CreateStore(props) {
                             </div>
 
                             <div className='w-full'>
-                                <p className='text-black font-normal  text-base'>Town / City</p>
+                                <p className='text-black font-normal  text-base'>{t("Town / City")}</p>
                                 <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                                    type="text" placeholder="Town / City"
+                                    type="text" placeholder={t("Town / City")}
                                     required
                                     value={createStoreData.city}
                                     onChange={(text) => {
@@ -236,11 +237,11 @@ function CreateStore(props) {
                             </div>
 
                             <div className='w-full'>
-                                <p className='text-black font-normal  text-base'>Upload Documents ( kbis )</p>
+                                <p className='text-black font-normal  text-base'>{t("Upload Documents ( kbis )")}</p>
                                 <div className='relative'>
                                     <div className='w-full md:h-[50px] h-[40px] bg-white border border-custom-newGray rounded-[10px]  md:my-5 my-3 flex px-5'>
                                         <input className="outline-none font-normal  text-base text-black md:w-[95%] w-[90%]"
-                                            type="text" placeholder="Upload document"
+                                            type="text" placeholder={t("Upload document")}                        
                                             required
                                             value={createStoreData.kbis}
                                             onChange={(text) => {
@@ -266,11 +267,11 @@ function CreateStore(props) {
                             </div>
 
                             <div className='w-full'>
-                                <p className='text-black font-normal  text-base'>Upload Documents ( Identity document )</p>
+                                <p className='text-black font-normal  text-base'>{t("Upload Documents ( Identity document )")}</p>
                                 <div className='relative'>
                                     <div className='w-full md:h-[50px] h-[40px] bg-white border border-custom-newGray rounded-[10px]  md:my-5 my-3 flex px-5'>
                                         <input className="outline-none font-normal  text-base text-black md:w-[95%] w-[90%]"
-                                            type="text" placeholder="Upload document"
+                                            type="text" placeholder={t("Upload document")}
                                             required
                                             value={createStoreData.identity}
                                             onChange={(text) => {
@@ -296,9 +297,9 @@ function CreateStore(props) {
                             </div>
 
                             <div className='w-full'>
-                                <p className='text-black font-normal  text-base'>Phone</p>
+                                <p className='text-black font-normal  text-base'>{t("Phone")}</p>
                                 <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                                    type="number" placeholder="Phone"
+                                    type="number" placeholder={t("Phone")}
                                     required
                                     value={createStoreData.phone}
                                     onChange={(text) => {
@@ -311,9 +312,9 @@ function CreateStore(props) {
                             </div>
 
                             <div className='w-full'>
-                                <p className='text-black font-normal  text-base'>Email address</p>
+                                <p className='text-black font-normal  text-base'>{t("Email address")}</p>
                                 <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
-                                    type="text" placeholder="Email address"
+                                    type="text" placeholder={t("Email address")}
                                     required
                                     value={createStoreData.email}
                                     onChange={(text) => {
@@ -328,7 +329,7 @@ function CreateStore(props) {
                         </div>
 
                         <div className='flex justify-center items-center md:mt-5 mt-2'>
-                            <button className='bg-custom-purple w-[237px] md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base' type="submit">Submit</button>
+                            <button className='bg-custom-purple w-[237px] md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base' type="submit">{t("Submit")}</button>
                         </div>
                     </form>
 

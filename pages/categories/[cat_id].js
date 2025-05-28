@@ -13,6 +13,7 @@ import { FaCircleChevronUp } from "react-icons/fa6";
 import GroceryCategories from "@/components/GroceryCatories";
 import { IoFilter } from "react-icons/io5";
 import Drawer from "@mui/material/Drawer";
+import { useTranslation } from "react-i18next";
 
 const sortByData = [
   {
@@ -51,12 +52,13 @@ const sortByData = [
 
 function Categories(props) {
   const router = useRouter();
+   const { t } = useTranslation()
   const [productList, SetProductList] = useState([]);
   const [category, setCategory] = useState({});
   const [categoryList, SetCategoryList] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState("");
   const [selectedSortBy, setSelectedSortBy] = useState("");
-  const [openData, setOpenData] = useState(false);
+  const [openData, setOpenData] = useState(true);
   const [openCategory, setOpenCategory] = useState(true);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -285,7 +287,7 @@ function Categories(props) {
                 <div className="border-b border-custom-gray">
                   <div className="flex justify-between items-center w-full  pb-5">
                     <p className="text-custom-black font-semibold text-lg">
-                      Sort By
+                     {t("Sort By")} 
                     </p>
                     {!openData && (
                       <FaCircleChevronDown
@@ -332,7 +334,7 @@ function Categories(props) {
                 <div className="pt-5">
                   <div className="flex justify-between items-center w-full  pb-5">
                     <p className="text-custom-black font-semibold text-lg">
-                      Categories
+                      {t("Categories")}
                     </p>
                     {!openCategory && (
                       <FaCircleChevronDown
@@ -419,7 +421,7 @@ function Categories(props) {
               <div className="pt-5">
                 <div className="flex justify-between items-center w-full  pb-5">
                   <p className="text-custom-black font-semibold text-lg">
-                    Categories
+                    {t("Categories")}
                   </p>
                   {!openCategory && (
                     <FaCircleChevronDown
@@ -467,7 +469,7 @@ function Categories(props) {
 
             <div className="md:col-span-3 col-span-1 flex justify-between items-center md:hidden">
               <p className="text-custom-black font-semibold text-lg">
-                Categories
+                {t("Categories")}
               </p>
               <IoFilter
                 onClick={() => setOpen(true)}
@@ -492,7 +494,7 @@ function Categories(props) {
                 ) : (
                   <div className="flex justify-center items-center h-[200px] md:h-[400px] col-span-4 ">
                     <p className="text-black text-center font-semibold text-2xl">
-                      No products available in this category.
+                      {t("No products available in this category")}.
                     </p>
                   </div>
                 )}

@@ -5,7 +5,7 @@ import { cartContext, openCartContext } from "@/pages/_app";
 import { produce } from "immer"; // Add this line
 import currencySign from "@/utils/currencySign";
 import { IoAddSharp, IoRemoveSharp } from "react-icons/io5";
-
+import { useTranslation } from "react-i18next";
 function GroceryCategories({ item, i, url, toaster, loader }) {
   // console.log(item);
   const router = useRouter();
@@ -14,7 +14,7 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
   const [isInCart, setIsInCart] = React.useState(false);
   const [availableQty, setAvailableQty] = React.useState(0);
   // console.log(cartData);
-
+  const { t } = useTranslation()
   const handleAddToCart = () => {
     // let updatedCart = [...cartData];
     // const existingItemIndex = updatedCart.findIndex((f) => f._id === item?._id);
@@ -47,39 +47,39 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
     // toaster({ type: "success", message: "Product added to cart" });
 
     setCartData((prevCartData) => {
-        const existingItem = prevCartData.find(
-          (f) => f._id === item?._id
+      const existingItem = prevCartData.find(
+        (f) => f._id === item?._id
+      );
+
+      if (!existingItem) {
+        const newItem = {
+          ...item,
+          selectedColor: item?.varients[0] || {},
+          selectedImage: item?.varients[0]?.image[0] || "",
+          qty: 1,
+          // total: item.price,
+          // total: item.price_slot[0]?.our_price,
+          price: item.price_slot[0]?.our_price,
+          total: Number(item.price_slot?.[0]?.our_price ?? 0).toFixed(2),
+          price_slot: item.price_slot[0],
+          // our_price: item.price_slot[0]?.our_price,
+          // other_price: item.price_slot[0]?.other_price,
+          // unit: item.price_slot[0]?.unit,
+        };
+
+        const updatedCart = [...prevCartData, newItem];
+        localStorage.setItem(
+          "addCartDetail",
+          JSON.stringify(updatedCart)
         );
 
-        if (!existingItem) {
-          const newItem = {
-            ...item,
-            selectedColor: item?.varients[0] || {},
-            selectedImage: item?.varients[0]?.image[0] || "",
-            qty: 1,
-            // total: item.price,
-            // total: item.price_slot[0]?.our_price,
-            price: item.price_slot[0]?.our_price,
-            total: Number(item.price_slot?.[0]?.our_price ?? 0).toFixed(2),
-            price_slot : item.price_slot[0],
-            // our_price: item.price_slot[0]?.our_price,
-            // other_price: item.price_slot[0]?.other_price,
-            // unit: item.price_slot[0]?.unit,
-          };
+        return updatedCart;
+      }
 
-          const updatedCart = [...prevCartData, newItem];
-          localStorage.setItem(
-            "addCartDetail",
-            JSON.stringify(updatedCart)
-          );
+      return prevCartData;
+    });
 
-          return updatedCart;
-        }
-
-        return prevCartData;
-      });
-
-      toaster({ type: "success", message: "Product added to cart" });
+    toaster({ type: "success", message: "Product added to cart" });
   };
 
   useEffect(() => {
@@ -132,13 +132,14 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             {currencySign(item?.price_slot[0]?.other_price)}
           </del>
         </p>
+
         {!isInCart ? (
           <button
-          className="bg-custom-lightGrayColor py-[8px] w-[90px] rounded-[2px] font-medium text-sm text-custom-purple flex justify-center items-center"
+            className="bg-custom-lightGrayColor py-[8px] w-[90px] rounded-[2px] font-medium text-sm text-custom-purple flex justify-center items-center"
             onClick={handleAddToCart}
           >
-          <FiShoppingCart className="w-[14px] h-[14px] text-custom-purple mr-2" />
-          Add
+            <FiShoppingCart className="w-[14px] h-[14px] text-custom-purple mr-2" />
+            {t("Add")}
           </button>
         ) : (
           <div className="bg-custom-offWhite w-[90px] h-[32px] rounded-[8px] flex gap-2 items-center">
@@ -149,13 +150,13 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
                   const updatedCart = cartData.map((cartItem) =>
                     cartItem._id === item._id
                       ? {
-                          ...cartItem,
-                          qty: cartItem.qty - 1,
-                          total: (
-                            (cartItem.price || 0) *
-                            (cartItem.qty - 1)
-                          ).toFixed(2),
-                        }
+                        ...cartItem,
+                        qty: cartItem.qty - 1,
+                        total: (
+                          (cartItem.price || 0) *
+                          (cartItem.qty - 1)
+                        ).toFixed(2),
+                      }
                       : cartItem
                   );
 
@@ -192,13 +193,13 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
                 const updatedCart = cartData.map((cartItem) =>
                   cartItem._id === item._id
                     ? {
-                        ...cartItem,
-                        qty: cartItem.qty + 1,
-                        total: (
-                          (cartItem.price || 0) *
-                          (cartItem.qty + 1)
-                        ).toFixed(2),
-                      }
+                      ...cartItem,
+                      qty: cartItem.qty + 1,
+                      total: (
+                        (cartItem.price || 0) *
+                        (cartItem.qty + 1)
+                      ).toFixed(2),
+                    }
                     : cartItem
                 );
 
@@ -213,6 +214,7 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             </div>
           </div>
         )}
+        
         {/* <button
           className="bg-custom-lightGrayColor py-[8px] w-[90px] rounded-[2px] font-medium text-sm text-custom-purple flex justify-center items-center"
           onClick={handleAddToCart}

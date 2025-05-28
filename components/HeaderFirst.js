@@ -48,6 +48,14 @@ function HeaderFirst(props) {
     );
   };
 
+  // useEffect(() => {
+  //   // Get language from localStorage or default to 'en'
+  //   const savedLang = localStorage.getItem("LANGUAGE") || "en";
+  //   setLang(savedLang);
+  //   i18n.changeLanguage(savedLang);
+  //   setgloballang(savedLang);
+  // }, []);
+
   function handleClick(idx) {
     try {
       setLang(idx);

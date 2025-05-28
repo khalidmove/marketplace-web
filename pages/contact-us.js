@@ -4,6 +4,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { Api } from "@/services/service";
 import { useRouter } from "next/router";
 import { validateEmailAddress, validateMobileNumber } from "@/services/validator";
+import { useTranslation } from 'react-i18next';
 
 function contactUs(props) {
   const router = useRouter();
@@ -14,7 +15,7 @@ function contactUs(props) {
     description: "",
     reason: ""
   });
-
+    const { t } = useTranslation();
   const submit = (e) => {
       e.preventDefault();
       if (!getInTouchData?.firstName || !getInTouchData?.email || !getInTouchData?.phoneNumber || !getInTouchData?.description || !getInTouchData?.reason) {
@@ -70,12 +71,10 @@ function contactUs(props) {
         <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:pt-10 pt-5">
           <div className="flex flex-col justify-center items-center">
             <p className="text-black font-semibold md:text-4xl text-2xl text-center">
-              Get In Touch With Us
+             {t("Get In Touch With Us")} 
             </p>
             <p className="text-custom-newGray font-normal text-base md:pt-5 pt-2 md:w-[560px] text-center">
-              For More Information About Our Product & Services. Please Feel
-              Free To Drop Us An Email. Our Staff Always Be There To Help You
-              Out. Do Not Hesitate!
+              {t("For More Information About Our Product & Services. Please Feel Free To Drop Us An Email. Our Staff Always Be There To Help You Out. Do Not Hesitate!")}
             </p>
           </div>
           <div className="grid md:grid-cols-2 grid-cols-1 w-full md:pt-10 pt-5">
@@ -84,7 +83,7 @@ function contactUs(props) {
                 <div className="flex justify-start items-center">
                   <FaLocationDot className="md:w-[22px] w-[15px] md:h-[22px] h-[15px] text-black" />
                   <p className="text-black md:text-2xl text-lg font-medium ml-5">
-                    Address
+                    {t("Address")}
                   </p>
                 </div>
                 <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
@@ -95,7 +94,7 @@ function contactUs(props) {
                 <div className="flex justify-start items-center">
                   <FaPhoneAlt className="md:w-[22px] w-[15px] md:h-[22px] h-[15px] text-black" />
                   <p className="text-black md:text-2xl text-lg font-medium ml-5">
-                    Phone
+                    {t("Phone")}
                   </p>
                 </div>
                 {/* <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
@@ -105,21 +104,21 @@ function contactUs(props) {
                   Hotline: +(84) 456-6789
                 </p> */}
                 <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
-                  Mobile: +964-751-092-1850
+                  {t("Mobile")}: +964-751-092-1850
                 </p>
                 <p className="text-black font-normal text-base pt-2 w-[180px] ml-10">
-                  Hotline: +964-751-092-1850
+                  {t("Hotline")}: +964-751-092-1850
                 </p>
               </div>
             </div>
 
             <form className="md:pt-0 pt-5 relative" onSubmit={submit}>
               <div className="w-full">
-                <p className="text-black font-normal  text-base">First Name</p>
+                <p className="text-black font-normal  text-base">{t("First Name")}</p>
                 <input
                   className="bg-white md:w-[428px] w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
                   type="text"
-                  placeholder="Abc"
+                  placeholder={t("First Name")}
                   required
                   value={getInTouchData.firstName}
                   onChange={(text) => {
@@ -133,12 +132,12 @@ function contactUs(props) {
 
               <div className="w-full">
                 <p className="text-black font-normal  text-base">
-                  Phone Number
+                  {t("Phone Number")}
                 </p>
                 <input
                   className="bg-white md:w-[428px] w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
                   type="tel"
-                  placeholder="Phone number"
+                  placeholder={t("Phone Number")}
                   required
                   maxLength={10}
                   value={getInTouchData.phoneNumber}
@@ -153,12 +152,12 @@ function contactUs(props) {
 
               <div className="w-full">
                 <p className="text-black font-normal  text-base">
-                  Email address
+                  {t("Email address")}
                 </p>
                 <input
                   className="bg-white md:w-[428px] w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
                   type="text"
-                  placeholder="Abc@def.com"
+                  placeholder={t("Email address")}
                   required
                   value={getInTouchData.email}
                   onChange={(text) => {
@@ -172,7 +171,7 @@ function contactUs(props) {
 
               <div className="w-full">
                 <p className="text-black font-normal  text-base">
-                  Reason
+                  {t("Reason")}
                 </p>
                 <select
                   className="bg-white md:w-[428px] w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
@@ -187,21 +186,21 @@ function contactUs(props) {
                     });
                   }}
                 >
-                  <option hidden value="">Select Reason</option>
-                  <option value="Product Inquiry">Product Inquiry</option>
-                  <option value="Technical Support">Technical Support</option>
-                  <option value="General Inquiry">General Inquiry</option>
-                  <option value="Feedback">Feedback</option>
-                  <option value="Other">Other</option>
+                  <option hidden value="">{t("Select Reason")}</option>
+                  <option value="Product Inquiry">{t("Product Inquiry")}</option>
+                  <option value="Technical Support">{t("Technical Support")}</option>
+                  <option value="General Inquiry">{t("General Inquiry")}</option>
+                  <option value="Feedback">{t("Feedback")}</option>
+                  <option value="Other">{t("Other")}</option>
                 </select>
               </div>
 
               <div className="w-full">
-                <p className="text-black font-normal  text-base">Message</p>
+                <p className="text-black font-normal  text-base">{t("Message")}</p>
                 <textarea
                   className="bg-white md:w-[428px] w-full px-5 py-2 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
                   rows={4}
-                  placeholder="Hi! i’d like to ask about"
+                  placeholder={t("Hi! i’d like to ask about")}
                   value={getInTouchData.description}
                   onChange={(e) => {
                     setGetInTouchData({
@@ -217,7 +216,7 @@ function contactUs(props) {
                   className="bg-custom-purple w-[237px] md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base"
                   type="submit"
                 >
-                  Submit
+                  {t("Submit")}
                 </button>
               </div>
             </form>

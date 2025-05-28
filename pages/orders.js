@@ -9,6 +9,7 @@ import currencySign from "@/utils/currencySign";
 import { FaChevronDown } from "react-icons/fa";
 import dateFormat, { masks } from "dateformat";
 import RefundButton from "@/components/RefundButton";
+import { useTranslation } from 'react-i18next';
 
 function orders(props) {
   const router = useRouter();
@@ -18,6 +19,7 @@ function orders(props) {
     description: "",
     reviews: 0,
   });
+    const { t } = useTranslation()
   const [productId, setProductId] = useState("");
   const [reviews, setReviews] = useState("product");
   const [sellerId, setSellerId] = useState("");
@@ -122,10 +124,10 @@ function orders(props) {
           {ordersData?.length > 0 && (
             <div className=" my-5 md:mt-6 md:mb-10 flex flex-col gap-3 md:gap-3 justify-center items-center">
               <p className="text-xl md:text-3xl text-custom-purple font-semibold">
-                My Order
+                {t("My Order")}
               </p>
               <p className="text-base text-black">
-                View and manage all your order in one place.
+                {t("View and manage all your order in one place")}.
               </p>
             </div>
           )}
@@ -212,7 +214,7 @@ function orders(props) {
                       <div className="flex justify-between gap-3 ">
                         <div className="grid md:flex justify-start md:gap-5">
                           <p className="text-black  text-xl md:text-2xl ">
-                            My Booking
+                            {t("My Booking")}
                           </p>
                           <p className="text-black text-xl md:text-2xl">
                             ({dateFormat(order?.updatedAt, "isoDate")})
@@ -220,7 +222,7 @@ function orders(props) {
                         </div>
                         <div>
                           <p className="text-black text-lg hidden sm:block">
-                            Total Amount :{" "}
+                            {t("Total Amount")} :{" "}
                             <span className="text-custom-purple font-semibold">
                               {currencySign(order?.total) || "0.00"}
                             </span>
@@ -269,10 +271,10 @@ function orders(props) {
                                 {/* // ))} */}
                               </div>
                               <p className="text-black text-xs font-bold pt-[6px]">
-                                Quantity: {product.qty || 1}
+                                {t("Quantity")}: {product.qty || 1}
                               </p>
                               <p className="text-black text-xs   max-w-sm sm:w-full font-bold pt-[6px]">
-                                Order Id: {order.orderId || order._id}
+                                {t("Order Id")}: {order.orderId || order._id}
                               </p>
                             </div>
                             <div className="w-[150px] flex flex-col justify-center md:items-end">
@@ -286,13 +288,13 @@ function orders(props) {
 
                     <div className="col-span-3 flex flex-wrap w-full gap-4 items-end text-black">
                       <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
-                        Tax: {"  "}<span>{currencySign(order.tax)}</span>
+                        {t("Tax")}: {"  "}<span>{currencySign(order.tax)}</span>
                       </span>
                       <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
-                        Delivery Charge: {"  "}<span>{currencySign(order.deliveryCharge)}</span>
+                        {t("Delivery Charge")}: {"  "}<span>{currencySign(order.deliveryCharge)}</span>
                       </span>
                       <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
-                        Delivery Tip: {"  "}<span>{currencySign(order.deliveryTip)}</span>
+                        {t("Delivery Tip")}: {"  "}<span>{currencySign(order.deliveryTip)}</span>
                       </span>
                     </div>
 
@@ -300,7 +302,7 @@ function orders(props) {
                       <div className="flex flex-col justify-center items-end">
                         <p className="text-black  text-base font-bold">
                           {" "}
-                          Total:
+                          {t('Total')}:
                           <span className="text-custom-purple">
                             {" "}
                             ${order.total}
@@ -314,7 +316,7 @@ function orders(props) {
             ) : (
               <div className="flex justify-center items-center md:mt-5 w-full md:h-[300px] h-[200px] col-span-4">
                 <p className="text-center text-black font-semibold text-xl sm:text-3xl">
-                  No orders available.
+                  {t("No orders available")}.
                 </p>
               </div>
             )}
@@ -332,7 +334,7 @@ function orders(props) {
                 </div>
 
                 <form className="px-5 py-5" onSubmit={createProductRquest}>
-                  <p className="text-black font-bold text-2xl mb-5">Reviews</p>
+                  <p className="text-black font-bold text-2xl mb-5">{t("Reviews")}</p>
 
                   <div className="flex justify-center items-center mb-5 gap-5">
                     <button
@@ -345,7 +347,7 @@ function orders(props) {
                         setReviews("product");
                       }}
                     >
-                      Product
+                      {t("Product")}
                     </button>
                     <button
                       className={`h-[30px] w-32 rounded-[5px] text-black font-semibold text-sm ${
@@ -357,7 +359,7 @@ function orders(props) {
                         setReviews("seller");
                       }}
                     >
-                      Seller
+                      {t("Seller")}
                     </button>
                   </div>
 
@@ -388,8 +390,8 @@ function orders(props) {
                       {/* <Box sx={{ ml: 2 }}>rating</Box> */}
                     </Box>
                     <p className="text-custom-newGrayColors font-bold text-center text-base mt-2">
-                      Rated {Number(reviewsData?.reviews || 0)?.toFixed(1)}/5.0
-                      by users
+                      {t('Rated')} {Number(reviewsData?.reviews || 0)?.toFixed(1)}/5.0
+                     {t("by users")} 
                     </p>
                   </div>
 
@@ -397,7 +399,7 @@ function orders(props) {
                     <textarea
                       className="bg-white md:w-full w-full px-5 py-2 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none md:my-5 my-3"
                       rows={4}
-                      placeholder="Description"
+                      placeholder={t("Description")}
                       value={reviewsData.description}
                       onChange={(e) => {
                         setReviewsData({
@@ -414,7 +416,7 @@ function orders(props) {
                       className="bg-custom-purple w-full md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base"
                       type="submit"
                     >
-                      Submit
+                      {t("Submit")}
                     </button>
                   </div>
                 </form>

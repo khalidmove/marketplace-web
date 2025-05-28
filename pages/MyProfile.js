@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { userContext } from "./_app";
 import Head from "next/head";
 import ChangePassword from "@/components/changePassword";
-
+import { useTranslation } from 'react-i18next';
 function Profile(props) {
   const router = useRouter();
   const [user, setUser] = useContext(userContext);
@@ -15,7 +15,7 @@ function Profile(props) {
   const f = useRef(null);
   const [ProfileData, setProfileData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
-
+  const {t} = useTranslation()
   const [userDetail, setUserDetail] = useState({
     name: "",
     email: "",
@@ -103,7 +103,7 @@ function Profile(props) {
       <div className="bg-white w-full">
         <div className="max-w-7xl px-6 md:px-6 2xl:px-0  mx-auto w-full">
           <h1 className="text-black my-5 text-2xl font-semibold">
-            Edit <span className="text-custom-orange">Profile</span>
+           {t("Edit")}  <span className="text-custom-orange">{t("Profile")}</span>
           </h1>
           {/* <Head>
         <title>Profile Settings | Update Personal Info </title>
@@ -121,7 +121,7 @@ function Profile(props) {
             <div className="w-full mx-auto max-w-[500px] flex flex-col  justify-center items-center self-center  rounded-xl shadow-xl  p-2">
               <div className="flex justify-center items-center md:pt-5 pt-5 pb-5">
                 <h1 className="text-black text-3xl	font-nunito font-bold	">
-                  My Profile
+                  {t("My Profile")}
                 </h1>
               </div>
 
@@ -131,7 +131,7 @@ function Profile(props) {
                   <IoIosContact className=" text-custom-gray h-5 w-5 ml-2" />
                   <input
                     className=" w-full pl-2  text-black  sm:text-lg text-sm rounded-2xl sm:py-4 py-2 outline-none"
-                    placeholder="Name"
+                    placeholder={t("Name")}
                     value={userDetail.name}
                     onChange={(text) => {
                       setUserDetail({ ...userDetail, name: text.target.value });
@@ -139,14 +139,14 @@ function Profile(props) {
                   />
                 </div>
                 {submitted && userDetail.name === "" && (
-                  <p className="text-red-700 mt-1">Name is required</p>
+                  <p className="text-red-700 mt-1">{t("Name is required")}</p>
                 )}
 
                 <div className="mr-2 relative w-full  sm:pb-0 pb-1 flex rounded-2xl  justify-start items-center border outline-custom-orange mt-4">
                   <AiOutlineMail className=" text-custom-gray h-5 w-5 ml-2" />
                   <input
                     className=" w-full pl-2  text-black  sm:text-lg text-sm rounded-2xl sm:py-4 py-2 outline-none"
-                    placeholder="Email"
+                    placeholder={t("Email")}
                     value={userDetail.email}
                     onChange={(text) => {
                       setUserDetail({ ...userDetail, email: text.target.value });
@@ -154,7 +154,7 @@ function Profile(props) {
                   />
                 </div>
                 {submitted && userDetail.email === "" && (
-                  <p className="text-red-700 mt-1">Email is required</p>
+                  <p className="text-red-700 mt-1">{t("Email is required")}</p>
                 )}
 
                 <div className="flex justify-center items-center mt-5">
@@ -163,7 +163,7 @@ function Profile(props) {
                     type="button"
                     className="text-white bg-custom-purple text-[20px]  font-nunito   text-center md:h-14 h-10 w-full rounded-2xl"
                   >
-                    Update
+                    {t("Update")}
                   </button>
                 </div>
               </div>
