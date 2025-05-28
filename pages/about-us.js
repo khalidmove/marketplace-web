@@ -1,6 +1,8 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 function AboutUs() {
+    const { t } = useTranslation()
     return (
 
         <div className="bg-white w-full">
@@ -10,7 +12,7 @@ function AboutUs() {
                     <div className="relative overflow-hidden">
                         <img className="md:h-[462px] h-96 w-full flex justify-end items-end rounded-[20px] object-cover " src='/backgroundImg-1a.png' />
                         <div className="flex justify-center items-end w-full h-[70px] rounded-[20px] rounded-t-[0px] absolute bottom-0 bg-[#00000050] group-hover:rounded-[20px] group-hover:rounded-t-[0px]   group-hover:h-[70px] group-hover:-transition group-hover:duration-1000">
-                            <p className='md:text-[40px] text-2xl text-white font-normal md:pb-5 pb-5 md:pt-5'>About us</p>
+                            <p className='md:text-[40px] text-2xl text-white font-normal md:pb-5 pb-5 md:pt-5'>{t("About us")}</p>
                         </div>
                     </div>
                     <div className='max-w-[100%]'>
