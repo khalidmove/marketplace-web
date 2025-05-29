@@ -323,7 +323,7 @@ function Categories(props) {
                                 checked={item?.value === selectedSortBy}
                               />
                             }
-                            label={item?.name}
+                            label={t(item?.name)}
                           />
                         ))}
                       </FormGroup>
@@ -380,7 +380,7 @@ function Categories(props) {
               <div className="border-b border-custom-gray">
                 <div className="flex justify-between items-center w-full  pb-5">
                   <p className="text-custom-black font-semibold text-lg">
-                    Sort By
+                    {t("Sort By")}
                   </p>
                   {!openData && (
                     <FaCircleChevronDown
@@ -410,7 +410,7 @@ function Categories(props) {
                               checked={item.value === selectedSortBy}
                             />
                           }
-                          label={item?.name}
+                          label={t(item?.name)}
                         />
                       ))}
                     </FormGroup>
