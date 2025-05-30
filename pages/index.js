@@ -308,7 +308,7 @@ export default function Home(props) {
               responsive={responsiveCarousel}
               autoPlay={true}
               infinite={true}
-              arrows={false}
+              arrows={true}
             >
             {carouselImg.map((d, i) => {
               return (

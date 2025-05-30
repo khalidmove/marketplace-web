@@ -129,12 +129,15 @@ function Footer(props) {
         <div className="max-w-7xl mx-auto w-full md:pb-10 pb-5 px-6">
           <div className="md:flex justify-between items-center">
             <p className="text-custom-darkGray text-base font-medium">© {moment().format('YYYY')}, 
-              {t("⁠All rights reserved / 2digitinnovations")}</p>
+              {t("All Rights Reserved By: RESAZ Technologies")}</p>
             <div className="flex gap-5 md:pt-0 pt-5">
               <img onClick={() => window.open("https://www.facebook.com/share/16HHQtMX53/?mibextid=wwXIfr", "_blank")} className="w-[44px] h-[44px] cursor-pointer" src="/facebookImg.png" />
               {/* <img className="w-[44px] h-[44px] cursor-pointer" src="/linkedinImg.png" /> */}
               <img onClick={() => window.open("https://www.instagram.com/resazonline?igsh=a3pkbXo4OHd6dzhv&utm_source=qr", "_blank")} className="w-[44px] h-[44px] cursor-pointer" src="/instagramImg.png" />
-              {/* <img className="w-[44px] h-[44px] cursor-pointer" src="/twitterImg.png " /> */}
+              <img 
+              onClick={() => window.open("https://t.me/ResazOnline", "_blank")} 
+              className="w-[44px] h-[44px] cursor-pointer" src="/twitterImg.png " />
+
             </div>
           </div>
         </div>

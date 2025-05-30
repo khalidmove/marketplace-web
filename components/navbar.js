@@ -103,6 +103,7 @@ const Navbar = (props) => {
     lng: null,
   });
   const [deliveryCharge, setDeliveryCharge] = useState(0);
+  const [ServiceFee, setServiceFee] = useState(0);
   const [deliveryPartnerTip, setDeliveryPartnerTip] = useState(0);
   const [mainTotal, setMainTotal] = useState(0);
   const [timeslot, setTimeslot] = useState("");
@@ -250,6 +251,25 @@ const Navbar = (props) => {
     );
   }, [router]);
 
+  
+  const getFee = useCallback(() => {
+    Api("get", `getServiceFee`, router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res.data);
+        if (res?.data[0]?.Servicefee === undefined || res?.data[0]?.Servicefee === "") {
+          setServiceFee("0.00");
+        } else {
+          setServiceFee(res?.data[0]?.Servicefee);
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+      }
+    );
+  }, [ router]);
+
   const getDeliveryCharge = useCallback(() => {
     Api("get", `getDeliveryCharge`, router).then(
       (res) => {
@@ -292,6 +312,10 @@ const Navbar = (props) => {
   useEffect(() => {
     getTax();
   }, [getTax]);
+
+    useEffect(() => {
+    getFee();
+  }, [getFee]);
 
   useEffect(() => {
     getDeliveryCharge();
@@ -433,10 +457,8 @@ const Navbar = (props) => {
     );
     setCartItem(sumWithInitial1);
     setCartTotal(sumWithInitial);
-    // setMainTotal(sumWithInitial + deliveryCharge + deliveryPartnerTip);
-    // main total with tax
     const totalWithTax = sumWithInitial + (sumWithInitial * tax) / 100;
-    setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip);
+    setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip + Number(ServiceFee));
   }, [cartData, openCart]);
 
   const emptyCart = async () => {
@@ -962,7 +984,7 @@ const Navbar = (props) => {
                   });
                 }}
               >
-               {t("Empty Cart")} 
+                {t("Empty Cart")}
               </button>
             )}
           </div>
@@ -1157,9 +1179,15 @@ const Navbar = (props) => {
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
               <div className="flex justify-between items-center w-full pt-1">
-                <p className="font-normal text-base">{t("Tax")}</p>
+                <p className="font-normal text-custom-purple text-base">{t("Tax")}</p>
                 <p className="text-custom-purple font-normal text-base">
                   {tax}%
+                </p>
+              </div>
+               <div className="flex justify-between items-center w-full pt-1">
+                <p className="font-normal text-custom-purple text-base">{t("Service Fee")}</p>
+                <p className="text-custom-purple font-normal text-base">
+                  {ServiceFee} IQD
                 </p>
               </div>
               <div className="flex items-center justify-between mt-1">
@@ -1626,7 +1654,7 @@ const Navbar = (props) => {
             <section className="w-full ">
               <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:py-5 py-5">
                 <p className="md:text-[48px] text-2xl text-black font-normal text-center">
-                 {t("Products")} 
+                  {t("Products")}
                 </p>
                 <div className="md:py-10 py-5 grid md:grid-cols-4 grid-cols-1 gap-5 w-full">
                   {productsList.map((item, i) => (

@@ -291,11 +291,10 @@ function ProductDetails(props) {
                               setPriceIndex(i);
                             }}
                             className={`bg-custom-lightPurple cursor-pointer w-full rounded-[8px] border border-custom-darkPurple p-[10px] relative
-                                        ${
-                                          priceIndex == i
-                                            ? "bg-custom-lightPurple"
-                                            : "bg-white"
-                                        }
+                                        ${priceIndex == i
+                                ? "bg-custom-lightPurple"
+                                : "bg-white"
+                              }
                             `}
                           >
                             <img
@@ -406,7 +405,7 @@ function ProductDetails(props) {
                           // Update only the matching product with the same price slot
                           const updatedCart = cartData.map((item) =>
                             item._id === updatedProduct._id &&
-                            item.price_slot.value === selectedPrice.value
+                              item.price_slot.value === selectedPrice.value
                               ? updatedProduct
                               : item
                           );
@@ -474,7 +473,7 @@ function ProductDetails(props) {
 
                         const updatedCart = cartData.map((item) =>
                           item._id === updatedProduct._id &&
-                          item.price_slot.value === selectedPrice.value
+                            item.price_slot.value === selectedPrice.value
                             ? updatedProduct
                             : item
                         );
@@ -564,33 +563,33 @@ function ProductDetails(props) {
                 {productsId.attributes?.some(
                   (attribute) => attribute.name === "color"
                 ) && (
-                  <div className="w-full">
-                    <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
-                      Select Colors
-                    </p>
-                    <div className="flex gap-2 flex-wrap">
-                      {productsId?.varients?.map((item, i) => (
-                        <div
-                          key={i}
-                          className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
-                          style={{ background: item?.color }}
-                          onClick={() => {
-                            item.selected.forEach((ele) => {
-                              ele.request = 0;
-                            });
-                            setSelectedColor(item);
-                            setSelectedImageList(item?.image);
-                            setSelectedImage(item?.image[0]);
-                          }}
-                        >
-                          {selectedColor?.color === item?.color && (
-                            <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
-                          )}
-                        </div>
-                      ))}
+                    <div className="w-full">
+                      <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
+                        Select Colors
+                      </p>
+                      <div className="flex gap-2 flex-wrap">
+                        {productsId?.varients?.map((item, i) => (
+                          <div
+                            key={i}
+                            className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
+                            style={{ background: item?.color }}
+                            onClick={() => {
+                              item.selected.forEach((ele) => {
+                                ele.request = 0;
+                              });
+                              setSelectedColor(item);
+                              setSelectedImageList(item?.image);
+                              setSelectedImage(item?.image[0]);
+                            }}
+                          >
+                            {selectedColor?.color === item?.color && (
+                              <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             </div>
           </div>
@@ -599,42 +598,39 @@ function ProductDetails(props) {
             <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
               <div className="flex flex-col justify-start items-start">
                 <p className="text-black md:text-2xl text-xl font-bold">
-                 {t("About Product")}
+                  {t("About Product")}
                 </p>
-                <p className="text-black font-medium md:text-xl text-base pt-2">
-                  {t("Description")} :{" "}
-                  <span className="text-custom-newGray font-normal md:text-xl text-base">
-                    {productsId?.long_description}
-                  </span>
-                </p>
+                <div className="flex flex-col justify-start items-start">
+                  <p className="text-black font-medium md:text-xl text-base pt-2">
+                    {t("Description")} :{" "}
+                    <span className="text-custom-newGray font-normal md:text-xl text-base">
+                      {productsId?.long_description}
+                    </span>
+                  </p>
+
+                  <p className="text-black pt-2 font-medium md:text-xl text-base">
+                    {t("Country of Origin")} :{" "}
+                    <span className="text-custom-newGray font-normal md:text-xl text-base">
+                      {productsId?.origin}
+                    </span>
+                  </p>
+                 
+                  <p className="text-black font-medium md:text-xl text-base pt-2">
+                    {t("Manufacturer Name")} :{" "}
+                    <span className="text-custom-newGray font-normal md:text-xl text-base">
+                      {productsId?.manufacturername}
+                    </span>
+                  </p>
+                  <p className="text-black font-medium md:text-xl text-base pt-2">
+
+                    {t("Manufacturer Address")} :{" "}
+                    <span className="text-custom-newGray font-normal md:text-xl text-base">
+                      {productsId?.manufactureradd}
+                    </span>
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col justify-start items-start">
-                <p className="text-black font-medium md:text-xl text-base">
-                  {t("Country of Origin")} :{" "}
-                  <span className="text-custom-newGray font-normal md:text-xl text-base">
-                    {productsId?.origin}
-                  </span>
-                </p>
-                {/* <p className="text-black font-medium md:text-xl text-base pt-2">
-                  Self Life :{" "}
-                  <span className="text-custom-newGray font-normal md:text-xl text-base">
-                    {productsId?.selflife}
-                  </span>
-                </p> */}
-                <p className="text-black font-medium md:text-xl text-base pt-2">
-                  {t("Manufacturer Name")} :{" "}
-                  <span className="text-custom-newGray font-normal md:text-xl text-base">
-                    {productsId?.manufacturername}
-                  </span>
-                </p>
-                <p className="text-black font-medium md:text-xl text-base pt-2">
-                  
-                  {t("Manufacturer Address")} :{" "}
-                  <span className="text-custom-newGray font-normal md:text-xl text-base">
-                    {productsId?.manufactureradd}
-                  </span>
-                </p>
-              </div>
+
             </div>
           </div>
 
