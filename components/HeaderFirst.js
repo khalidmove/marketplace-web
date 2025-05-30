@@ -186,7 +186,7 @@ function HeaderFirst(props) {
               onChange={(e) => handleClick(e.target.value)}
             >
               <option value={"en"}>English</option>
-              <option value={"ku"}>Kurdish</option>
+              <option value={"ckb"}>Kurdish</option>
               <option value={"ar"}>Arabic</option>
             </select>
           </div>

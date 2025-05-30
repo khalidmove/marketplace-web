@@ -1,4 +1,4 @@
-const supportedLngs = ['en', 'ar', 'ku'];
+const supportedLngs = ['en', 'ar', 'ckb'];
 
 export const ni18nConfig = {
   fallbackLng: supportedLngs,
