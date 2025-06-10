@@ -51,12 +51,12 @@ function Footer(props) {
     <div>
       <div className="bg-white relative">
         <div className="max-w-7xl mx-auto h-full border-b border-b-[#00000050] md:pb-10 pb-5"></div>
-        <div className="max-w-7xl mx-auto h-full md:py-10 py-5 px-5 md:px-6">
+        <div className="max-w-7xl mx-auto h-full md:py-10 py-5 px-4 md:px-6">
           <div className="grid md:grid-cols-5 grid-cols-1">
             <div className="text-white flex flex-col md:justify-start justify-center md:items-start items-start  md:col-span-2">
               <div className="py-5">
                 <img
-                  className="md:w-[165px] h-[43px]  object-cover  rounded-[5px] -mt-6"
+                  className="md:w-[165px] w-[110px] h-[43px]  object-cover  rounded-[5px] -mt-6"
                   src="/logo.jpeg"
                   alt=""
                 />
@@ -136,7 +136,7 @@ function Footer(props) {
               <img onClick={() => window.open("https://www.instagram.com/resazonline?igsh=a3pkbXo4OHd6dzhv&utm_source=qr", "_blank")} className="w-[44px] h-[44px] cursor-pointer" src="/instagramImg.png" />
               <img 
               onClick={() => window.open("https://t.me/ResazOnline", "_blank")} 
-              className="w-[44px] h-[44px] cursor-pointer" src="/twitterImg.png " />
+              className="w-[44px] h-[44px] cursor-pointer" src="/icons-teli.png" />
 
             </div>
           </div>

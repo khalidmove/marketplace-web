@@ -101,30 +101,30 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
   return (
     <div
       key={i}
-      className="flex border border-featuredProducts-borderColor bg-white flex-col md:pb-5 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-3 gap-4"
+      className="flex border border-featuredProducts-borderColor bg-white flex-col md:pb-3 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-1 gap-4"
     >
       {/* w-[228px]  */}
       <img
-        className="h-[144px] w-full object-cover"
+        className="md:h-[154px] h-[250px] w-full object-cover"
         src={item?.varients[0]?.image[0]}
         onClick={() => {
           router.push(url);
         }}
       />
-      <div className="flex flex-col justify-start items-start pt-5">
+      <div className="flex flex-col justify-start items-start px-2">
         <p className="text-custom-gray font-normal text-xs">
           {item?.categoryName}
         </p>
         <div className="flex gap-2 w-full">
-          <span className="text-custom-darkGray text-base font-semibold pt-2 text-left">
+          <span className="text-custom-darkGray text-base font-semibold pt-1 text-left">
             {item?.name}
           </span>
-          <span className="text-custom-darkGray text-base font-semibold pt-2">
+          <span className="text-custom-darkGray text-base font-semibold pt-1">
             - {item?.price_slot[0]?.value}{item?.price_slot[0]?.unit}
           </span>
         </div>
       </div>
-      <div className="flex justify-between items-center pt-5">
+      <div className="flex justify-between items-center px-2">
         <p className="text-custom-purple text-lg font-semibold flex items-center gap-1">
           {/* ${item?.price_slot[0]?.our_price}{" "} */}
           {currencySign(item?.price_slot[0]?.our_price)}

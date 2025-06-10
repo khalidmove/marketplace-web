@@ -622,12 +622,12 @@ const Navbar = (props) => {
               <div
                 className={` flex items-center justify-between md:py-4 py-0 text-sm md:px-0 px-0 max-w-full`}
               >
-                <div className="md:flex gap-1 items-center text-xl justify-center font-bold hidden">
+                <div className="md:flex gap-1 items-center text-xl justify-center  hidden">
                   <img
                     onClick={() => {
                       router.push("/");
                     }}
-                    className="md:w-[165px] w-[130px] h-[43px] object-cover cursor-pointer"
+                    className="md:w-[145px]  h-[53px] object-cover cursor-pointer"
                     src="/logo.jpeg"
                     alt="Resaz Logo"
                   />
@@ -875,7 +875,7 @@ const Navbar = (props) => {
                     onClick={() => {
                       router.push("/");
                     }}
-                    className="md:w-[165px] w-[130px] h-[43px] object-cover cursor-pointer"
+                    className="w-[160px] h-[47px] object-cover cursor-pointer"
                     src="/logo.jpeg"
                     alt="Resaz Logo"
                   />

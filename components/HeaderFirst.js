@@ -174,11 +174,11 @@ function HeaderFirst(props) {
               <FaPhoneAlt />
             </p>
             <a href="tel:+964-751-092-1850" className="text-red-500 font-medium cursor-pointer">+964-751-092-1850</a>
-            {/* <p className="font-medium text-gray-500 cursor-pointer"
+            <p className="font-medium text-gray-900 cursor-pointer "
               onClick={()=>{router.push("/create-store")}}
             >
                 {user.type=='SELLER' ?<span>My Store</span>:<span>Become a seller</span>}
-            </p> */}
+            </p>
           </div>
           <div className="rounded-lg md:flex hidden">
             <select className="bg-white w-full font-normal text-sm text-black outline-none cursor-pointer"
