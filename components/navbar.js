@@ -229,7 +229,7 @@ const Navbar = (props) => {
 
   useEffect(() => {
     // if (user?.token) {
-      getTimeSlot();
+    getTimeSlot();
     // }
   }, [user?.token, router]);
 
@@ -1030,33 +1030,79 @@ const Navbar = (props) => {
                 key={i}
                 className="grid md:grid-cols-9 grid-cols-1 w-full md:gap-5 mt-5"
               >
-                <div className="flex justify-start items-start col-span-4 md:gap-0 gap-2">
-                  <img
-                    className="md:w-[145px] md:h-[104px] w-[50px] h-[50px] object-contain"
-                    src={item?.selectedImage || item?.image}
-                  />
+                <div className="relative flex justify-start items-start col-span-4 md:gap-0 gap-2">
+                  <div className="relative">
+                    <img
+                      className="md:w-[145px] md:h-[104px] w-[50px] h-[50px] object-contain"
+                      src={item?.selectedImage || item?.image}
+                    />
+                    {item?.type === "combo" && (
+                      // <div className="bg-custom-purple text-white text-xs font-semibold px-2 py-1 rounded-md absolute top-2 left-2">
+                      //   Combo
+                      // </div>
+                      <img
+                        src="/combo.png"
+                        className="absolute -top-2 -right-1 w-[50px] h-[50px]"
+                        alt="Combo"
+                      />
+                    )}
+                  </div>
                   <div className="pt-2 items-start pl-2">
                     <p className="text-custom-purple font-semibold text-base">
                       {item?.name}
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="">{item?.price_slot?.value ?? 1}</span>{" "}
-                      <span>{item?.price_slot?.unit ?? "unit"}</span>
+                      <span className="">
+                        {item?.price_slot?.value && item?.price_slot?.unit
+                          ? item?.price_slot?.value +
+                            " " +
+                            item?.price_slot?.unit
+                          : Array.isArray(item?.comboItems) &&
+                            item?.comboItems.length > 0
+                          ? item?.comboItems.map((comboItem, index) => (
+                              <span key={index}>
+                                {comboItem?.selected_slot
+                                  ? comboItem?.selected_slot?.value +
+                                    " " +
+                                    comboItem?.selected_slot?.unit
+                                  : comboItem?.value}
+                                {index < item?.comboItems.length - 1
+                                  ? ", "
+                                  : ""}
+                              </span>
+                            ))
+                          : "N/A"}
+                      </span>
                     </p>
                     <p className="text-custom-newGrayColors font-normal text-sm pt-2">
-                      <span className="">
-                        {currencySign(item?.price_slot?.our_price)}
-                      </span>{" "}
+                      <span className="">{currencySign(item?.price)}</span>{" "}
                       <span className="line-through">
-                        {currencySign(item?.price_slot?.other_price)}
+                        {currencySign(
+                          typeof item?.price_slot?.other_price === "number" &&
+                            typeof item?.qty === "number"
+                            ? item?.price_slot?.other_price
+                            : typeof item?.other_price === "number" &&
+                              typeof item?.qty === "number"
+                            ? item?.other_price
+                            : 0
+                        )}
                       </span>
                     </p>
                   </div>
                   <div className="flex md:justify-center justify-start md:items-center items-start col-span-2 md:mt-0 mt-2 md:hidden">
                     <p className="text-custom-purple font-semibold text-base">
-                      {currencySign(item?.our_price)}
+                      {currencySign(item?.total)}
                       <del className="text-custom-red font-normal text-xs ml-2">
-                        {currencySign(item?.other_price)}
+                        {/* {currencySign(item?.other_price)} */}
+                        {currencySign(
+                          typeof item?.price_slot?.other_price === "number" &&
+                            typeof item?.qty === "number"
+                            ? item?.price_slot?.other_price * item?.qty
+                            : typeof item?.other_price === "number" &&
+                              typeof item?.qty === "number"
+                            ? item?.other_price * item?.qty
+                            : 0
+                        )}
                       </del>
                     </p>
                     <IoMdClose
@@ -1073,9 +1119,85 @@ const Navbar = (props) => {
                     <div
                       className="h-[39px] w-[51px] bg-custom-purple cursor-pointer rounded-[8px] rounded-r-none	 flex justify-center items-center"
                       onClick={() => {
-                        if (item.qty > 1) {
+                        if (item?.type === "combo") {
+                          if (item.qty > 1) {
+                            const updatedCart = cartData.map((cartItem) =>
+                              cartItem._id === item._id
+                                ? {
+                                    ...cartItem,
+                                    qty: cartItem.qty - 1,
+                                    total: (
+                                      cartItem.price *
+                                      (cartItem.qty - 1)
+                                    ).toFixed(2),
+                                  }
+                                : cartItem
+                            );
+                            setCartData(updatedCart);
+                            localStorage.setItem(
+                              "addCartDetail",
+                              JSON.stringify(updatedCart)
+                            );
+                          }
+                          // else {
+                          //   const updatedCart = cartData.filter(
+                          //     (cartItem) => cartItem._id !== item._id
+                          //   );
+                          //   setCartData(updatedCart);
+                          //   localStorage.setItem(
+                          //     "addCartDetail",
+                          //     JSON.stringify(updatedCart)
+                          //   );
+                          //   setIsInCart(false);
+                          //   setAvailableQty(0);
+                          // }
+                        } else {
+                          if (item.qty > 1) {
+                            const nextState = produce(cartData, (draft) => {
+                              draft[i].qty -= 1;
+                              draft[i].total = (
+                                parseFloat(draft[i]?.price_slot?.our_price) *
+                                draft[i].qty
+                              ).toFixed(2);
+                            });
+                            setCartData(nextState);
+                            localStorage.setItem(
+                              "addCartDetail",
+                              JSON.stringify(nextState)
+                            );
+                          }
+                        }
+                      }}
+                    >
+                      <IoRemoveSharp className="h-[30px] w-[30px] text-white" />
+                    </div>
+                    <p className="text-black md:text-xl text-lg font-medium text-center mx-5">
+                      {item?.qty}
+                    </p>
+                    <div
+                      className="h-[39px] w-[51px] bg-custom-purple cursor-pointer rounded-[8px] rounded-l-none flex justify-center items-center"
+                      onClick={() => {
+                        if (item?.type === "combo") {
+                          const updatedCart = cartData.map((cartItem) =>
+                            cartItem._id === item._id
+                              ? {
+                                  ...cartItem,
+                                  qty: cartItem.qty + 1,
+                                  total: (
+                                    cartItem.price *
+                                    (cartItem.qty + 1)
+                                  ).toFixed(2),
+                                }
+                              : cartItem
+                          );
+                          setCartData(updatedCart);
+                          localStorage.setItem(
+                            "addCartDetail",
+                            JSON.stringify(updatedCart)
+                          );
+                        } else {
                           const nextState = produce(cartData, (draft) => {
-                            draft[i].qty -= 1;
+                            draft[i].qty += 1;
                             draft[i].total = (
                               parseFloat(draft[i]?.price_slot?.our_price) *
                               draft[i].qty
@@ -1087,39 +1209,6 @@ const Navbar = (props) => {
                             JSON.stringify(nextState)
                           );
                         }
-                        // Remove only the specific price slot variation when qty = 1
-
-                        // else {
-                        //   const updatedCart = cartData.filter(
-                        //     (cartItem) =>
-                        //       !(cartItem._id === item._id && cartItem.price_slot.value === item.price_slot.value)
-                        //   );
-
-                        //   setCartData(updatedCart);
-                        //   localStorage.setItem("addCartDetail", JSON.stringify(updatedCart));
-                        // }
-                      }}
-                    >
-                      <IoRemoveSharp className="h-[30px] w-[30px] text-white" />
-                    </div>
-                    <p className="text-black md:text-xl text-lg font-medium text-center mx-5">
-                      {item?.qty}
-                    </p>
-                    <div
-                      className="h-[39px] w-[51px] bg-custom-purple cursor-pointer rounded-[8px] rounded-l-none flex justify-center items-center"
-                      onClick={() => {
-                        const nextState = produce(cartData, (draft) => {
-                          draft[i].qty += 1;
-                          draft[i].total = (
-                            parseFloat(draft[i]?.price_slot?.our_price) *
-                            draft[i].qty
-                          ).toFixed(2);
-                        });
-                        setCartData(nextState);
-                        localStorage.setItem(
-                          "addCartDetail",
-                          JSON.stringify(nextState)
-                        );
                       }}
                     >
                       <IoAddSharp className="h-[30px] w-[30px] text-white" />
@@ -1131,7 +1220,15 @@ const Navbar = (props) => {
                   <p className="text-custom-purple font-semibold text-base">
                     {currencySign(item?.total)}
                     <del className="text-custom-red font-normal text-xs ml-2">
-                      {currencySign(item?.price_slot?.other_price * item?.qty)}
+                      {currencySign(
+                        typeof item?.price_slot?.other_price === "number" &&
+                          typeof item?.qty === "number"
+                          ? item?.price_slot?.other_price * item?.qty
+                          : typeof item?.other_price === "number" &&
+                            typeof item?.qty === "number"
+                          ? item?.other_price * item?.qty
+                          : 0
+                      )}
                     </del>
                   </p>
                   <IoMdClose
@@ -1249,13 +1346,11 @@ const Navbar = (props) => {
                 <p className="text-gray-500 font-normal text-base">
                   Payment Method
                 </p>
-                  <select
-                    className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
-                  >
-                    <option value="" disabled selected>
-                      Cash
-                    </option>
-                  </select>
+                <select className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2">
+                  <option value="" disabled selected>
+                    Cash
+                  </option>
+                </select>
               </div>
 
               {/* <div className="flex justify-between items-center w-full pt-3 border-b border-b-[#97999B80] pb-5">

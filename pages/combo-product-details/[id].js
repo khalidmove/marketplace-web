@@ -112,9 +112,9 @@ function ProductDetails(props) {
   };
 
   const getProductById = async () => {
-    let url = `getProductByslug/${router?.query?.id}`;
+    let url = `getComboProductByslug/${router?.query?.id}`;
     if (user?.token) {
-      url = `getProductByslug/${router?.query?.id}?user=${user?._id}`;
+      url = `getComboProductByslug/${router?.query?.id}?user=${user?._id}`;
     }
     props.loader(true);
     Api("get", url, "", router).then(
@@ -681,7 +681,7 @@ function ProductDetails(props) {
                   <ComboGroceryCategories
                     item={item}
                     i={i}
-                    url={`/combo-product-details/${item?._id}`}
+                    url={`/product-details/${item?.slug}`}
                     loader={props?.loader}
                     toaster={props?.toaster}
                   />
