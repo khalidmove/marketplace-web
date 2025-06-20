@@ -232,8 +232,9 @@ function orders(props) {
                     </div>
                   </div>
                   <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-5 bg-white p-3 rounded-[10px] ">
-                    {expandedOrderId === order._id &&
-                      order.productDetail.map((product, index) => {
+                    {expandedOrderId === order._id && (
+                      <div className="col-span-3 flex flex-col gap-5">
+                        {order?.productDetail?.map((product, index) => {
                         return (
                           <div
                             key={index}
@@ -252,7 +253,15 @@ function orders(props) {
                             <div className="w-full">
                               <div className="flex items-center justify-between w-full">
                                 <p className="text-black text-base font-bold">
-                                  {product.product?.name || "Product Name"}
+                                  {product.product?.name || "Product Name"} 
+                                  {
+                                    product?.comboItems?.map((item) => (
+                                      <span key={item._id}>
+                                        {item.name}
+                                        {product?.comboItems?.length > 1 && ", "}
+                                        </span>
+                                        ))
+                                  }
                                 </p>
                                 {/* {order?.productDetail?.map((item) => ( */}
                                 <RefundButton
@@ -285,6 +294,58 @@ function orders(props) {
                           </div>
                         );
                       })}
+                      {order?.comboProductDetail && order?.comboProductDetail?.map((product, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="md:col-span-3 col-span-1 md:rounded p-2 md:border md:border-custom-purple flex flex-wrap md:flex-nowrap gap-5 cursor-pointer"
+                          >
+                                <img
+                              className="w-20 h-20 text-black rounded-[10px] object-contain "
+                              src={product?.comboItems?.[0]?.product?.varients[0]?.image}
+                              alt="Product"
+                            />
+                            <div className="w-full">
+                              <div className="flex items-center justify-between w-full">
+                                <p className="text-black text-base font-bold">
+                                  {product?.comboItems?.map((item) => (
+                                    <span key={item._id}>
+                                      {item?.product?.name}
+                                      {product?.comboItems?.length > 1 && ", "}
+                                    </span>
+                                  ))}
+                                </p>
+                                {/* <RefundButton
+                                  // key={product?.product?._id}
+                                  returned={product?.returnDetails?.isReturned}
+                                  refunded={product?.returnDetails?.isRefunded}
+                                  deliveredAt={order?.deliveredAt}
+                                  id={order?._id}
+                                  productId={product?.product?._id}
+                                  loader={props?.loader}
+                                  toaster={props?.toaster}
+                                  getProductRequestbyUser={
+                                    getProductRequestbyUser
+                                  }
+                                /> */}
+                              </div>
+                              <p className="text-black text-xs font-bold pt-[6px]">
+                                {t("Quantity")}: {product.qty || 1}
+                              </p>
+                              <p className="text-black text-xs max-w-sm sm:w-full font-bold pt-[6px]">
+                                {t("Order Id")}: {order.orderId || order._id}
+                              </p>
+                            </div>
+                            <div className="w-[150px] flex flex-col justify-center md:items-end">
+                              <p className="text-black text-base font-bold">
+                                $ {currencySign(product?.price)}
+                              </p>
+                          </div>
+                          </div>
+                        );
+                      })}
+                      </div>
+                    )}
 
                     <div className="col-span-3 flex flex-wrap w-full gap-4 items-end text-black">
                       <span className="px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full">
