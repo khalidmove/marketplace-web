@@ -246,7 +246,7 @@ function orders(props) {
                                   `/myorder/${order?._id}?product_id=${product?._id}`
                                 );
                               }}
-                              className="w-20 h-20 text-black rounded-[10px] object-contain "
+                              className="w-20 h-20 text-black rounded-[10px] object-contain"
                               src={product.image[0]}
                               alt="Product"
                             />
