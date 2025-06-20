@@ -64,7 +64,7 @@ const Navbar = (props) => {
   ]);
   const [currentCity, setCurrentCity] = useState("");
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   // const [commonCity, setCommonCity] = useContext(cityContext)
   // const [initial, setInitial] = useContext(Context)
   // const [mobile, setMobile] = useState(false);
@@ -251,13 +251,15 @@ const Navbar = (props) => {
     );
   }, [router]);
 
-  
   const getFee = useCallback(() => {
     Api("get", `getServiceFee`, router).then(
       (res) => {
         props.loader(false);
         console.log("res================>", res.data);
-        if (res?.data[0]?.Servicefee === undefined || res?.data[0]?.Servicefee === "") {
+        if (
+          res?.data[0]?.Servicefee === undefined ||
+          res?.data[0]?.Servicefee === ""
+        ) {
           setServiceFee("0.00");
         } else {
           setServiceFee(res?.data[0]?.Servicefee);
@@ -268,7 +270,7 @@ const Navbar = (props) => {
         console.log(err);
       }
     );
-  }, [ router]);
+  }, [router]);
 
   const getDeliveryCharge = useCallback(() => {
     Api("get", `getDeliveryCharge`, router).then(
@@ -313,7 +315,7 @@ const Navbar = (props) => {
     getTax();
   }, [getTax]);
 
-    useEffect(() => {
+  useEffect(() => {
     getFee();
   }, [getFee]);
 
@@ -441,7 +443,7 @@ const Navbar = (props) => {
     },
   ];
 
-  useEffect(() => { }, [user]);
+  useEffect(() => {}, [user]);
   // console.log(props?.user);
 
   useEffect(() => {
@@ -458,7 +460,9 @@ const Navbar = (props) => {
     setCartItem(sumWithInitial1);
     setCartTotal(sumWithInitial);
     const totalWithTax = sumWithInitial + (sumWithInitial * tax) / 100;
-    setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip + Number(ServiceFee));
+    setMainTotal(
+      totalWithTax + deliveryCharge + deliveryPartnerTip + Number(ServiceFee)
+    );
   }, [cartData, openCart]);
 
   const emptyCart = async () => {
@@ -492,31 +496,56 @@ const Navbar = (props) => {
       props.toaster({ type: "warning", message: "Please select time slot" });
       return;
     }
-    // if (cartData?.length === 0) {
-    //   toaster({ type: "warning", message: 'Your cart is empty' });
-    //   return
-    // }
     let data = [];
+    let comboProductDetail = [];
     let cart = localStorage.getItem("addCartDetail");
     let d = JSON.parse(cart);
     d.forEach((element) => {
-      console.log(element);
-      console.log("hey i'm image ", element?.selectedImage);
-      data.push({
-        product: element?._id,
-        image: element.selectedColor?.image,
-        color: element.selectedColor?.color || "",
-        total: element.total,
-        price: element.price,
-        qty: element.qty,
-        seller_id: element.userid,
-        price_slot: element.price_slot,
-      });
+      // console.log(element);
+      // console.log("hey i'm image ", element?.selectedImage);
+      // data.push({
+      //   product: element?._id,
+      //   image: element.selectedColor?.image,
+      //   color: element.selectedColor?.color || "",
+      //   total: element.total,
+      //   price: element.price,
+      //   qty: element.qty,
+      //   seller_id: element.userid,
+      //   price_slot: element.price_slot,
+      // });
+      if (element.type === "combo") {
+        comboProductDetail.push({
+          comboId: element._id,
+          qty: element.qty,
+          price: element.price,
+          total: element.total,
+          comboItems: element.comboItems.map((item) => ({
+            product: item.product._id,
+            seller_id: item.product.userid,
+            qty: item.qty || 1,
+            price: item.our_price,
+            price_slot: item.selected_slot,
+          })),
+        });
+      } else {
+        data.push({
+          product: element._id,
+          image: element.selectedColor?.image,
+          color: element.selectedColor?.color || "",
+          total: element.total,
+          price: element.price,
+          qty: element.qty,
+          seller_id: element.userid,
+          price_slot: element.price_slot,
+        });
+      }
     });
 
     let newData = {
       productDetail: data,
-      sold_pieces: d?.qty,
+      comboProductDetail: comboProductDetail,
+      // sold_pieces: d?.qty,
+      sold_pieces: d.reduce((sum, item) => sum + (item.qty || 0), 0),
       total: mainTotal.toFixed(2),
       timeslot: timeslot,
       shipping_address: {
@@ -548,7 +577,8 @@ const Navbar = (props) => {
       deliveryTip: deliveryPartnerTip,
     };
 
-    // return
+    console.log("newData", newData);
+
     props.loader(true);
     Api("post", "createProductRquest", newData, router).then(
       (res) => {
@@ -576,7 +606,7 @@ const Navbar = (props) => {
     );
   };
 
-  // console.log("cart data::", cartData);
+  console.log("cart data::", cartData);
 
   const pricePerPoint = 0.001;
   const minPointsRequired = 25000;
@@ -636,12 +666,12 @@ const Navbar = (props) => {
                 <div className="hidden md:flex gap-10 font-medium">
                   <div
                     className="relative flex justify-end w-full "
-                  // onClick={() => {
-                  //   setShowCategory1(true)
-                  //   setTimeout(() => {
-                  //     inputRef2.current.focus();
-                  //   }, 200);
-                  // }}
+                    // onClick={() => {
+                    //   setShowCategory1(true)
+                    //   setTimeout(() => {
+                    //     inputRef2.current.focus();
+                    //   }, 200);
+                    // }}
                   >
                     <input
                       type="text"
@@ -930,8 +960,9 @@ const Navbar = (props) => {
         anchor={"right"}
       >
         <div
-          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${!cartData.length ? "h-full" : ""
-            }`}
+          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${
+            !cartData.length ? "h-full" : ""
+          }`}
         >
           <div className="bg-white w-full rounded-[5px]  boxShadows md:p-5 p-2 flex justify-between items-center">
             <div
@@ -1276,13 +1307,17 @@ const Navbar = (props) => {
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
               <div className="flex justify-between items-center w-full pt-1">
-                <p className="font-normal text-custom-purple text-base">{t("Tax")}</p>
+                <p className="font-normal text-custom-purple text-base">
+                  {t("Tax")}
+                </p>
                 <p className="text-custom-purple font-normal text-base">
                   {tax}%
                 </p>
               </div>
-               <div className="flex justify-between items-center w-full pt-1">
-                <p className="font-normal text-custom-purple text-base">{t("Service Fee")}</p>
+              <div className="flex justify-between items-center w-full pt-1">
+                <p className="font-normal text-custom-purple text-base">
+                  {t("Service Fee")}
+                </p>
                 <p className="text-custom-purple font-normal text-base">
                   {ServiceFee} IQD
                 </p>
@@ -1374,9 +1409,7 @@ const Navbar = (props) => {
                 <p className="text-gray-500 font-normal text-base">
                   {t("Payment Method")}
                 </p>
-                <select
-                  className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
-                >
+                <select className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2">
                   <option value="" disabled selected>
                     {t("Cash")}
                   </option>
