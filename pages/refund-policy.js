@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Api } from '@/services/service';
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 function RefundPolicy(props) {
     const [returnPolicyData, setReturnPolicyData] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
-
+const {t} = useTranslation()
     const getReturnPolicy = () => {
         props.loader(true);
         Api("get", "/content", router).then(
@@ -44,7 +45,7 @@ function RefundPolicy(props) {
                     <p className="text-base text-black font-normal md:pb-5">Loading...</p>
                 ) : ( */}
                     <div>
-                        <p className='text-2xl text-black font-bold md:pb-5 pb-2'>Refund Policy and Exchange</p>
+                        <p className='text-2xl text-black font-bold md:pb-5 pb-2'>{t("Refund Policy and Exchange")}</p>
                         <div className="text-base text-black font-normal md:pb-5 refund-policy" dangerouslySetInnerHTML={{ __html: returnPolicyData?.returnPolicy }} />
                     </div>
 

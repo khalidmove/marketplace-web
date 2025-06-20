@@ -2,13 +2,14 @@ import GroceryCategories from "@/components/GroceryCatories";
 import { Api } from "@/services/service";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 
 function SearchResult(props) {
   const router = useRouter();
   const [searchData, setSearchData] = useState([]);
   const { query } = router.query;
   // console.log("query ::", query);
-
+  const { t } = useTranslation()
   useEffect(() => {
     if (query) {
       getProductBySearchCategory(query);
@@ -44,14 +45,14 @@ function SearchResult(props) {
                   item={data}
                   url={`product-details/${data?.slug}`}
                   loader={props?.loader}
-                toaster={props?.toaster}
+                  toaster={props?.toaster}
                 />
               </div>
             ))
           ) : (
             <div className="col-span-full flex items-center justify-center min-h-[180px] md:min-h-[300px]">
               <p className="text-lg md:text-3xl text-black font-semibold text-center ">
-                No product available
+                {t("No product available")}
               </p>
             </div>
           )}

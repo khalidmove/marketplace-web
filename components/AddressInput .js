@@ -62,6 +62,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
+import { useTranslation } from "react-i18next";
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -74,6 +75,7 @@ const AddressInput = ({ shippingAddressData, setShippingAddressData }) => {
     libraries: ["places"],
   });
 
+  const {t} = useTranslation()
   // Sync when parent data changes (e.g., when editing existing address)
   useEffect(() => {
     if (shippingAddressData?.address) {
@@ -137,7 +139,7 @@ const AddressInput = ({ shippingAddressData, setShippingAddressData }) => {
         <input
           className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal text-base text-black outline-none mb-5"
           type="text"
-          placeholder="Address"
+          placeholder={t("Address")}
           value={inputValue}
           onChange={handleChange}
           required

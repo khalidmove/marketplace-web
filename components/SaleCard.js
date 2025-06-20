@@ -6,50 +6,19 @@ import { produce } from "immer"; // Add this line
 import currencySign from "@/utils/currencySign";
 import { IoAddSharp, IoRemoveSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
-function GroceryCategories({ item, i, url, toaster, loader }) {
+
+function GroceryCategories({ item, i, url, toaster, loader, Saleprice }) {
   // console.log(item);
   const router = useRouter();
   const [cartData, setCartData] = useContext(cartContext);
   const [openCart, setOpenCart] = useContext(openCartContext);
   const [isInCart, setIsInCart] = React.useState(false);
   const [availableQty, setAvailableQty] = React.useState(0);
-  // console.log(cartData);
-  const { t } = useTranslation()
+
+  const { t } = useTranslation();
   const handleAddToCart = () => {
-    // let updatedCart = [...cartData];
-    // const existingItemIndex = updatedCart.findIndex((f) => f._id === item?._id);
-
-    // const price = parseFloat(item?.price_slot[0]?.our_price);
-
-    // if (existingItemIndex === -1) {
-    //   const newItem = {
-    //     ...item,
-    //     selectedColor: item?.varients[0],
-    //     image: item?.varients[0]?.image[0],
-    //     total: price,
-    //     // parseFloat(item.price_slot[0]?.our_price),
-    //     qty: 1,
-    //   };
-    //   updatedCart.push(newItem);
-    // } else {
-    //   const nextState = produce(updatedCart, (draft) => {
-    //     draft[existingItemIndex].qty += 1;
-    //     draft[existingItemIndex].total = (
-    //       price * draft[existingItemIndex].qty
-    //     ).toFixed(2);
-    //   });
-    //   updatedCart = nextState;
-    // }
-
-    // setCartData(updatedCart);
-    // localStorage.setItem("addCartDetail", JSON.stringify(updatedCart));
-    // // setOpenCart(true);
-    // toaster({ type: "success", message: "Product added to cart" });
-
     setCartData((prevCartData) => {
-      const existingItem = prevCartData.find(
-        (f) => f._id === item?._id
-      );
+      const existingItem = prevCartData.find((f) => f._id === item?._id);
 
       if (!existingItem) {
         const newItem = {
@@ -57,22 +26,13 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
           selectedColor: item?.varients[0] || {},
           selectedImage: item?.varients[0]?.image[0] || "",
           qty: 1,
-          // total: item.price,
-          // total: item.price_slot[0]?.our_price,
-          price: item.price_slot[0]?.our_price,
-          total: Number(item.price_slot?.[0]?.our_price ?? 0).toFixed(2),
+          price: Saleprice,
+          total: Number(Saleprice ?? 0).toFixed(2),
           price_slot: item.price_slot[0],
-          // our_price: item.price_slot[0]?.our_price,
-          // other_price: item.price_slot[0]?.other_price,
-          // unit: item.price_slot[0]?.unit,
         };
 
         const updatedCart = [...prevCartData, newItem];
-        localStorage.setItem(
-          "addCartDetail",
-          JSON.stringify(updatedCart)
-        );
-
+        localStorage.setItem("addCartDetail", JSON.stringify(updatedCart));
         return updatedCart;
       }
 
@@ -103,7 +63,6 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
       key={i}
       className="flex border border-featuredProducts-borderColor bg-white flex-col md:pb-3 cursor-pointer text-center text-xs flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500 p-1 gap-4"
     >
-      {/* w-[228px]  */}
       <img
         className="md:h-[154px] h-[250px] w-full object-cover"
         src={item?.varients[0]?.image[0]}
@@ -120,14 +79,15 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             {item?.name}
           </span>
           <span className="text-custom-darkGray text-base font-semibold pt-1">
-            - {item?.price_slot[0]?.value}{item?.price_slot[0]?.unit}
+            - {item?.price_slot[0]?.value}
+            {item?.price_slot[0]?.unit}
           </span>
         </div>
       </div>
       <div className="flex justify-between items-center px-2">
         <p className="text-custom-purple text-lg font-semibold flex items-center gap-1">
           {/* ${item?.price_slot[0]?.our_price}{" "} */}
-          {currencySign(item?.price_slot[0]?.our_price)}
+          {currencySign(Saleprice)}
           <del className="font-medium text-sm text-custom-gray">
             {currencySign(item?.price_slot[0]?.other_price)}
           </del>
@@ -150,13 +110,13 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
                   const updatedCart = cartData.map((cartItem) =>
                     cartItem._id === item._id
                       ? {
-                        ...cartItem,
-                        qty: cartItem.qty - 1,
-                        total: (
-                          (cartItem.price || 0) *
-                          (cartItem.qty - 1)
-                        ).toFixed(2),
-                      }
+                          ...cartItem,
+                          qty: cartItem.qty - 1,
+                          total: (
+                            (cartItem.price || 0) *
+                            (cartItem.qty - 1)
+                          ).toFixed(2),
+                        }
                       : cartItem
                   );
 
@@ -193,13 +153,13 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
                 const updatedCart = cartData.map((cartItem) =>
                   cartItem._id === item._id
                     ? {
-                      ...cartItem,
-                      qty: cartItem.qty + 1,
-                      total: (
-                        (cartItem.price || 0) *
-                        (cartItem.qty + 1)
-                      ).toFixed(2),
-                    }
+                        ...cartItem,
+                        qty: cartItem.qty + 1,
+                        total: (
+                          (cartItem.price || 0) *
+                          (cartItem.qty + 1)
+                        ).toFixed(2),
+                      }
                     : cartItem
                 );
 
@@ -214,14 +174,6 @@ function GroceryCategories({ item, i, url, toaster, loader }) {
             </div>
           </div>
         )}
-        
-        {/* <button
-          className="bg-custom-lightGrayColor py-[8px] w-[90px] rounded-[2px] font-medium text-sm text-custom-purple flex justify-center items-center"
-          onClick={handleAddToCart}
-        >
-          <FiShoppingCart className="w-[14px] h-[14px] text-custom-purple mr-2" />
-          Add
-        </button> */}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Api } from "@/services/service";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 function signUp(props) {
   const router = useRouter();
@@ -14,7 +15,7 @@ function signUp(props) {
     password: "",
   });
   const [eyeIcon, setEyeIcon] = useState(false);
-
+  const { t } = useTranslation()
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const submit = (e) => {
@@ -101,10 +102,10 @@ function signUp(props) {
         <section className="bg-white w-full relative flex flex-col justify-center items-center">
           <div className="max-w-7xl mx-auto w-full px-1 md:px-6 2xl:px-0 md:pt-10 pt-5">
             <p className="text-custom-black md:text-[64px]  text-2xl font-bold md:leading-[80px]">
-              Welcome
+             {t("Welcome")} 
             </p>
             <p className="text-custom-newGrayColor font-normal md:text-xl text-base">
-              Please enter your sign up details.
+              {t("Please enter your sign up details")}.
             </p>
             {/* <div className="bg-custom-gray w-full rounded-[20px] border border-black md:p-10 p-5"> */}
             <form
@@ -117,12 +118,12 @@ function signUp(props) {
 
               <div className="flex flex-col justify-center border border-black rounded-[15px] md:p-10 p-5">
                 <p className="md:text-3xl text-2xl text-black font-bold  md:pb-10 pb-5 text-center">
-                  Sign up
+                  {t("Sign up")}
                 </p>
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="Name"
+                  placeholder={t("Name")}
                   required
                   value={userDetail.name}
                   onChange={(text) => {
@@ -136,7 +137,7 @@ function signUp(props) {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="Email"
+                  placeholder={t("Email")}
                   required
                   value={userDetail.email}
                   onChange={(text) => {
@@ -150,7 +151,7 @@ function signUp(props) {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="Referral"
+                  placeholder={t("Referral")}
                   value={userDetail.referal}
                   onChange={(text) => {
                     setUserDetail({
@@ -164,7 +165,7 @@ function signUp(props) {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5"
                   type="number"
-                  placeholder="Phone Number"
+                  placeholder={t("Phone Number")}
                   required
                   value={userDetail.phoneNumber}
                   onChange={(text) => {
@@ -218,17 +219,17 @@ function signUp(props) {
                   className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5 mt-5 disabled:bg-opacity-50"
                   type="submit"
                 >
-                  Sign up
+                  {t("Sign up")}
                 </button>
                 <p className="md:text-lg text-base text-custom-darkGray font-normal Lato">
-                  Already have an account{" "}
+                  {t("Already have an account")}{" "}
                   <span
                     className="font-bold text-custom-purple cursor-pointer"
                     onClick={() => {
                       router.push("/auth/signIn");
                     }}
                   >
-                    sign in
+                    {t("sign in")}
                   </span>
                 </p>
               </div>

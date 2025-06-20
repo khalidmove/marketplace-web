@@ -13,11 +13,12 @@ import {
 import { RxCrossCircled } from 'react-icons/rx';
 import { IoIosSend } from "react-icons/io";
 import { userContext } from './_app';
+import { useTranslation } from "react-i18next";
 
 function Referal() {
     const [viewPopup, setviewPopup] = useState(false)
     const [user, setUser] = useContext(userContext);
-
+    const { t } = useTranslation()
     // const shareUrl = "https://yourwebsite.com";
     const shareUrl = "https://main.d29wph1akkhrww.amplifyapp.com/";
     // const title = "Check out this amazing content!";
@@ -30,14 +31,14 @@ function Referal() {
                 <div className="max-w-7xl  mx-auto w-full flex justify-center items-center">
                     <div className='bg-[#5C108380] md:w-[680px] w-[320px] border border-custom-newPurple rounded-[15px] md:p-10 p-5 flex flex-col justify-center items-center'>
                         <img className='md:w-[300px] w-[100px] md:h-[300px] h-[100px]' src='/image-2.png' />
-                        <p className='text-black md:text-[32px] text-xl font-semibold pt-5 text-center'>Refer a friend to earn points.</p>
-                        <button className='w-[230px] md:h-[50px] h-[40px] border-[2px] border-custom-red rounded-[12px] md:text-2xl text-base font-medium text-custom-red mt-2'>{user?.referalpoints} Points</button>
-                        <p className='text-black max-w-56 sm:w-full md:text-xl text-base font-medium w-[400px] text-center py-5'>Welcome to our  <span className='font-semibold'>Resaz Referral Program</span>! We’re excited to reward you for sharing the Resaz with your friends and family</p>
+                        <p className='text-black md:text-[32px] text-xl font-semibold pt-5 text-center'>{t("Refer a friend to earn points")}.</p>
+                        <button className='w-[230px] md:h-[50px] h-[40px] border-[2px] border-custom-red rounded-[12px] md:text-2xl text-base font-medium text-custom-red mt-2'>{user?.referalpoints} {t("Points")}</button>
+                        <p className='text-black max-w-56 sm:w-full md:text-xl text-base font-medium w-[400px] text-center py-5'>{t('Welcome to our')} <span className='font-semibold'>{t("Resaz Referral Program")}</span>! {t("We’re excited to reward you for sharing the Resaz with your friends and family")}</p>
                         <button className='md:w-[426px] w-[230px] md:h-[50px] h-[40px] border border-custom-red rounded-[12px] md:text-xl text-base font-medium text-custom-red'>{user?.referal}</button>
                         <button className='bg-custom-red md:h-[50px] h-[40px] md:w-[426px] w-[230px] rounded-[12px] text-white md:text-xl text-base font-semibold mt-5'
                             onClick={() => {
                                 setviewPopup(true)
-                            }}>Send invite</button>
+                            }}>{t("Send invite")}</button>
                     </div>
                 </div>
             </section>

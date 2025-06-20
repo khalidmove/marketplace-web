@@ -4,9 +4,10 @@ import { IoEyeOffOutline } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 import { Api } from '@/services/service';
 import Head from 'next/head';
-
+import { useTranslation } from 'react-i18next';
 function forgotPassword(props) {
     const router = useRouter();
+    const {t} = useTranslation()
     const [eyeIcon, setEyeIcon] = useState(false);
     const [eyeIcons, setEyeIcons] = useState(false);
     const [showEmail, setShowEmail] = useState(true);
@@ -144,24 +145,25 @@ function forgotPassword(props) {
             <div className="bg-white w-full">
                 <section className="bg-white w-full  relative flex flex-col justify-center items-center">
                     <div className="max-w-7xl mx-auto w-full px-1 md:px-6 2xl:px-0 md:pt-10 pt-5">
-                        <p className='text-custom-black md:text-[64px]  text-2xl font-bold md:leading-[80px]'>Welcome</p>
-                        <p className='text-custom-newGrayColor font-normal md:text-xl text-base'>Please enter your forgot password details.</p>
+                        <p className='text-custom-black md:text-[64px]  text-2xl font-bold md:leading-[80px]'>{t("Welcome")}</p>
+                        <p className='text-custom-newGrayColor font-normal md:text-xl text-base'>
+                            {t("Please enter your forgot password details")}.</p>
                         {/* <div className="bg-custom-gray w-full rounded-[20px] border border-black md:p-10 p-5"> */}
                         <div className="grid md:grid-cols-2 grid-cols-1 w-full md:gap-0 gap-5 md:pt-10 pt-5">
                             <div className='md:flex justify-start items-center hidden'>
                                 <img className='h-96 object-contain' src='/image-1.png' />
                             </div>
                             <div className="flex flex-col justify-center border border-black rounded-[15px] md:p-10 p-5">
-                                <p className="md:text-3xl text-2xl text-black font-bold md:pb-10 pb-5 text-center">Forgot Password</p>
+                                <p className="md:text-3xl text-2xl text-black font-bold md:pb-10 pb-5 text-center">{t("Forgot Password")}</p>
 
-                                {showEmail && (<input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="text" placeholder="Email"
+                                {showEmail && (<input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="text" placeholder={t("Email")}
                                     value={email}
                                     onChange={(text) => {
                                         setEmail(text.target.value);
                                     }}
                                 />)}
 
-                                {showOtp && (<input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="number" placeholder="OTP"
+                                {showOtp && (<input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-5" type="number" placeholder={t("OTP")}
                                     value={otp}
                                     onChange={(text) => {
                                         setOtp(text.target.value);
@@ -170,7 +172,7 @@ function forgotPassword(props) {
 
                                 {showPassword && (<div>
                                     <div className='relative'>
-                                        <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-10" placeholder="New Password"
+                                        <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-10" placeholder={t("New Password")}
                                             type={!eyeIcon ? "password" : "text"}
                                             value={password}
                                             onChange={(text) => {
@@ -184,7 +186,7 @@ function forgotPassword(props) {
                                     </div>
 
                                     <div className='relative'>
-                                        <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-10" placeholder="Confirm Password"
+                                        <input className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[5px] border border-black font-normal md:text-lg text-base text-black outline-none mb-10" placeholder={t("Confirm Password")}
                                             type={!eyeIcons ? "password" : "text"}
                                             value={confirmPassword}
                                             onChange={(text) => {
@@ -198,13 +200,13 @@ function forgotPassword(props) {
                                     </div>
                                 </div>)}
 
-                                {showEmail && (<button className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5" onClick={sendOtp}>Send OTP</button>)}
-                                {showOtp && (<button className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5" onClick={verifyOtp}>Verify</button>)}
-                                {showPassword && (<button className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5" onClick={Submit}>Submit</button>)}
+                                {showEmail && (<button className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5" onClick={sendOtp}>{t("Send OTP")}</button>)}
+                                {showOtp && (<button className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5" onClick={verifyOtp}>{t("Verify")}</button>)}
+                                {showPassword && (<button className="bg-custom-purple md:h-[50px] h-[40px] w-full rounded-[10px] font-bold md:text-xl text-base text-white md:mb-10 mb-5" onClick={Submit}>{t("Submit")}</button>)}
                                 <p className="md:text-lg text-base text-custom-darkGray font-normal">
-                                    Already have an account <span className="font-bold text-custom-purple cursor-pointer" onClick={() => {
+                                    {t("Already have an account")} <span className="font-bold text-custom-purple cursor-pointer" onClick={() => {
                                         router.push("/auth/signIn");
-                                    }}>sign in</span>
+                                    }}>{t("sign in")}</span>
                                 </p>
                             </div>
 

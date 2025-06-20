@@ -6,7 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import moment from "moment";
 import Carousel from "react-multi-carousel";
 import currencySign from "@/utils/currencySign";
-
+import { useTranslation } from "react-i18next";
 export default function MyOrder(props) {
   const router = useRouter();
   const [productsId, setProductsId] = useState({});
@@ -14,7 +14,7 @@ export default function MyOrder(props) {
   const [selectedImageList, setSelectedImageList] = useState([]);
   const { id, productDetailId } = router.query;
   const [userAddress, setUserAddress] = useState([]);
-
+  const { t } = useTranslation()
   // console.log("router------->", router);
   
 
@@ -121,7 +121,7 @@ export default function MyOrder(props) {
               )}
               <div className="flex flex-col justify-start items-start">
                 <p className="text-black text-base font-normal md:mt-5 mt-3 ">
-                  {"Qty"}:{" "}
+                  {t("Qty")}:{" "}
                   <span className="font-bold">{productsId?.qty || 0}</span>
                 </p>
                 {productsId?.vat && (
@@ -132,7 +132,7 @@ export default function MyOrder(props) {
                 )}
 
                 <p className="text-black text-base font-normal md:pt-5 pt-3">
-                  {"Order Date"}:{" "}
+                  {t("Order Date")}:{" "}
                   <span className="font-bold">
                     {moment(new Date(ordersData?.createdAt)).format(
                       "DD MMM YYYY"
@@ -148,41 +148,41 @@ export default function MyOrder(props) {
                         "
           >
             <p className="text-black font-bold text-2xl md:mb-0 mb-2 md:mt-0 mt-5">
-              {"Shipping Address"}
+              {t("Shipping Address")}
             </p>
             <div className="grid grid-cols-2 w-full  justify-center items-center">
               <p className="text-black text-base font-normal md:pt-5 pt-3">
-                {"First Name"}
+                {t("First Name")}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
                 {userAddress?.firstName}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
-                {"Address"}
+                {t("Address")}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
                 {userAddress?.address}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
-                {"Pin Code"}
+                {t("Pin Code")}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
                 {userAddress?.pinCode}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
-                {"Phone Number"}
+                {t("Phone Number")}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
                 {userAddress?.phoneNumber}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
-                {"City"}
+                {t("City")}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
                 {userAddress?.city}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
-                {"Country"}
+                {t("Country")}
               </p>
               <p className="text-black text-base font-normal md:pt-5 pt-3">
                 {userAddress?.country}

@@ -99,7 +99,7 @@ box-shadow: 0px 4px 4px 0px #00000040 !important;
 }
 
 .react-multi-carousel-track {
-  gap: 10px !important;
+  gap: 0px !important;
 }
 
 .MuiDrawer-paper{

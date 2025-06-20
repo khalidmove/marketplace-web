@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Api } from "@/services/service";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 function faq() {
     const [open, setOpen] = useState([]);
     const [faq, setFaq] = useState([]);
     const router = useRouter();
-
+    const { t } = useTranslation()
     useEffect(() => {
         getFAQ();
     }, []);  // ✅ Fix: Added dependency array to avoid infinite re-renders
@@ -37,7 +38,7 @@ function faq() {
         <div className="bg-white w-full">
             <section className="bg-white w-full flex flex-col justify-center items-center">
                 <div className="max-w-6xl mx-auto w-full  md:px-0 px-5 md:pt-10 pt-5 md:pb-10 pb-5">
-                    <p className="text-2xl text-black font-bold text-center md:pb-5 pb-5">FAQ</p>
+                    <p className="text-2xl text-black font-bold text-center md:pb-5 pb-5">{t("FAQ")}</p>
 
                     {faq.length > 0 ? (
                         faq.map((item, index) => (
@@ -75,7 +76,7 @@ function faq() {
                             </div>
                         ))
                     ) : (
-                        <p className="text-center text-gray-600">No FAQs available.</p>
+                        <p className="text-center text-gray-600">{t("No FAQs available")}.</p>
                     )}
                 </div>
             </section>

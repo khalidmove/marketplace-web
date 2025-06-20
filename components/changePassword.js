@@ -5,14 +5,14 @@ import { AiOutlineMail, AiFillLock } from "react-icons/ai";
 import { Api } from "@/services/service";
 import { checkForEmptyKeys } from "@/services/InputsNullChecker";
 import { MdPassword } from "react-icons/md";
-
+import { useTranslation } from 'react-i18next';
 function ChangePassword(props) {
     const router = useRouter();
     const [showEmail, setShowEmail] = useState(true);
     const [showOtp, setShowOtp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [token, setToken] = useState();
-
+const {t} = useTranslation()
     const [submitted, setSubmitted] = useState(false);
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
@@ -72,13 +72,13 @@ function ChangePassword(props) {
                         <div className="flex w-full  px-3 flex-col justify-center items-center md:px-7  border rounded-xl shadow-xl">
                             <p className="text-custom-black text-3xl font-bold my-5">
                                 {" "}
-                                Change Password
+                                {t("Change Password")}
                             </p>
                             <div className="mb-3 block flex-col md:flex w-full justify-start ">
                                 <div className="mr-2 relative w-full  sm:pb-0 pb-1 flex rounded-2xl  justify-start items-center border outline-custom-orange ">
                                     <AiFillLock className=" text-custom-gray h-5 w-5 ml-2" />
                                     <input
-                                        placeholder="New Password"
+                                        placeholder={t("New Password")}
                                         type="password"
                                         className=" w-full pl-2  text-black  sm:text-lg text-sm rounded-2xl sm:py-4 py-2 outline-none"
                                         value={password}
@@ -91,7 +91,7 @@ function ChangePassword(props) {
                                 <div className="mr-2 relative w-full  sm:pb-0 pb-1 flex rounded-2xl  justify-start items-center border outline-custom-orange mt-4">
                                     <AiFillLock className=" text-custom-gray h-5 w-5 ml-2" />
                                     <input
-                                        placeholder="Confirm Password"
+                                        placeholder={t("Confirm Password")}
                                         type="password"
                                         className=" w-full pl-2  text-black  sm:text-lg text-sm rounded-2xl sm:py-4 py-2 outline-none"
                                         value={confirmPassword}
@@ -107,7 +107,7 @@ function ChangePassword(props) {
                                     type="button"
                                     className="text-white w-full rounded-2xl bg-custom-purple font-nunito text-[20px] md:py-3 py-2"
                                 >
-                                    Submit
+                                    {t("Submit")}
                                 </button>
                             </div>
                         </div>

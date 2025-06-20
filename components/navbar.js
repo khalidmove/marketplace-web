@@ -22,6 +22,7 @@ import { FaMapMarker, FaMapMarkerAlt, FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { FiSearch } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import {
   IoAddSharp,
   IoCloseCircleOutline,
@@ -63,7 +64,7 @@ const Navbar = (props) => {
   ]);
   const [currentCity, setCurrentCity] = useState("");
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-
+  const { t } = useTranslation()
   // const [commonCity, setCommonCity] = useContext(cityContext)
   // const [initial, setInitial] = useContext(Context)
   // const [mobile, setMobile] = useState(false);
@@ -102,6 +103,7 @@ const Navbar = (props) => {
     lng: null,
   });
   const [deliveryCharge, setDeliveryCharge] = useState(0);
+  const [ServiceFee, setServiceFee] = useState(0);
   const [deliveryPartnerTip, setDeliveryPartnerTip] = useState(0);
   const [mainTotal, setMainTotal] = useState(0);
   const [timeslot, setTimeslot] = useState("");
@@ -249,6 +251,25 @@ const Navbar = (props) => {
     );
   }, [router]);
 
+  
+  const getFee = useCallback(() => {
+    Api("get", `getServiceFee`, router).then(
+      (res) => {
+        props.loader(false);
+        console.log("res================>", res.data);
+        if (res?.data[0]?.Servicefee === undefined || res?.data[0]?.Servicefee === "") {
+          setServiceFee("0.00");
+        } else {
+          setServiceFee(res?.data[0]?.Servicefee);
+        }
+      },
+      (err) => {
+        props.loader(false);
+        console.log(err);
+      }
+    );
+  }, [ router]);
+
   const getDeliveryCharge = useCallback(() => {
     Api("get", `getDeliveryCharge`, router).then(
       (res) => {
@@ -291,6 +312,10 @@ const Navbar = (props) => {
   useEffect(() => {
     getTax();
   }, [getTax]);
+
+    useEffect(() => {
+    getFee();
+  }, [getFee]);
 
   useEffect(() => {
     getDeliveryCharge();
@@ -416,7 +441,7 @@ const Navbar = (props) => {
     },
   ];
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
   // console.log(props?.user);
 
   useEffect(() => {
@@ -432,10 +457,8 @@ const Navbar = (props) => {
     );
     setCartItem(sumWithInitial1);
     setCartTotal(sumWithInitial);
-    // setMainTotal(sumWithInitial + deliveryCharge + deliveryPartnerTip);
-    // main total with tax
     const totalWithTax = sumWithInitial + (sumWithInitial * tax) / 100;
-    setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip);
+    setMainTotal(totalWithTax + deliveryCharge + deliveryPartnerTip + Number(ServiceFee));
   }, [cartData, openCart]);
 
   const emptyCart = async () => {
@@ -599,12 +622,12 @@ const Navbar = (props) => {
               <div
                 className={` flex items-center justify-between md:py-4 py-0 text-sm md:px-0 px-0 max-w-full`}
               >
-                <div className="md:flex gap-1 items-center text-xl justify-center font-bold hidden">
+                <div className="md:flex gap-1 items-center text-xl justify-center  hidden">
                   <img
                     onClick={() => {
                       router.push("/");
                     }}
-                    className="md:w-[165px] w-[130px] h-[43px] object-cover cursor-pointer"
+                    className="md:w-[145px]  h-[53px] object-cover cursor-pointer"
                     src="/logo.jpeg"
                     alt="Resaz Logo"
                   />
@@ -613,16 +636,16 @@ const Navbar = (props) => {
                 <div className="hidden md:flex gap-10 font-medium">
                   <div
                     className="relative flex justify-end w-full "
-                    // onClick={() => {
-                    //   setShowCategory1(true)
-                    //   setTimeout(() => {
-                    //     inputRef2.current.focus();
-                    //   }, 200);
-                    // }}
+                  // onClick={() => {
+                  //   setShowCategory1(true)
+                  //   setTimeout(() => {
+                  //     inputRef2.current.focus();
+                  //   }, 200);
+                  // }}
                   >
                     <input
                       type="text"
-                      placeholder="Search for items..."
+                      placeholder={t("Search for items...")}
                       className="md:w-[255px] lg:w-[455px] bg-custom-lightGray outline-none h-[42px] px-5 rounded-[2px] text-black font-medium	text-sm flex justify-start items-center text-start"
                       ref={inputRef2}
                       value={serchData}
@@ -669,7 +692,7 @@ const Navbar = (props) => {
                         )}
                       </div>
                       <span className="text-black text-xs	font-medium">
-                        Wishlist
+                        {t("Wishlist")}
                       </span>
                     </li>
                     <li
@@ -691,7 +714,7 @@ const Navbar = (props) => {
                       </div>
                       {/* <FiShoppingCart className="w-[24px] h-[24px] text-custom-purple" /> */}
                       <span className="text-black text-xs	font-medium">
-                        My cart
+                        {t("My cart")}
                       </span>
                     </li>
                   </ul>
@@ -736,7 +759,7 @@ const Navbar = (props) => {
                                       router.push("/MyProfile");
                                     }}
                                   >
-                                    {"My Profile"}
+                                    {t("My Profile")}
                                   </div>
                                 </li>
                                 <li className="px-5 shadow-inner feature1  py-2">
@@ -747,7 +770,7 @@ const Navbar = (props) => {
                                       router.push("/orders");
                                     }}
                                   >
-                                    {"My order"}
+                                    {t("My order")}
                                   </div>
                                 </li>
                                 {user?.type === "SELLER" && (
@@ -761,7 +784,7 @@ const Navbar = (props) => {
                                         );
                                       }}
                                     >
-                                      {"Dashboard"}
+                                      {t("Dashboard")}
                                     </div>
                                   </li>
                                 )}
@@ -769,13 +792,13 @@ const Navbar = (props) => {
                                   <div
                                     onClick={() => {
                                       Swal.fire({
-                                        title: "Are you sure?",
-                                        text: "Do you want to signout?",
-                                        icon: "warning",
+                                        title: t("Are you sure?"),
+                                        text: t("Do you want to signout?"),
+
                                         showCancelButton: true,
                                         cancelButtonColor: "#d33",
-                                        confirmButtonText: "Yes",
-                                        cancelButtonText: "No",
+                                        confirmButtonText: t("Yes"),
+                                        cancelButtonText: t("No"),
                                       }).then(function (result) {
                                         if (result.isConfirmed) {
                                           setUser({});
@@ -789,7 +812,7 @@ const Navbar = (props) => {
                                     className="block px-5 py-1  pl-0 text-white text-left font-semibold text-base"
                                     aria-current="page"
                                   >
-                                    {"Sign out"}
+                                    {t("Sign out")}
                                   </div>
                                 </li>
                               </ul>
@@ -852,7 +875,7 @@ const Navbar = (props) => {
                     onClick={() => {
                       router.push("/");
                     }}
-                    className="md:w-[165px] w-[130px] h-[43px] object-cover cursor-pointer"
+                    className="w-[160px] h-[47px] object-cover cursor-pointer"
                     src="/logo.jpeg"
                     alt="Resaz Logo"
                   />
@@ -863,7 +886,7 @@ const Navbar = (props) => {
                   <p
                     type="text"
                     ref={inputRef1}
-                    placeholder="Search for items..."
+                    placeholder={t("Search for items...")}
                     onClick={() => {
                       setShowCategory1(true);
                       setTimeout(() => {
@@ -873,7 +896,7 @@ const Navbar = (props) => {
                     className="bg-white min-w-32 justify-start items-center px-3 h-10 w-full rounded-[62px] outline-none flex text-black text-xs font-normal"
                   >
                     {" "}
-                    {serchData || "Search for items..."}
+                    {serchData || t("Search for items...")}
                   </p>
                 </div>
 
@@ -907,9 +930,8 @@ const Navbar = (props) => {
         anchor={"right"}
       >
         <div
-          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${
-            !cartData.length ? "h-full" : ""
-          }`}
+          className={`md:w-[700px] w-[330px] relative   pb-5 bg-custom-purple  pt-5 md:px-10 px-5 ${!cartData.length ? "h-full" : ""
+            }`}
         >
           <div className="bg-white w-full rounded-[5px]  boxShadows md:p-5 p-2 flex justify-between items-center">
             <div
@@ -920,7 +942,7 @@ const Navbar = (props) => {
             >
               <IoIosArrowBack className="md:w-[38px] w-[28px] md:h-[31px] h-[21px] text-black" />
               <p className="text-custom-purple md:text-2xl text-base font-bold">
-                Your Cart
+                {t("Your Cart")}
               </p>
             </div>
             {cartData.length > 0 && (
@@ -936,10 +958,10 @@ const Navbar = (props) => {
 
                   // Set up SweetAlert
                   Swal.fire({
-                    title: "Are you sure you want to empty your cart?",
+                    title: t("Are you sure you want to empty your cart?"),
                     showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "No",
+                    confirmButtonText: t("Yes"),
+                    cancelButtonText: t("No"),
                     confirmButtonColor: "#35035C",
                     cancelButtonColor: "#d33",
                     reverseButtons: true,
@@ -962,7 +984,7 @@ const Navbar = (props) => {
                   });
                 }}
               >
-                Empty Cart
+                {t("Empty Cart")}
               </button>
             )}
           </div>
@@ -1001,7 +1023,7 @@ const Navbar = (props) => {
                   <GoClock className="text-white w-[38px] h-[29px]" />
                 </div>
                 <p className="text-custom-purple font-semibold text-xl">
-                  Items
+                  {t("Items")}
                 </p>
                 {/* Delivery in 8 mins */}
               </div>
@@ -1009,7 +1031,7 @@ const Navbar = (props) => {
               <div className="bg-white w-full rounded-[5px]  md:p-5 p-2 mt-5 text-center">
                 <MdOutlineShoppingCart className="text-custom-purple text-5xl mx-auto mb-4" />
                 <p className="text-custom-purple font-semibold text-xl">
-                  Your cart is empty
+                  {t("Your cart is empty")}
                 </p>
                 {/* <p className="text-custom-newGrayColors text-sm mt-2">
               Looks like you haven't added any items to your cart yet. Start shopping now!
@@ -1021,7 +1043,7 @@ const Navbar = (props) => {
                     router.push("/");
                   }}
                 >
-                  Start Shopping
+                  {t("Start Shopping")}
                 </button>
               </div>
             )}
@@ -1246,7 +1268,7 @@ const Navbar = (props) => {
             <div className="bg-white w-full rounded-[5px] boxShadows md:p-5 p-2 mt-5">
               <div className="flex justify-between items-center w-full">
                 <p className="text-custom-purple font-normal text-base">
-                  Total Amount
+                  {t("Total Amount")}
                 </p>
                 <p className="text-custom-purple font-normal text-base">
                   {currencySign(CartTotal)}
@@ -1254,14 +1276,20 @@ const Navbar = (props) => {
                 {/* <del className="font-normal text-base text-custom-grayColors mr-5">₹941</del> */}
               </div>
               <div className="flex justify-between items-center w-full pt-1">
-                <p className="font-normal text-base">Tax</p>
+                <p className="font-normal text-custom-purple text-base">{t("Tax")}</p>
                 <p className="text-custom-purple font-normal text-base">
                   {tax}%
                 </p>
               </div>
+               <div className="flex justify-between items-center w-full pt-1">
+                <p className="font-normal text-custom-purple text-base">{t("Service Fee")}</p>
+                <p className="text-custom-purple font-normal text-base">
+                  {ServiceFee} IQD
+                </p>
+              </div>
               <div className="flex items-center justify-between mt-1">
                 <p className="text-custom-purple text-base">
-                  You have total point
+                  {t("You have total point")}
                 </p>
                 <div className="flex gap-1 ">
                   <span>
@@ -1276,26 +1304,26 @@ const Navbar = (props) => {
                 <div className="mt-1">
                   <input type="checkbox" onChange={handleCheckboxChange} />{" "}
                   <span>
-                    Use{" "}
+                    {t("Use")}{" "}
                     <span className="text-custom-purple font-semibold">
                       {redeemablePoints}
                     </span>{" "}
-                    points
+                    {t("points")}
                   </span>
                 </div>
               ) : (
                 <p className="mt-1 text-base text-custom-purple">
-                  Minimum{" "}
+                  {t("Minimum")}{" "}
                   <span className="font-semibold text-custom-purple">
                     25,000{" "}
                   </span>
-                  points required to redeem
+                  {t("points required to redeem")}
                 </p>
               )}
 
               <div className="flex justify-between items-center w-full pt-1">
                 <p className="text-custom-red font-normal text-base">
-                  Delivery Fee {deliveryCharge <= 0 ? "(Free)" : ""}
+                  {t("Delivery Fee")} {deliveryCharge <= 0 ? "(Free)" : ""}
                 </p>
                 <p className="text-custom-purple font-normal text-base">
                   {currencySign(deliveryCharge)}
@@ -1305,7 +1333,7 @@ const Navbar = (props) => {
 
               <div className="flex justify-between items-center w-full pt-1 border-b border-b-[#97999B80] pb-3">
                 <p className="text-gray-500 font-normal text-base">
-                  Delivery Partner Tip
+                  {t("Delivery Partner Tip")}
                 </p>
                 {deliveryPartnerTip ? (
                   // Tip is selected: show tip + cancel icon
@@ -1331,7 +1359,7 @@ const Navbar = (props) => {
                     }}
                   >
                     <option value="" disabled selected>
-                      Select Tip
+                      {t("Select Tip")}
                     </option>
                     {tips?.map((item, i) => (
                       <option key={i} value={item}>
@@ -1344,11 +1372,13 @@ const Navbar = (props) => {
 
               <div className="flex justify-between items-center w-full border-b border-b-[#97999B80] py-3">
                 <p className="text-gray-500 font-normal text-base">
-                  Payment Method
+                  {t("Payment Method")}
                 </p>
-                <select className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2">
+                <select
+                  className="bg-white text-custom-purple font-normal text-base outline-none rounded-[8px] w-fit px-2"
+                >
                   <option value="" disabled selected>
-                    Cash
+                    {t("Cash")}
                   </option>
                 </select>
               </div>
@@ -1364,7 +1394,7 @@ const Navbar = (props) => {
 
               <div className="flex justify-between items-center w-full pt-3">
                 <p className="text-custom-purple font-normal text-base">
-                  Time Slot
+                  {t("Time Slot")}
                 </p>
                 <select
                   className="bg-white text-custom-purple font-normal text-base outline-none border border-custom-purple rounded-[8px] h-[40px] w-fit px-2"
@@ -1374,7 +1404,7 @@ const Navbar = (props) => {
                   }}
                 >
                   <option value="" disabled>
-                    Select Time Slot
+                    {t("Select Time Slot")}
                   </option>
                   {availableTimeSlots?.map((item, i) => (
                     <option
@@ -1389,7 +1419,7 @@ const Navbar = (props) => {
 
               <div className="flex justify-between items-center w-full pt-3">
                 <p className="text-custom-purple font-normal text-base">
-                  Total Payable
+                  {t("Total Payable")}
                 </p>
                 <p className="text-custom-purple font-medium text-base">
                   {currencySign(mainTotal)}
@@ -1410,7 +1440,7 @@ const Navbar = (props) => {
                     className="flex justify-between items-center w-full pt-5"
                   >
                     <p className="text-custom-purple font-normal text-base">
-                      Delivery Address
+                      {t("Delivery Address")}
                     </p>
                     <p className="text-custom-purple font-medium text-base flex items-center">
                       <FaMapMarkerAlt />{" "}
@@ -1459,7 +1489,7 @@ const Navbar = (props) => {
                 setOpenCart(false);
               }}
             >
-              CONTINUE TO PAY {currencySign(mainTotal)}
+              {t("CONTINUE TO PAY")} {currencySign(mainTotal)}
             </button>
           )}
         </div>
@@ -1555,14 +1585,14 @@ const Navbar = (props) => {
 
             <form className="px-5 py-5" onSubmit={createProductRquest}>
               <p className="text-black font-bold text-2xl mb-5">
-                Shipping Address
+                {t("Shipping Address")}
               </p>
 
               <div className="w-full">
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="First Name"
+                  placeholder={t("First Name")}
                   required
                   value={shippingAddressData?.username}
                   onChange={(text) => {
@@ -1578,7 +1608,7 @@ const Navbar = (props) => {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="House No. / Street Address"
+                  placeholder={t("House No. / Street Address")}
                   required
                   value={shippingAddressData?.house_no}
                   onChange={(text) => {
@@ -1601,7 +1631,7 @@ const Navbar = (props) => {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="number"
-                  placeholder="Pin Code"
+                  placeholder={t("Pin Code")}
                   required
                   value={shippingAddressData?.pinCode}
                   onChange={(text) => {
@@ -1617,7 +1647,7 @@ const Navbar = (props) => {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="number"
-                  placeholder="Phone number"
+                  placeholder={t("Phone number")}
                   required
                   value={shippingAddressData?.phoneNumber}
                   onChange={(text) => {
@@ -1633,7 +1663,7 @@ const Navbar = (props) => {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="City"
+                  placeholder={t("City")}
                   required
                   value={shippingAddressData?.city}
                   onChange={(text) => {
@@ -1649,7 +1679,7 @@ const Navbar = (props) => {
                 <input
                   className="bg-white w-full md:h-[50px] h-[40px] px-5 rounded-[10px] border border-custom-newGray font-normal  text-base text-black outline-none mb-5"
                   type="text"
-                  placeholder="Country"
+                  placeholder={t("Country")}
                   required
                   value={shippingAddressData?.country}
                   onChange={(text) => {
@@ -1666,7 +1696,7 @@ const Navbar = (props) => {
                   className="bg-custom-purple w-full md:h-[50px] h-[40px] rounded-[5px] text-white font-normal text-base"
                   type="submit"
                 >
-                  Place Order
+                  {t("Place Order")}
                 </button>
               </div>
             </form>
@@ -1690,7 +1720,7 @@ const Navbar = (props) => {
                   setProductsList([]);
                 }
               }}
-              placeholder="Search for products..."
+              placeholder={t("Search for products...")}
               className="bg-custom-lightGray px-5 h-10 w-full rounded-[62px] outline-none  text-black"
             />
             <IconButton
@@ -1721,7 +1751,7 @@ const Navbar = (props) => {
             <section className="w-full ">
               <div className="max-w-7xl mx-auto w-full md:px-0 px-5 md:py-5 py-5">
                 <p className="md:text-[48px] text-2xl text-black font-normal text-center">
-                  Products
+                  {t("Products")}
                 </p>
                 <div className="md:py-10 py-5 grid md:grid-cols-4 grid-cols-1 gap-5 w-full">
                   {productsList.map((item, i) => (
@@ -1746,7 +1776,7 @@ const Navbar = (props) => {
                 </div>
                 {productsList?.length === 0 && (
                   <p className="text-2xl text-black font-normal text-center">
-                    No Products
+                    {t("No Products")}
                   </p>
                 )}
               </div>
