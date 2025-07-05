@@ -20,13 +20,11 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import currencySign from "@/utils/currencySign";
-import { useTranslation } from "react-i18next";
 import ComboGroceryCategories from "@/components/ComboGroceryCategories";
 
 function ProductDetails(props) {
   const router = useRouter();
   console.log(router);
-  const { t } = useTranslation()
   const [user, setUser] = useContext(userContext);
   const [wishlist, setWishlist] = useContext(wishlistContext);
   const [productsId, setProductsId] = useState({});
@@ -114,9 +112,9 @@ function ProductDetails(props) {
   };
 
   const getProductById = async () => {
-    let url = `getProductByslug/${router?.query?.id}`;
+    let url = `getComboProductByslug/${router?.query?.id}`;
     if (user?.token) {
-      url = `getProductByslug/${router?.query?.id}?user=${user?._id}`;
+      url = `getComboProductByslug/${router?.query?.id}?user=${user?._id}`;
     }
     props.loader(true);
     Api("get", url, "", router).then(
@@ -327,10 +325,11 @@ function ProductDetails(props) {
                               setPriceIndex(i);
                             }}
                             className={`bg-custom-lightPurple cursor-pointer w-full rounded-[8px] border border-custom-darkPurple p-[10px] relative
-                                        ${priceIndex == i
-                                ? "bg-custom-lightPurple"
-                                : "bg-white"
-                              }
+                                        ${
+                                          priceIndex == i
+                                            ? "bg-custom-lightPurple"
+                                            : "bg-white"
+                                        }
                             `}
                           >
                             <img
@@ -339,7 +338,7 @@ function ProductDetails(props) {
                             />
                             <p className="text-white text-center text-[8px] font-medium absolute -top-[2px] right-[1px]">
                               {percentageDifference?.toFixed(2)}%<br />
-                              {t("off")}
+                              off
                             </p>
                             <p className="text-black font-normal text-base pt-1">
                               {currencySign(data.our_price)}
@@ -441,7 +440,7 @@ function ProductDetails(props) {
                           // Update only the matching product with the same price slot
                           const updatedCart = cartData.map((item) =>
                             item._id === updatedProduct._id &&
-                              item.price_slot.value === selectedPrice.value
+                            item.price_slot.value === selectedPrice.value
                               ? updatedProduct
                               : item
                           );
@@ -509,7 +508,7 @@ function ProductDetails(props) {
 
                         const updatedCart = cartData.map((item) =>
                           item._id === updatedProduct._id &&
-                            item.price_slot.value === selectedPrice.value
+                          item.price_slot.value === selectedPrice.value
                             ? updatedProduct
                             : item
                         );
@@ -592,40 +591,40 @@ function ProductDetails(props) {
                       });
                     }}
                   >
-                    {t('ADD')}
+                    ADD
                   </button>
                 )}
 
                 {productsId.attributes?.some(
                   (attribute) => attribute.name === "color"
                 ) && (
-                    <div className="w-full">
-                      <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
-                        Select Colors
-                      </p>
-                      <div className="flex gap-2 flex-wrap">
-                        {productsId?.varients?.map((item, i) => (
-                          <div
-                            key={i}
-                            className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
-                            style={{ background: item?.color }}
-                            onClick={() => {
-                              item.selected.forEach((ele) => {
-                                ele.request = 0;
-                              });
-                              setSelectedColor(item);
-                              setSelectedImageList(item?.image);
-                              setSelectedImage(item?.image[0]);
-                            }}
-                          >
-                            {selectedColor?.color === item?.color && (
-                              <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                  <div className="w-full">
+                    <p className="text-custom-newBlacks font-semibold text-lg md:pt-5 pt-3 pb-3">
+                      Select Colors
+                    </p>
+                    <div className="flex gap-2 flex-wrap">
+                      {productsId?.varients?.map((item, i) => (
+                        <div
+                          key={i}
+                          className="md:w-[37px] w-[19px] md:h-[37px] h-[19px] rounded-full flex justify-center items-center border border-black"
+                          style={{ background: item?.color }}
+                          onClick={() => {
+                            item.selected.forEach((ele) => {
+                              ele.request = 0;
+                            });
+                            setSelectedColor(item);
+                            setSelectedImageList(item?.image);
+                            setSelectedImage(item?.image[0]);
+                          }}
+                        >
+                          {selectedColor?.color === item?.color && (
+                            <FaCheck className="md:w-[18px] w-[11px] md:h-[15px] h-[8px] text-white" />
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -634,45 +633,47 @@ function ProductDetails(props) {
             <div className="grid md:grid-cols-2 grid-cols-1 w-full gap-5">
               <div className="flex flex-col justify-start items-start">
                 <p className="text-black md:text-2xl text-xl font-bold">
-                  {t("About Product")}
+                  About Product
                 </p>
-                <div className="flex flex-col justify-start items-start">
-                  <p className="text-black font-medium md:text-xl text-base pt-2">
-                    {t("Description")} :{" "}
-                    <span className="text-custom-newGray font-normal md:text-xl text-base">
-                      {productsId?.long_description}
-                    </span>
-                  </p>
-
-                  <p className="text-black pt-2 font-medium md:text-xl text-base">
-                    {t("Country of Origin")} :{" "}
-                    <span className="text-custom-newGray font-normal md:text-xl text-base">
-                      {productsId?.origin}
-                    </span>
-                  </p>
-                 
-                  <p className="text-black font-medium md:text-xl text-base pt-2">
-                    {t("Manufacturer Name")} :{" "}
-                    <span className="text-custom-newGray font-normal md:text-xl text-base">
-                      {productsId?.manufacturername}
-                    </span>
-                  </p>
-                  <p className="text-black font-medium md:text-xl text-base pt-2">
-
-                    {t("Manufacturer Address")} :{" "}
-                    <span className="text-custom-newGray font-normal md:text-xl text-base">
-                      {productsId?.manufactureradd}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-black font-medium md:text-xl text-base pt-2">
+                  Description :{" "}
+                  <span className="text-custom-newGray font-normal md:text-xl text-base">
+                    {productsId?.long_description}
+                  </span>
+                </p>
               </div>
-
+              <div className="flex flex-col justify-start items-start">
+                <p className="text-black font-medium md:text-xl text-base">
+                  Country of Origin :{" "}
+                  <span className="text-custom-newGray font-normal md:text-xl text-base">
+                    {productsId?.origin}
+                  </span>
+                </p>
+                {/* <p className="text-black font-medium md:text-xl text-base pt-2">
+                  Self Life :{" "}
+                  <span className="text-custom-newGray font-normal md:text-xl text-base">
+                    {productsId?.selflife}
+                  </span>
+                </p> */}
+                <p className="text-black font-medium md:text-xl text-base pt-2">
+                  Manufacturer Name :{" "}
+                  <span className="text-custom-newGray font-normal md:text-xl text-base">
+                    {productsId?.manufacturername}
+                  </span>
+                </p>
+                <p className="text-black font-medium md:text-xl text-base pt-2">
+                  Manufacturer Address :{" "}
+                  <span className="text-custom-newGray font-normal md:text-xl text-base">
+                    {productsId?.manufactureradd}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
 
           <div className="bg-white w-full md:pt-10 md:pb-10 pb-5">
             <p className="text-black text-xl font-bold md:mb-10 mb-5">
-              {t("Similar Products")}
+              Similar Products
             </p>
             <div className="grid md:grid-cols-5 grid-cols-1 md:gap-3 gap-5">
               {getComboProductList.map((item, i) => (
@@ -680,7 +681,7 @@ function ProductDetails(props) {
                   <ComboGroceryCategories
                     item={item}
                     i={i}
-                    url={`/combo-product-details/${item?._id}`}
+                    url={`/product-details/${item?.slug}`}
                     loader={props?.loader}
                     toaster={props?.toaster}
                   />
@@ -702,7 +703,7 @@ function ProductDetails(props) {
 
           <div className="bg-white w-full">
             <p className="text-black text-xl font-bold md:mb-10 mb-5">
-              {t("You might also like")}
+              You might also like
             </p>
             <div className="grid md:grid-cols-5 grid-cols-1 md:gap-3 gap-5">
               {productList.map((item, i) => (
